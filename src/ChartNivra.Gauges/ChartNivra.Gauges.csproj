@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Radial, Linear, Bullet, and Speedometer Gauges for ChartNivra.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
+    <ProjectReference Include="..\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

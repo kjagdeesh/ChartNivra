@@ -11,5 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
     <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Gauges\ChartNivra.Gauges.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Statistical\ChartNivra.Statistical.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Annotations\ChartNivra.Annotations.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Export\ChartNivra.Export.csproj" />
   </ItemGroup>
 </Project>

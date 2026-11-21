@@ -1,0 +1,28 @@
+name: .NET MAUI CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore ChartNivra.slnx
+
+    - name: Build Solution
+      run: dotnet build ChartNivra.slnx --no-restore -c Release
+
+    - name: Run Tests
+      run: dotnet test tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj --no-build -c Release --verbosity normal

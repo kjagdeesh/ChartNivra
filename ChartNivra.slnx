@@ -3,10 +3,14 @@
     <Project Path="samples/ChartNivra.Demo/ChartNivra.Demo.csproj" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/ChartNivra.Annotations/ChartNivra.Annotations.csproj" />
     <Project Path="src/ChartNivra.Core/ChartNivra.Core.csproj" />
+    <Project Path="src/ChartNivra.Export/ChartNivra.Export.csproj" />
+    <Project Path="src/ChartNivra.Gauges/ChartNivra.Gauges.csproj" />
     <Project Path="src/ChartNivra.Maui/ChartNivra.Maui.csproj" />
     <Project Path="src/ChartNivra.Rendering.Abstractions/ChartNivra.Rendering.Abstractions.csproj" />
     <Project Path="src/ChartNivra.Rendering.Skia/ChartNivra.Rendering.Skia.csproj" />
+    <Project Path="src/ChartNivra.Statistical/ChartNivra.Statistical.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj" />
