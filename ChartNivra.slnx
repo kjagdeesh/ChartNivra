@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/ChartNivra.Demo/ChartNivra.Demo.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ChartNivra.Core/ChartNivra.Core.csproj" />
+    <Project Path="src/ChartNivra.Maui/ChartNivra.Maui.csproj" />
+    <Project Path="src/ChartNivra.Rendering.Abstractions/ChartNivra.Rendering.Abstractions.csproj" />
+    <Project Path="src/ChartNivra.Rendering.Skia/ChartNivra.Rendering.Skia.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj" />
+  </Folder>
+</Solution>
