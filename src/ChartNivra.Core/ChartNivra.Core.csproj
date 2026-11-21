@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Core data models, mathematics, axis transforms, and theme abstractions for ChartNivra.</Description>
+  </PropertyGroup>
+</Project>

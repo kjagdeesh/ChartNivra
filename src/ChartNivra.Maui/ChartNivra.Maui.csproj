@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net10.0-windows10.0.19041.0;net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <Description>.NET MAUI controls and handlers for ChartNivra.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
+    <ProjectReference Include="..\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+    <ProjectReference Include="..\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
+  </ItemGroup>
+</Project>
