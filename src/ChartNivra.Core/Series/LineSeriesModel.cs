@@ -3,10 +3,9 @@ namespace ChartNivra.Core.Series;
 using ChartNivra.Core.Axes;
 using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Transforms;
-using ChartNivra.Rendering.Abstractions;
 
 /// <summary>
-/// Basic line series representing a continuous line plot.
+/// Basic line series representing a continuous line plot data model.
 /// </summary>
 public class LineSeriesModel
 {
@@ -41,28 +40,5 @@ public class LineSeriesModel
         }
         return new DataRange(min, max);
     }
-
-    public void Render(IChartCanvas canvas, CartesianTransform transform)
-    {
-        if (Points.Count == 0) return;
-
-        var screenPoints = new List<ChartPoint>(Points.Count);
-        foreach (var pt in Points)
-        {
-            screenPoints.Add(transform.DataToPixel(pt.X, pt.Y));
-        }
-
-        var pen = new ChartPen(Color, StrokeWidth);
-        canvas.DrawLines(screenPoints, pen);
-
-        if (ShowMarkers)
-        {
-            var brush = new ChartBrush(Color);
-            var markerBorder = new ChartPen(ChartColor.White, 1.5f);
-            foreach (var pt in screenPoints)
-            {
-                canvas.DrawCircle(pt, MarkerRadius, brush, markerBorder);
-            }
-        }
-    }
 }
+

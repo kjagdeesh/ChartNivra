@@ -2,7 +2,4 @@
   <PropertyGroup>
     <Description>Core data models, mathematics, axis transforms, and theme abstractions for ChartNivra.</Description>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
-  </ItemGroup>
 </Project>

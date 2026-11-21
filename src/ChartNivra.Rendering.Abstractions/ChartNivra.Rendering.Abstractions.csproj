@@ -2,4 +2,7 @@
   <PropertyGroup>
     <Description>Abstract rendering interfaces (canvas, paints, brushes, camera, geometry buffers) for ChartNivra.</Description>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
+  </ItemGroup>
 </Project>
