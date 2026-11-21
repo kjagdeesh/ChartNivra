@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChartNivra.Maui — Modern High-Performance 2D & 3D Charting for .NET MAUI</title>
-  <meta name="description" content="ChartNivra.Maui is a fast, modular, open-source 2D and analytical 3D charting library built for .NET MAUI with SkiaSharp.">
+  <meta name="description" content="ChartNivra.Maui is an ultra-fast, modern, elegant 2D and analytical 3D charting framework built for .NET MAUI. Inspired by modern SaaS and Dribbble design aesthetics.">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
 </head>
@@ -12,18 +12,18 @@
 
   <!-- Navigation -->
   <header class="navbar">
-    <a href="#" class="logo-container">
-      <span>📊 ChartNivra</span>
-      <span class="logo-badge">MAUI 10</span>
+    <a href="#" class="brand">
+      <div class="brand-icon">📈</div>
+      <span>ChartNivra</span>
     </a>
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#showcase">Gallery & Code</a></li>
-      <li><a href="#3d-depth">True 3D Engine</a></li>
-      <li><a href="#documentation">Documentation</a></li>
+      <li><a href="#dashboard-preview">Live Demo</a></li>
+      <li><a href="#showcase">Gallery &amp; Code</a></li>
+      <li><a href="#features">Architecture</a></li>
+      <li><a href="#docs">Documentation</a></li>
       <li>
         <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="btn-github">
-          <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
+          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
           </svg>
           GitHub
@@ -34,176 +34,231 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-badge">🚀 Next-Gen .NET 10 MAUI Charting Engine</div>
-    <h1>The Modern 2D &amp; <span class="gradient-text">True 3D</span> Charting Framework</h1>
+    <div class="badge-pill">✨ Engineered for .NET 10 MAUI</div>
+    <h1>Build Beautiful, Fluid <span class="gradient-teal">2D &amp; True 3D</span> Charts in .NET MAUI</h1>
     <p class="hero-subtitle">
-      Engineered for .NET MAUI. Powered by SkiaSharp and real 3D perspective projection. Built for unmatched performance with streaming FIFO buffers, LTTB decimation, and native multi-platform compilation.
+      Say goodbye to clunky, outdated chart controls. ChartNivra brings modern SaaS aesthetics, smooth curves, real 3D perspective projection, and instant 60 FPS streaming to iOS, Android, macOS, and Windows.
     </p>
 
-    <div class="hero-cta-group">
-      <a href="#showcase" class="btn-primary">Explore Interactive Gallery</a>
-      <a href="#documentation" class="btn-secondary">Read Documentation</a>
-    </div>
-
-    <div class="install-command">
-      <span>dotnet add package ChartNivra.Maui</span>
-      <button class="copy-btn" onclick="copyInstall()">Copy</button>
+    <div class="hero-actions">
+      <a href="#showcase" class="btn-primary">View Interactive Gallery</a>
+      <a href="#docs" class="btn-secondary">Read Documentation</a>
+      <div class="install-bar">
+        <code>dotnet add package ChartNivra.Maui</code>
+        <button class="btn-copy" onclick="copyInstall()">Copy</button>
+      </div>
     </div>
   </section>
 
-  <!-- Features Grid -->
-  <section id="features" class="features-section">
-    <div class="section-header">
-      <h2>Engineered Without Compromise</h2>
-      <p>Built as an extensible enterprise framework, not just another drawing canvas wrapper.</p>
-    </div>
-
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon icon-blue">🧊</div>
-        <h3>True 3D Analytical Engine</h3>
-        <p>Real 3-dimensional world coordinates, Camera3D view/projection matrices, Lambertian directional lighting, and depth-sorted polygon rendering. Not fake 2D shadows.</p>
+  <!-- Clean Dashboard Hero Mockup (Pulsey Reference Inspired) -->
+  <section id="dashboard-preview" class="dashboard-hero-mockup">
+    <div class="mockup-window">
+      <!-- Window Titlebar -->
+      <div class="window-header">
+        <div class="user-badge">
+          <div class="avatar">Alex</div>
+          <div>
+            <h4 style="font-size:1.05rem; font-weight:800; color:var(--text-title);">Good morning, Alex! 👋</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Here's your health &amp; activity overview for today.</p>
+          </div>
+        </div>
+        <div style="background:#f1f5f9; padding:0.4rem 1rem; border-radius:9999px; font-size:0.85rem; font-weight:700; color:var(--text-title);">
+          May 20, 2026 📅
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon icon-emerald">⚡</div>
-        <h3>High-Throughput Streaming</h3>
-        <p>Built-in <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> algorithms capable of handling 100,000+ points and 60 FPS real-time streaming with zero memory reallocations.</p>
+      <!-- 4 KPI Metrics Row -->
+      <div class="metrics-row">
+        <div class="metric-pill-card">
+          <div class="metric-header">
+            <span>❤️ Heart Rate</span>
+            <span class="metric-tag tag-teal">● Normal</span>
+          </div>
+          <div class="metric-value">
+            72 <span class="metric-unit">bpm</span>
+          </div>
+        </div>
+
+        <div class="metric-pill-card">
+          <div class="metric-header">
+            <span>🌙 Sleep Quality</span>
+            <span class="metric-tag tag-indigo">● Good</span>
+          </div>
+          <div class="metric-value">
+            85 <span class="metric-unit">Score</span>
+          </div>
+        </div>
+
+        <div class="metric-pill-card">
+          <div class="metric-header">
+            <span>👟 Daily Steps</span>
+            <span class="metric-tag tag-blue">● 84% of goal</span>
+          </div>
+          <div class="metric-value">
+            8,432 <span class="metric-unit">steps</span>
+          </div>
+        </div>
+
+        <div class="metric-pill-card">
+          <div class="metric-header">
+            <span>💧 Water Intake</span>
+            <span class="metric-tag tag-purple">● 75% of goal</span>
+          </div>
+          <div class="metric-value">
+            6 <span class="metric-unit">Glasses</span>
+          </div>
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon icon-purple">📈</div>
-        <h3>Comprehensive Chart Suite</h3>
-        <p>Line, Spline, Area, Bar, Column, Scatter, Pie, Donut, Radial Gauges, Histograms, Box Plots, and Financial Candlesticks with SMA/EMA indicators.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon icon-amber">🎨</div>
-        <h3>Enterprise Theming &amp; Palettes</h3>
-        <p>First-class Dark, Light, High-Contrast themes and categorical palettes (Vibrant, Ocean) with per-series overrides and accessible contrast ratios.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon icon-rose">📱</div>
-        <h3>Native Multi-Platform MAUI</h3>
-        <p>Direct support for Windows, Android, iOS, and macOS MacCatalyst. Fully supports XAML collection syntax, MVVM data-binding, and smooth gesture zoom/pan.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon icon-blue">💾</div>
-        <h3>Off-Screen Image Export</h3>
-        <p>High-resolution headless PNG raster rendering with <code>ChartImageExporter</code> without needing a visible screen host control.</p>
+      <!-- Live Embedded Chart Graphic -->
+      <div style="padding: 1rem 2rem 2.5rem;">
+        <div style="border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; background:#ffffff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <div>
+              <h3 style="font-size:1.15rem; font-weight:800; color:var(--text-title);">Weekly Progress</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Tracking Steps, Active Minutes, and Calories Burned</p>
+            </div>
+            <div style="display:flex; gap:1.25rem; font-size:0.85rem; font-weight:700;">
+              <span style="color:#00C096;">● Steps</span>
+              <span style="color:#3B82F6;">● Active Min</span>
+              <span style="color:#8B5CF6;">● Calories</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 1000 320" width="100%" height="240" xmlns="http://www.w3.org/2000/svg">
+            <line x1="40" y1="40" x2="960" y2="40" stroke="#F1F5F9" stroke-width="1.2" />
+            <line x1="40" y1="110" x2="960" y2="110" stroke="#F1F5F9" stroke-width="1.2" />
+            <line x1="40" y1="180" x2="960" y2="180" stroke="#F1F5F9" stroke-width="1.2" />
+            <line x1="40" y1="250" x2="960" y2="250" stroke="#E2E8F0" stroke-width="1.5" />
+            <!-- Path 1 Steps (Teal) -->
+            <path d="M 60 170 C 180 140, 240 180, 360 110 C 480 60, 560 130, 680 75 C 780 40, 860 90, 940 50" fill="none" stroke="#00C096" stroke-width="4" stroke-linecap="round" />
+            <circle cx="360" cy="110" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
+            <circle cx="680" cy="75" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
+            <circle cx="940" cy="50" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
+            <!-- Path 2 Active (Blue) -->
+            <path d="M 60 210 C 180 180, 240 200, 360 160 C 480 120, 560 170, 680 130 C 780 100, 860 140, 940 110" fill="none" stroke="#3B82F6" stroke-width="3.5" stroke-linecap="round" />
+            <!-- Path 3 Calories (Purple) -->
+            <path d="M 60 230 C 180 220, 240 230, 360 200 C 480 175, 560 210, 680 180 C 780 160, 860 190, 940 160" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" />
+            <!-- Days -->
+            <text x="60" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Mon</text>
+            <text x="210" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Tue</text>
+            <text x="360" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Wed</text>
+            <text x="510" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Thu</text>
+            <text x="660" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Fri</text>
+            <text x="810" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Sat</text>
+            <text x="940" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Sun</text>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Interactive Gallery & Code Showcase -->
   <section id="showcase" class="showcase-section">
-    <div class="showcase-container">
-      <div class="section-header">
-        <h2>Interactive Gallery &amp; Code</h2>
-        <p>Clean XAML and C# syntax designed for maximum developer ergonomics.</p>
-      </div>
+    <div class="section-title">
+      <h2>Interactive Gallery &amp; Code</h2>
+      <p>Clean, declarative XAML and C# APIs that seamlessly integrate into any MVVM workflow.</p>
+    </div>
 
-      <div class="tab-nav">
-        <button class="tab-btn active" data-tab="line" onclick="switchTab('line')">Line &amp; Area</button>
-        <button class="tab-btn" data-tab="bar" onclick="switchTab('bar')">3D Column</button>
-        <button class="tab-btn" data-tab="pie" onclick="switchTab('pie')">Donut &amp; Pie</button>
-        <button class="tab-btn" data-tab="financial" onclick="switchTab('financial')">Financial Candlestick</button>
-        <button class="tab-btn" data-tab="gauge" onclick="switchTab('gauge')">Radial Gauge</button>
-      </div>
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="line" onclick="switchTab('line')">Multi-Line &amp; Area</button>
+      <button class="tab-btn" data-tab="rings" onclick="switchTab('rings')">Health Rings</button>
+      <button class="tab-btn" data-tab="columns" onclick="switchTab('columns')">Tracked Bars</button>
+      <button class="tab-btn" data-tab="threed" onclick="switchTab('threed')">3D Columns</button>
+    </div>
 
-      <div class="showcase-preview-card">
-        <div class="preview-visual">
-          <div id="showcase-svg" class="svg-chart-container"></div>
+    <div class="split-card">
+      <div class="preview-pane">
+        <div id="showcase-svg" style="width:100%; max-width:440px; height:280px;"></div>
+      </div>
+      <div class="code-pane">
+        <div class="code-header">
+          <span id="showcase-title" class="code-title">Weekly Activity &amp; Progress (Multi-Line)</span>
+          <span style="font-size:0.8rem; color:#94a3b8; font-family:var(--font-mono);">XAML / C#</span>
         </div>
-        <div class="preview-code">
-          <div class="code-header">
-            <span id="showcase-title" class="code-title">Cartesian Line &amp; Spline Chart</span>
-            <span style="font-size:0.75rem; color:#64748b; font-family:var(--font-mono);">XAML / C#</span>
-          </div>
-          <pre><code id="showcase-code"></code></pre>
-        </div>
+        <pre><code id="showcase-code"></code></pre>
       </div>
     </div>
   </section>
 
-  <!-- True 3D Depth Spotlight -->
-  <section id="3d-depth" class="features-section" style="background:#090d16;">
-    <div class="section-header">
-      <h2>The True 3D Analytical Advantage</h2>
-      <p>Why ChartNivra delivers real three-dimensional insight instead of decorative 2.5D visual tricks.</p>
+  <!-- Architecture Features Grid -->
+  <section id="features" class="features-section">
+    <div class="section-title">
+      <h2>Engineered for Modern .NET Applications</h2>
+      <p>Built as a maintainable, high-performance charting framework.</p>
     </div>
 
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem;">
-      <div style="background:var(--bg-card); padding:2rem; border-radius:16px; border:1px solid var(--border-color);">
-        <h4 style="color:#f43f5e; margin-bottom:0.75rem; font-size:1.15rem;">❌ Other "3D" Libraries (Fake 2D)</h4>
-        <ul style="color:var(--text-muted); font-size:0.95rem; line-height:1.8; padding-left:1.25rem;">
-          <li>Simple drop shadows and gradient skewing.</li>
-          <li>Fixed viewing angle with zero camera rotation or orbit.</li>
-          <li>No depth testing; geometry renders in arbitrary order.</li>
-          <li>Distorts data and provides misleading presentation.</li>
-        </ul>
+    <div class="feature-grid">
+      <div class="clean-card">
+        <div class="icon-wrapper icon-teal">🧊</div>
+        <h3>True 3D Analytical Subsystem</h3>
+        <p>Built with <code>Camera3D</code> matrix projection, Lambertian directional lighting, and back-to-front depth sorting. Actual three-dimensional spatial coordinates, not fake 2D shadows.</p>
       </div>
 
-      <div style="background:var(--bg-card); padding:2rem; border-radius:16px; border:1px solid var(--accent-blue); box-shadow: 0 0 20px rgba(59,130,246,0.15);">
-        <h4 style="color:#38bdf8; margin-bottom:0.75rem; font-size:1.15rem;">✅ ChartNivra True 3D Subsystem</h4>
-        <ul style="color:var(--text-main); font-size:0.95rem; line-height:1.8; padding-left:1.25rem;">
-          <li>Real 3D coordinates (X, Y, Z) and World Space.</li>
-          <li><code>Camera3D</code> with full LookAt View and Perspective Projection matrices.</li>
-          <li>Directional Lambertian lighting with ambient and diffuse shading.</li>
-          <li>Painter's depth sorting algorithm for accurate occlusion.</li>
-        </ul>
+      <div class="clean-card">
+        <div class="icon-wrapper icon-blue">⚡</div>
+        <h3>High-Throughput Streaming</h3>
+        <p>Thread-safe <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> algorithms capable of handling continuous real-time data streaming without heap reallocations.</p>
+      </div>
+
+      <div class="clean-card">
+        <div class="icon-wrapper icon-purple">🎨</div>
+        <h3>Modern Clean Palettes</h3>
+        <p>Built-in <code>CleanLight</code> and <code>Dark</code> themes with crisp typography, subtle gridlines, and categorical palettes inspired by modern SaaS applications.</p>
+      </div>
+
+      <div class="clean-card">
+        <div class="icon-wrapper icon-amber">📱</div>
+        <h3>Cross-Platform .NET MAUI</h3>
+        <p>Direct native support for Windows, iOS, Android, and macOS MacCatalyst. Simple <code>ChartView</code> control with full MVVM data-binding support.</p>
+      </div>
+
+      <div class="clean-card">
+        <div class="icon-wrapper icon-indigo">📊</div>
+        <h3>Financial &amp; Statistical</h3>
+        <p>Full support for Candlestick/OHLC series with technical indicators (SMA, EMA), Box Plots, and automated Histogram frequency binning.</p>
+      </div>
+
+      <div class="clean-card">
+        <div class="icon-wrapper icon-cyan">💾</div>
+        <h3>Headless PNG Exporter</h3>
+        <p>Export high-resolution raster images in memory via <code>ChartImageExporter</code> without requiring an active UI window or screen.</p>
       </div>
     </div>
   </section>
 
   <!-- Documentation Section -->
-  <section id="documentation" class="docs-section">
-    <div class="section-header">
-      <h2>Developer Documentation</h2>
-      <p>Everything you need to integrate, customize, and extend ChartNivra in minutes.</p>
+  <section id="docs" class="features-section" style="padding-top:0;">
+    <div class="section-title">
+      <h2>Documentation &amp; Quick Start</h2>
+      <p>Get up and running in your .NET MAUI application in less than 2 minutes.</p>
     </div>
 
-    <div class="docs-grid">
-      <div class="doc-block">
-        <h3>🚀 Getting Started</h3>
-        <ul>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Installation via NuGet</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">MAUI App Registration</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">First 2D Cartesian Chart</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">MVVM Data Binding</a></li>
-        </ul>
+    <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:24px; padding:2.5rem; max-width:900px; margin:0 auto; box-shadow:var(--shadow-sm);">
+      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">1. Install NuGet Package</h3>
+      <div style="background:#0f172a; color:#f8fafc; padding:1rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.95rem; margin-bottom:1.75rem;">
+        dotnet add package ChartNivra.Maui
       </div>
 
-      <div class="doc-block">
-        <h3>📊 Chart Types</h3>
-        <ul>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Line, Spline, and Area Series</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Bar and Column Series</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Pie and Donut Slices</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Candlestick and Technical Indicators</a></li>
-        </ul>
+      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">2. Add ChartView in XAML</h3>
+      <div style="background:#0f172a; color:#f8fafc; padding:1.25rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.9rem; line-height:1.6; margin-bottom:1.75rem; overflow-x:auto;">
+&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:charts="clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra.Maui"&gt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;charts:ChartView Title="Weekly Activity"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theme="{x:Static themes:ChartTheme.CleanLight}"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HeightRequest="300" /&gt;<br>
+&lt;/ContentPage&gt;
       </div>
 
-      <div class="doc-block">
-        <h3>⚡ Real-Time &amp; High Perf</h3>
-        <ul>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">StreamingRingBuffer Usage</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">LTTB Downsampling Decimation</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Gesture Zoom &amp; Pan State</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Memory Optimization Guide</a></li>
-        </ul>
-      </div>
-
-      <div class="doc-block">
-        <h3>🧊 3D Analytical</h3>
-        <ul>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Camera3D Projection</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Lighting &amp; Material Shading</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">3D Column Mesh Generator</a></li>
-          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Depth Sorting Architecture</a></li>
-        </ul>
+      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">3. Feed Series Data in C#</h3>
+      <div style="background:#0f172a; color:#f8fafc; padding:1.25rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.9rem; line-height:1.6; overflow-x:auto;">
+chart.Model.Series.Add(new LineSeriesModel<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Title = "Steps",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Color = ChartColor.FromHex("#00C096"),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;StrokeWidth = 3.5f,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Points = new List&lt;ChartPoint&gt; { new(1, 45), new(2, 52), new(3, 49), new(4, 78) }<br>
+});
       </div>
     </div>
   </section>

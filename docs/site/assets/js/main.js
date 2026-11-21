@@ -1,150 +1,160 @@
 const showcaseData = {
   line: {
-    title: "Cartesian Line & Spline Chart",
-    code: `<charts:CartesianChart Title="Revenue vs Profit"
-                       Theme="Dark"
-                       Palette="Ocean"
-                       HeightRequest="350">
+    title: "Weekly Activity & Progress (Multi-Line)",
+    code: `<charts:CartesianChart Title="Weekly Progress"
+                       Theme="CleanLight"
+                       Palette="Clean"
+                       HeightRequest="320">
     <charts:CartesianChart.XAxes>
         <charts:CategoryAxis />
     </charts:CartesianChart.XAxes>
     <charts:CartesianChart.YAxes>
-        <charts:NumericAxis LabelFormat="C0" />
+        <charts:NumericAxis />
     </charts:CartesianChart.YAxes>
     <charts:CartesianChart.Series>
-        <charts:LineSeries Label="Revenue"
-                           ItemsSource="{Binding MonthlySales}"
-                           XBinding="Month"
-                           YBinding="Revenue"
+        <charts:LineSeries Label="Steps"
+                           ItemsSource="{Binding StepsData}"
+                           Color="#00C096"
+                           StrokeWidth="3.5"
+                           ShowMarkers="True" />
+        <charts:LineSeries Label="Active Min"
+                           ItemsSource="{Binding ActiveData}"
+                           Color="#3B82F6"
                            StrokeWidth="3"
+                           ShowMarkers="True" />
+        <charts:LineSeries Label="Calories"
+                           ItemsSource="{Binding CalorieData}"
+                           Color="#8B5CF6"
+                           StrokeWidth="2.5"
                            ShowMarkers="True" />
     </charts:CartesianChart.Series>
 </charts:CartesianChart>`,
-    svg: `<svg viewBox="0 0 450 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="280" rx="12" fill="#0f172a" />
-      <line x1="60" y1="50" x2="410" y2="50" stroke="#334155" stroke-dasharray="4" />
-      <line x1="60" y1="110" x2="410" y2="110" stroke="#334155" stroke-dasharray="4" />
-      <line x1="60" y1="170" x2="410" y2="170" stroke="#334155" stroke-dasharray="4" />
-      <line x1="60" y1="230" x2="410" y2="230" stroke="#475569" stroke-width="1.5" />
-      <line x1="60" y1="50" x2="60" y2="230" stroke="#475569" stroke-width="1.5" />
-      <text x="35" y="55" fill="#94a3b8" font-size="11" font-family="sans-serif">$150k</text>
-      <text x="35" y="115" fill="#94a3b8" font-size="11" font-family="sans-serif">$100k</text>
-      <text x="42" y="175" fill="#94a3b8" font-size="11" font-family="sans-serif">$50k</text>
-      <text x="50" y="235" fill="#94a3b8" font-size="11" font-family="sans-serif">$0</text>
-      <!-- Area Fill -->
-      <path d="M 90 190 L 140 140 L 200 160 L 260 90 L 320 110 L 380 60 L 380 230 L 90 230 Z" fill="url(#blueGradient)" opacity="0.3" />
-      <!-- Line -->
-      <path d="M 90 190 L 140 140 L 200 160 L 260 90 L 320 110 L 380 60" fill="none" stroke="#3b82f6" stroke-width="3" />
-      <!-- Markers -->
-      <circle cx="90" cy="190" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
-      <circle cx="140" cy="140" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
-      <circle cx="200" cy="160" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
-      <circle cx="260" cy="90" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
-      <circle cx="320" cy="110" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
-      <circle cx="380" cy="60" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2" />
+    svg: `<svg viewBox="0 0 460 290" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect width="460" height="290" rx="16" fill="#FFFFFF" />
+      <!-- Grid lines -->
+      <line x1="55" y1="45" x2="425" y2="45" stroke="#F1F5F9" stroke-width="1.2" />
+      <line x1="55" y1="105" x2="425" y2="105" stroke="#F1F5F9" stroke-width="1.2" />
+      <line x1="55" y1="165" x2="425" y2="165" stroke="#F1F5F9" stroke-width="1.2" />
+      <line x1="55" y1="225" x2="425" y2="225" stroke="#E2E8F0" stroke-width="1.5" />
+      <line x1="55" y1="45" x2="55" y2="225" stroke="#E2E8F0" stroke-width="1.5" />
+      <!-- Y Labels -->
+      <text x="30" y="50" fill="#94A3B8" font-size="11" font-weight="600" font-family="sans-serif">15k</text>
+      <text x="30" y="110" fill="#94A3B8" font-size="11" font-weight="600" font-family="sans-serif">10k</text>
+      <text x="35" y="170" fill="#94A3B8" font-size="11" font-weight="600" font-family="sans-serif">5k</text>
+      <text x="40" y="230" fill="#94A3B8" font-size="11" font-weight="600" font-family="sans-serif">0</text>
+      <!-- X Labels -->
+      <text x="90" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Mon</text>
+      <text x="145" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Tue</text>
+      <text x="200" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Wed</text>
+      <text x="255" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Thu</text>
+      <text x="310" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Fri</text>
+      <text x="365" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Sat</text>
+      <text x="415" y="246" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" font-family="sans-serif">Sun</text>
+      <!-- Area Fill for Series 1 (Teal) -->
+      <path d="M 90 145 C 120 120, 135 150, 145 130 C 160 100, 185 110, 200 95 C 220 75, 240 85, 255 105 C 275 135, 295 90, 310 80 C 335 65, 350 85, 365 70 C 390 50, 405 60, 415 50 L 415 225 L 90 225 Z" fill="url(#tealGlow)" opacity="0.15" />
+      <!-- Line 1: Steps (Teal #00C096) -->
+      <path d="M 90 145 C 120 120, 135 150, 145 130 C 160 100, 185 110, 200 95 C 220 75, 240 85, 255 105 C 275 135, 295 90, 310 80 C 335 65, 350 85, 365 70 C 390 50, 405 60, 415 50" fill="none" stroke="#00C096" stroke-width="3.5" stroke-linecap="round" />
+      <circle cx="200" cy="95" r="5" fill="#00C096" stroke="#FFFFFF" stroke-width="2.5" />
+      <circle cx="310" cy="80" r="5" fill="#00C096" stroke="#FFFFFF" stroke-width="2.5" />
+      <circle cx="415" cy="50" r="5" fill="#00C096" stroke="#FFFFFF" stroke-width="2.5" />
+      <!-- Line 2: Active (Blue #3B82F6) -->
+      <path d="M 90 170 C 120 150, 135 165, 145 155 C 160 135, 185 145, 200 130 C 220 115, 240 120, 255 135 C 275 160, 295 125, 310 115 C 335 105, 350 120, 365 105 C 390 90, 405 95, 415 85" fill="none" stroke="#3B82F6" stroke-width="3" stroke-linecap="round" />
+      <!-- Line 3: Calories (Purple #8B5CF6) -->
+      <path d="M 90 195 C 120 185, 135 190, 145 180 C 160 165, 185 175, 200 160 C 220 145, 240 155, 255 170 C 275 190, 295 160, 310 150 C 335 140, 350 155, 365 140 C 390 125, 405 130, 415 120" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
       <defs>
-        <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3b82f6" />
-          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+        <linearGradient id="tealGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#00C096" />
+          <stop offset="100%" stop-color="#00C096" stop-opacity="0" />
         </linearGradient>
       </defs>
     </svg>`
   },
-  bar: {
-    title: "3D Cuboid & Column Series",
-    code: `<charts:ThreeDChart CameraPreset="Perspective"
+  rings: {
+    title: "Health & Activity Circular Rings",
+    code: `<gauges:RadialGauge Value="72"
+                     TrackColor="#F1F5F9"
+                     ValueColor="#00C096"
+                     StrokeWidth="14"
+                     Title="Heart Rate" />`,
+    svg: `<svg viewBox="0 0 460 290" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect width="460" height="290" rx="16" fill="#FFFFFF" />
+      <!-- Ring 1 (Teal) -->
+      <circle cx="110" cy="130" r="50" fill="none" stroke="#F1F5F9" stroke-width="12" />
+      <circle cx="110" cy="130" r="50" fill="none" stroke="#00C096" stroke-width="12" stroke-dasharray="240 320" stroke-linecap="round" />
+      <text x="110" y="132" text-anchor="middle" fill="#0F172A" font-size="22" font-weight="bold" font-family="sans-serif">72</text>
+      <text x="110" y="148" text-anchor="middle" fill="#64748B" font-size="11" font-family="sans-serif">bpm</text>
+      <text x="110" y="210" text-anchor="middle" fill="#0F172A" font-size="13" font-weight="bold" font-family="sans-serif">Heart Rate</text>
+      <!-- Ring 2 (Purple) -->
+      <circle cx="230" cy="130" r="50" fill="none" stroke="#F1F5F9" stroke-width="12" />
+      <circle cx="230" cy="130" r="50" fill="none" stroke="#8B5CF6" stroke-width="12" stroke-dasharray="270 320" stroke-linecap="round" />
+      <text x="230" y="132" text-anchor="middle" fill="#0F172A" font-size="22" font-weight="bold" font-family="sans-serif">85</text>
+      <text x="230" y="148" text-anchor="middle" fill="#64748B" font-size="11" font-family="sans-serif">score</text>
+      <text x="230" y="210" text-anchor="middle" fill="#0F172A" font-size="13" font-weight="bold" font-family="sans-serif">Sleep Quality</text>
+      <!-- Ring 3 (Blue) -->
+      <circle cx="350" cy="130" r="50" fill="none" stroke="#F1F5F9" stroke-width="12" />
+      <circle cx="350" cy="130" r="50" fill="none" stroke="#3B82F6" stroke-width="12" stroke-dasharray="250 320" stroke-linecap="round" />
+      <text x="350" y="132" text-anchor="middle" fill="#0F172A" font-size="20" font-weight="bold" font-family="sans-serif">8.4k</text>
+      <text x="350" y="148" text-anchor="middle" fill="#64748B" font-size="11" font-family="sans-serif">steps</text>
+      <text x="350" y="210" text-anchor="middle" fill="#0F172A" font-size="13" font-weight="bold" font-family="sans-serif">Daily Steps</text>
+    </svg>`
+  },
+  columns: {
+    title: "Segmented Bar & Category Hours",
+    code: `<charts:CartesianChart Title="Tracked Hours"
+                       Theme="CleanLight">
+    <charts:BarSeries ItemsSource="{Binding TimeEntries}"
+                      BarWidthRatio="0.65"
+                      CornerRadius="8"
+                      Color="#3B82F6" />
+</charts:CartesianChart>`,
+    svg: `<svg viewBox="0 0 460 290" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect width="460" height="290" rx="16" fill="#FFFFFF" />
+      <!-- Horizontal Bars -->
+      <text x="40" y="65" fill="#64748B" font-size="12" font-weight="600" font-family="sans-serif">Mon</text>
+      <rect x="80" y="50" width="60" height="22" rx="6" fill="#8B5CF6" />
+      <rect x="145" y="50" width="80" height="22" rx="6" fill="#F59E0B" />
+      <rect x="230" y="50" width="120" height="22" rx="6" fill="#00C096" />
+
+      <text x="40" y="110" fill="#64748B" font-size="12" font-weight="600" font-family="sans-serif">Tue</text>
+      <rect x="80" y="95" width="110" height="22" rx="6" fill="#F59E0B" />
+      <rect x="195" y="95" width="95" height="22" rx="6" fill="#8B5CF6" />
+
+      <text x="40" y="155" fill="#64748B" font-size="12" font-weight="600" font-family="sans-serif">Wed</text>
+      <rect x="80" y="140" width="90" height="22" rx="6" fill="#F59E0B" />
+      <rect x="175" y="140" width="110" height="22" rx="6" fill="#3B82F6" />
+
+      <text x="40" y="200" fill="#64748B" font-size="12" font-weight="600" font-family="sans-serif">Thu</text>
+      <rect x="80" y="185" width="130" height="22" rx="6" fill="#8B5CF6" />
+      <rect x="215" y="185" width="75" height="22" rx="6" fill="#F43F5E" />
+
+      <text x="40" y="245" fill="#64748B" font-size="12" font-weight="600" font-family="sans-serif">Fri</text>
+      <rect x="80" y="230" width="160" height="22" rx="6" fill="#3B82F6" />
+      <rect x="245" y="230" width="110" height="22" rx="6" fill="#00C096" />
+    </svg>`
+  },
+  threed: {
+    title: "True 3D Cuboids with Lambertian Shading",
+    code: `<threed:ThreeDChart CameraPreset="Perspective"
                     IsRotationEnabled="True">
-    <charts:ThreeDChart.Series>
-        <charts:Column3DSeries ItemsSource="{Binding RegionalSales}"
-                               XBinding="Region"
-                               YBinding="Quarter"
-                               ZBinding="Revenue"
-                               Color="#3b82f6" />
-    </charts:ThreeDChart.Series>
-</charts:ThreeDChart>`,
-    svg: `<svg viewBox="0 0 450 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="280" rx="12" fill="#0f172a" />
-      <!-- Isometric / 3D Columns -->
-      <!-- Column 1 -->
-      <polygon points="100,210 140,225 140,150 100,135" fill="#2563eb" />
-      <polygon points="140,225 170,205 170,130 140,150" fill="#1d4ed8" />
-      <polygon points="100,135 140,150 170,130 130,115" fill="#60a5fa" />
-      <!-- Column 2 -->
-      <polygon points="190,210 230,225 230,110 190,95" fill="#059669" />
-      <polygon points="230,225 260,205 260,90 230,110" fill="#047857" />
-      <polygon points="190,95 230,110 260,90 220,75" fill="#34d399" />
-      <!-- Column 3 -->
-      <polygon points="280,210 320,225 320,70 280,55" fill="#7c3aed" />
-      <polygon points="320,225 350,205 350,50 320,70" fill="#6d28d9" />
-      <polygon points="280,55 320,70 350,50 310,35" fill="#a78bfa" />
-    </svg>`
-  },
-  pie: {
-    title: "Donut & Pie Slices with Hole Radius",
-    code: `<charts:PieChart Title="Traffic Sources"
-                 HoleRadiusRatio="0.55"
-                 Theme="Dark">
-    <charts:PieChart.Slices>
-        <charts:PieSlice Label="Direct" Value="45" Color="#3b82f6" />
-        <charts:PieSlice Label="Referral" Value="30" Color="#10b981" />
-        <charts:PieSlice Label="Social" Value="25" Color="#8b5cf6" />
-    </charts:PieChart.Slices>
-</charts:PieChart>`,
-    svg: `<svg viewBox="0 0 450 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="280" rx="12" fill="#0f172a" />
-      <circle cx="225" cy="140" r="85" fill="none" stroke="#3b82f6" stroke-width="45" stroke-dasharray="240 500" stroke-dashoffset="0" />
-      <circle cx="225" cy="140" r="85" fill="none" stroke="#10b981" stroke-width="45" stroke-dasharray="160 500" stroke-dashoffset="-240" />
-      <circle cx="225" cy="140" r="85" fill="none" stroke="#8b5cf6" stroke-width="45" stroke-dasharray="134 500" stroke-dashoffset="-400" />
-      <text x="225" y="135" text-anchor="middle" fill="#f8fafc" font-size="20" font-weight="bold" font-family="sans-serif">100%</text>
-      <text x="225" y="155" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">Total Traffic</text>
-    </svg>`
-  },
-  financial: {
-    title: "Candlestick & Technical Indicators (SMA/EMA)",
-    code: `<charts:FinancialChart Title="MSFT - Daily"
-                       ShowVolume="True">
-    <charts:CandlestickSeries ItemsSource="{Binding Candlesticks}"
-                             BullishColor="#10b981"
-                             BearishColor="#ef4444" />
-    <charts:SmaIndicator Period="14" Color="#f59e0b" StrokeWidth="2" />
-</charts:FinancialChart>`,
-    svg: `<svg viewBox="0 0 450 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="280" rx="12" fill="#0f172a" />
-      <!-- Grid -->
-      <line x1="50" y1="50" x2="410" y2="50" stroke="#334155" stroke-dasharray="4" />
-      <line x1="50" y1="120" x2="410" y2="120" stroke="#334155" stroke-dasharray="4" />
-      <line x1="50" y1="190" x2="410" y2="190" stroke="#334155" stroke-dasharray="4" />
-      <!-- Candle 1 (Green) -->
-      <line x1="90" y1="110" x2="90" y2="180" stroke="#10b981" stroke-width="2" />
-      <rect x="80" y="130" width="20" height="40" rx="2" fill="#10b981" />
-      <!-- Candle 2 (Red) -->
-      <line x1="150" y1="90" x2="150" y2="190" stroke="#ef4444" stroke-width="2" />
-      <rect x="140" y="110" width="20" height="60" rx="2" fill="#ef4444" />
-      <!-- Candle 3 (Green) -->
-      <line x1="210" y1="80" x2="210" y2="160" stroke="#10b981" stroke-width="2" />
-      <rect x="200" y="90" width="20" height="50" rx="2" fill="#10b981" />
-      <!-- Candle 4 (Green) -->
-      <line x1="270" y1="50" x2="270" y2="130" stroke="#10b981" stroke-width="2" />
-      <rect x="260" y="60" width="20" height="40" rx="2" fill="#10b981" />
-      <!-- SMA Curve -->
-      <path d="M 90 150 Q 150 140 210 115 T 330 80" fill="none" stroke="#f59e0b" stroke-width="2.5" />
-    </svg>`
-  },
-  gauge: {
-    title: "Radial & Circular Progress Gauge",
-    code: `<gauges:RadialGauge Value="78"
-                     Minimum="0"
-                     Maximum="100"
-                     Unit="%"
-                     TrackColor="#334155"
-                     ValueColor="#3b82f6"
-                     Theme="Dark" />`,
-    svg: `<svg viewBox="0 0 450 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="280" rx="12" fill="#0f172a" />
-      <path d="M 125 210 A 110 110 0 1 1 325 210" fill="none" stroke="#334155" stroke-width="22" stroke-linecap="round" />
-      <path d="M 125 210 A 110 110 0 1 1 300 110" fill="none" stroke="#3b82f6" stroke-width="22" stroke-linecap="round" />
-      <text x="225" y="160" text-anchor="middle" fill="#f8fafc" font-size="34" font-weight="bold" font-family="sans-serif">78%</text>
-      <text x="225" y="190" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="sans-serif">System Health</text>
+    <threed:Column3DSeries ItemsSource="{Binding Analytics}"
+                          Color="#00C096" />
+</threed:ThreeDChart>`,
+    svg: `<svg viewBox="0 0 460 290" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect width="460" height="290" rx="16" fill="#FFFFFF" />
+      <!-- Grid Floor -->
+      <polygon points="60,200 230,240 400,200 230,165" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2" />
+      <!-- 3D Column 1 (Teal) -->
+      <polygon points="110,185 150,195 150,115 110,105" fill="#00A883" />
+      <polygon points="150,195 180,180 180,100 150,115" fill="#008F6F" />
+      <polygon points="110,105 150,115 180,100 140,90" fill="#34D399" />
+      <!-- 3D Column 2 (Blue) -->
+      <polygon points="200,195 240,205 240,75 200,65" fill="#2563EB" />
+      <polygon points="240,205 270,190 270,60 240,75" fill="#1D4ED8" />
+      <polygon points="200,65 240,75 270,60 230,50" fill="#60A5FA" />
+      <!-- 3D Column 3 (Purple) -->
+      <polygon points="290,185 330,195 330,95 290,85" fill="#7C3AED" />
+      <polygon points="330,195 360,180 360,80 330,95" fill="#6D28D9" />
+      <polygon points="290,85 330,95 360,80 320,70" fill="#A78BFA" />
     </svg>`
   }
 };
@@ -165,7 +175,7 @@ function switchTab(type) {
 function copyInstall() {
   const text = "dotnet add package ChartNivra.Maui";
   navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.copy-btn');
+    const btn = document.querySelector('.btn-copy');
     btn.textContent = "Copied!";
     setTimeout(() => { btn.textContent = "Copy"; }, 2000);
   });
