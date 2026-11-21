@@ -3,28 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChartNivra.Maui — Modern High-Performance 2D & 3D Charting for .NET MAUI</title>
-  <meta name="description" content="ChartNivra.Maui is an ultra-fast, modern, elegant 2D and analytical 3D charting framework built for .NET MAUI. Inspired by modern SaaS and Dribbble design aesthetics.">
+  <title>ChartNivra.Maui — Enterprise 2D & True 3D Charting for .NET MAUI</title>
+  <meta name="description" content="ChartNivra is a modern, high-performance 2D and analytical 3D charting framework for .NET MAUI. Clean architecture, LTTB decimation, and native multi-platform compilation.">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
 </head>
 <body>
 
-  <!-- Navigation -->
-  <header class="navbar">
-    <a href="#" class="brand">
-      <div class="brand-icon">📈</div>
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <a href="#" class="brand-wrapper">
+      <div class="brand-symbol">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      </div>
       <span>ChartNivra</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="#dashboard-preview">Live Demo</a></li>
-      <li><a href="#showcase">Gallery &amp; Code</a></li>
-      <li><a href="#features">Architecture</a></li>
-      <li><a href="#docs">Documentation</a></li>
+
+    <ul class="nav-menu">
+      <li><a href="#catalog">Chart Catalog</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#quickstart">Quick Start</a></li>
       <li>
-        <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="btn-github">
-          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="github-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
           </svg>
           GitHub
         </a>
@@ -33,240 +38,183 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="badge-pill">✨ Engineered for .NET 10 MAUI</div>
-    <h1>Build Beautiful, Fluid <span class="gradient-teal">2D &amp; True 3D</span> Charts in .NET MAUI</h1>
-    <p class="hero-subtitle">
-      Say goodbye to clunky, outdated chart controls. ChartNivra brings modern SaaS aesthetics, smooth curves, real 3D perspective projection, and instant 60 FPS streaming to iOS, Android, macOS, and Windows.
+  <section class="hero-wrapper">
+    <div class="version-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      Production Ready for .NET 10 MAUI
+    </div>
+
+    <h1 class="hero-title">
+      The Modular 2D &amp; <span>True 3D</span> Charting Framework
+    </h1>
+
+    <p class="hero-sub">
+      Engineered as a clean, high-performance alternative to legacy commercial suites. Native SkiaSharp hardware acceleration, real 3D perspective projection, and 60 FPS streaming for iOS, Android, macOS, and Windows.
     </p>
 
-    <div class="hero-actions">
-      <a href="#showcase" class="btn-primary">View Interactive Gallery</a>
-      <a href="#docs" class="btn-secondary">Read Documentation</a>
-      <div class="install-bar">
+    <div class="hero-cta">
+      <a href="#catalog" class="btn-primary">Browse Chart Catalog</a>
+      <a href="#quickstart" class="btn-outline">Documentation</a>
+      <div class="terminal-box">
         <code>dotnet add package ChartNivra.Maui</code>
-        <button class="btn-copy" onclick="copyInstall()">Copy</button>
+        <button class="copy-badge" onclick="copyInstall()">Copy</button>
       </div>
     </div>
   </section>
 
-  <!-- Clean Dashboard Hero Mockup (Pulsey Reference Inspired) -->
-  <section id="dashboard-preview" class="dashboard-hero-mockup">
-    <div class="mockup-window">
-      <!-- Window Titlebar -->
-      <div class="window-header">
-        <div class="user-badge">
-          <div class="avatar">Alex</div>
-          <div>
-            <h4 style="font-size:1.05rem; font-weight:800; color:var(--text-title);">Good morning, Alex! 👋</h4>
-            <p style="font-size:0.85rem; color:var(--text-muted);">Here's your health &amp; activity overview for today.</p>
+  <!-- Master Interactive Chart Catalog & Explorer -->
+  <section id="catalog" class="catalog-section">
+    <div class="catalog-title">
+      <h2>Comprehensive Chart Catalog</h2>
+      <p>Select any chart type from the sidebar to inspect the live render and copy drop-in XAML/C# snippets.</p>
+    </div>
+
+    <div class="explorer-layout">
+      <!-- Sidebar Categories & Charts -->
+      <aside class="sidebar-categories">
+        <!-- Cartesian Group -->
+        <div class="category-group">
+          <div class="category-header">Cartesian 2D</div>
+          <button class="chart-item-btn active" data-key="line" onclick="selectChart('line')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            Line &amp; Spline
+          </button>
+          <button class="chart-item-btn" data-key="area" onclick="selectChart('area')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            Area &amp; Gradient
+          </button>
+          <button class="chart-item-btn" data-key="column" onclick="selectChart('column')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="10" width="4" height="11"/><rect x="10" y="5" width="4" height="16"/><rect x="17" y="13" width="4" height="8"/></svg>
+            Rounded Column
+          </button>
+          <button class="chart-item-btn" data-key="bar" onclick="selectChart('bar')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="13" y2="18"/></svg>
+            Horizontal Bar
+          </button>
+          <button class="chart-item-btn" data-key="scatter" onclick="selectChart('scatter')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="18.5" cy="5.5" r=".5" fill="currentColor"/><circle cx="11.5" cy="11.5" r=".5" fill="currentColor"/><circle cx="7.5" cy="16.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="14.5" r=".5" fill="currentColor"/></svg>
+            Scatter &amp; Bubble
+          </button>
+        </div>
+
+        <!-- Circular Group -->
+        <div class="category-group">
+          <div class="category-header">Circular &amp; Gauges</div>
+          <button class="chart-item-btn" data-key="donut" onclick="selectChart('donut')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            Donut &amp; Pie
+          </button>
+          <button class="chart-item-btn" data-key="gauge" onclick="selectChart('gauge')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 22v-4"/><path d="m19.07 19.07-2.83-2.83"/><path d="M22 12h-4"/><path d="m19.07 4.93-2.83 2.83"/></svg>
+            Radial Progress Gauge
+          </button>
+        </div>
+
+        <!-- Financial & Statistical -->
+        <div class="category-group">
+          <div class="category-header">Financial &amp; Stats</div>
+          <button class="chart-item-btn" data-key="candlestick" onclick="selectChart('candlestick')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="2" x2="9" y2="22"/><rect x="6" y="6" width="6" height="10" rx="1"/><line x1="17" y1="2" x2="17" y2="22"/><rect x="14" y="10" width="6" height="8" rx="1"/></svg>
+            Candlestick + SMA
+          </button>
+          <button class="chart-item-btn" data-key="boxplot" onclick="selectChart('boxplot')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="6" width="10" height="12" rx="1"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+            Box &amp; Whisker
+          </button>
+        </div>
+
+        <!-- 3D Group -->
+        <div class="category-group">
+          <div class="category-header">True 3D Analytical</div>
+          <button class="chart-item-btn" data-key="threed" onclick="selectChart('threed')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            3D Perspective Column
+          </button>
+        </div>
+      </aside>
+
+      <!-- Stage & Code Snippet Display -->
+      <main class="stage-workspace">
+        <div class="stage-preview">
+          <div class="stage-meta">
+            <span id="stage-category" class="stage-tag">Cartesian 2D</span>
+            <h3 id="stage-name">Line &amp; Spline Chart</h3>
+            <p id="stage-desc">Multi-series continuous line and cubic spline curves with custom markers and smooth interpolation.</p>
           </div>
+          <div id="stage-svg" class="svg-display-area"></div>
         </div>
-        <div style="background:#f1f5f9; padding:0.4rem 1rem; border-radius:9999px; font-size:0.85rem; font-weight:700; color:var(--text-title);">
-          May 20, 2026 📅
+
+        <div class="code-workspace">
+          <div class="code-toolbar">
+            <span class="toolbar-title">XAML / C# DECLARATION</span>
+            <button class="btn-code-copy" onclick="copyCode()">Copy Code</button>
+          </div>
+          <pre><code id="code-display"></code></pre>
         </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- Core Pillars / Architecture -->
+  <section id="architecture" class="pillar-section">
+    <div class="catalog-title">
+      <h2>Architectural Foundations</h2>
+      <p>Built as an extensible enterprise ecosystem, not a monolithic control.</p>
+    </div>
+
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <h4>True 3D Analytical Subsystem</h4>
+        <p>Real three-dimensional geometry with <code>Camera3D</code> view/perspective matrices, Lambertian directional lighting, and depth-sorted polygon occlusion.</p>
       </div>
 
-      <!-- 4 KPI Metrics Row -->
-      <div class="metrics-row">
-        <div class="metric-pill-card">
-          <div class="metric-header">
-            <span>❤️ Heart Rate</span>
-            <span class="metric-tag tag-teal">● Normal</span>
-          </div>
-          <div class="metric-value">
-            72 <span class="metric-unit">bpm</span>
-          </div>
+      <div class="pillar-card">
+        <div class="pillar-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
-
-        <div class="metric-pill-card">
-          <div class="metric-header">
-            <span>🌙 Sleep Quality</span>
-            <span class="metric-tag tag-indigo">● Good</span>
-          </div>
-          <div class="metric-value">
-            85 <span class="metric-unit">Score</span>
-          </div>
-        </div>
-
-        <div class="metric-pill-card">
-          <div class="metric-header">
-            <span>👟 Daily Steps</span>
-            <span class="metric-tag tag-blue">● 84% of goal</span>
-          </div>
-          <div class="metric-value">
-            8,432 <span class="metric-unit">steps</span>
-          </div>
-        </div>
-
-        <div class="metric-pill-card">
-          <div class="metric-header">
-            <span>💧 Water Intake</span>
-            <span class="metric-tag tag-purple">● 75% of goal</span>
-          </div>
-          <div class="metric-value">
-            6 <span class="metric-unit">Glasses</span>
-          </div>
-        </div>
+        <h4>60 FPS Real-Time Streaming</h4>
+        <p>Built-in <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> algorithms capable of downsampling 100,000+ data points with zero heap reallocations.</p>
       </div>
 
-      <!-- Live Embedded Chart Graphic -->
-      <div style="padding: 1rem 2rem 2.5rem;">
-        <div style="border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; background:#ffffff;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-            <div>
-              <h3 style="font-size:1.15rem; font-weight:800; color:var(--text-title);">Weekly Progress</h3>
-              <p style="font-size:0.85rem; color:var(--text-muted);">Tracking Steps, Active Minutes, and Calories Burned</p>
-            </div>
-            <div style="display:flex; gap:1.25rem; font-size:0.85rem; font-weight:700;">
-              <span style="color:#00C096;">● Steps</span>
-              <span style="color:#3B82F6;">● Active Min</span>
-              <span style="color:#8B5CF6;">● Calories</span>
-            </div>
-          </div>
-          <svg viewBox="0 0 1000 320" width="100%" height="240" xmlns="http://www.w3.org/2000/svg">
-            <line x1="40" y1="40" x2="960" y2="40" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="110" x2="960" y2="110" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="180" x2="960" y2="180" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="250" x2="960" y2="250" stroke="#E2E8F0" stroke-width="1.5" />
-            <!-- Path 1 Steps (Teal) -->
-            <path d="M 60 170 C 180 140, 240 180, 360 110 C 480 60, 560 130, 680 75 C 780 40, 860 90, 940 50" fill="none" stroke="#00C096" stroke-width="4" stroke-linecap="round" />
-            <circle cx="360" cy="110" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
-            <circle cx="680" cy="75" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
-            <circle cx="940" cy="50" r="6" fill="#00C096" stroke="#fff" stroke-width="3" />
-            <!-- Path 2 Active (Blue) -->
-            <path d="M 60 210 C 180 180, 240 200, 360 160 C 480 120, 560 170, 680 130 C 780 100, 860 140, 940 110" fill="none" stroke="#3B82F6" stroke-width="3.5" stroke-linecap="round" />
-            <!-- Path 3 Calories (Purple) -->
-            <path d="M 60 230 C 180 220, 240 230, 360 200 C 480 175, 560 210, 680 180 C 780 160, 860 190, 940 160" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" />
-            <!-- Days -->
-            <text x="60" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Mon</text>
-            <text x="210" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Tue</text>
-            <text x="360" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Wed</text>
-            <text x="510" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Thu</text>
-            <text x="660" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Fri</text>
-            <text x="810" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Sat</text>
-            <text x="940" y="278" text-anchor="middle" fill="#64748B" font-size="13" font-weight="600" font-family="sans-serif">Sun</text>
-          </svg>
+      <div class="pillar-card">
+        <div class="pillar-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
         </div>
+        <h4>CleanLight SaaS Themes</h4>
+        <p>Pre-configured with crisp white card containers, subtle gridlines, and high-contrast color-blind safe palettes (Teal, Blue, Purple, Amber).</p>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Gallery & Code Showcase -->
-  <section id="showcase" class="showcase-section">
-    <div class="section-title">
-      <h2>Interactive Gallery &amp; Code</h2>
-      <p>Clean, declarative XAML and C# APIs that seamlessly integrate into any MVVM workflow.</p>
+  <!-- Quick Start -->
+  <section id="quickstart" class="pillar-section" style="padding-top:0;">
+    <div class="catalog-title">
+      <h2>Getting Started in 2 Steps</h2>
+      <p>Integrate ChartNivra directly into your existing .NET MAUI project.</p>
     </div>
 
-    <div class="tab-nav">
-      <button class="tab-btn active" data-tab="line" onclick="switchTab('line')">Multi-Line &amp; Area</button>
-      <button class="tab-btn" data-tab="rings" onclick="switchTab('rings')">Health Rings</button>
-      <button class="tab-btn" data-tab="columns" onclick="switchTab('columns')">Tracked Bars</button>
-      <button class="tab-btn" data-tab="threed" onclick="switchTab('threed')">3D Columns</button>
-    </div>
-
-    <div class="split-card">
-      <div class="preview-pane">
-        <div id="showcase-svg" style="width:100%; max-width:440px; height:280px;"></div>
-      </div>
-      <div class="code-pane">
-        <div class="code-header">
-          <span id="showcase-title" class="code-title">Weekly Activity &amp; Progress (Multi-Line)</span>
-          <span style="font-size:0.8rem; color:#94a3b8; font-family:var(--font-mono);">XAML / C#</span>
-        </div>
-        <pre><code id="showcase-code"></code></pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- Architecture Features Grid -->
-  <section id="features" class="features-section">
-    <div class="section-title">
-      <h2>Engineered for Modern .NET Applications</h2>
-      <p>Built as a maintainable, high-performance charting framework.</p>
-    </div>
-
-    <div class="feature-grid">
-      <div class="clean-card">
-        <div class="icon-wrapper icon-teal">🧊</div>
-        <h3>True 3D Analytical Subsystem</h3>
-        <p>Built with <code>Camera3D</code> matrix projection, Lambertian directional lighting, and back-to-front depth sorting. Actual three-dimensional spatial coordinates, not fake 2D shadows.</p>
-      </div>
-
-      <div class="clean-card">
-        <div class="icon-wrapper icon-blue">⚡</div>
-        <h3>High-Throughput Streaming</h3>
-        <p>Thread-safe <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> algorithms capable of handling continuous real-time data streaming without heap reallocations.</p>
-      </div>
-
-      <div class="clean-card">
-        <div class="icon-wrapper icon-purple">🎨</div>
-        <h3>Modern Clean Palettes</h3>
-        <p>Built-in <code>CleanLight</code> and <code>Dark</code> themes with crisp typography, subtle gridlines, and categorical palettes inspired by modern SaaS applications.</p>
-      </div>
-
-      <div class="clean-card">
-        <div class="icon-wrapper icon-amber">📱</div>
-        <h3>Cross-Platform .NET MAUI</h3>
-        <p>Direct native support for Windows, iOS, Android, and macOS MacCatalyst. Simple <code>ChartView</code> control with full MVVM data-binding support.</p>
-      </div>
-
-      <div class="clean-card">
-        <div class="icon-wrapper icon-indigo">📊</div>
-        <h3>Financial &amp; Statistical</h3>
-        <p>Full support for Candlestick/OHLC series with technical indicators (SMA, EMA), Box Plots, and automated Histogram frequency binning.</p>
-      </div>
-
-      <div class="clean-card">
-        <div class="icon-wrapper icon-cyan">💾</div>
-        <h3>Headless PNG Exporter</h3>
-        <p>Export high-resolution raster images in memory via <code>ChartImageExporter</code> without requiring an active UI window or screen.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Documentation Section -->
-  <section id="docs" class="features-section" style="padding-top:0;">
-    <div class="section-title">
-      <h2>Documentation &amp; Quick Start</h2>
-      <p>Get up and running in your .NET MAUI application in less than 2 minutes.</p>
-    </div>
-
-    <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:24px; padding:2.5rem; max-width:900px; margin:0 auto; box-shadow:var(--shadow-sm);">
-      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">1. Install NuGet Package</h3>
-      <div style="background:#0f172a; color:#f8fafc; padding:1rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.95rem; margin-bottom:1.75rem;">
+    <div style="background:#ffffff; border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:2.5rem; max-width:900px; margin:0 auto; box-shadow:var(--shadow-card);">
+      <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem;">Step 1: Install NuGet Package</h4>
+      <div style="background:#0f172a; color:#f8fafc; padding:1rem 1.25rem; border-radius:10px; font-family:var(--font-mono); font-size:0.92rem; margin-bottom:1.5rem;">
         dotnet add package ChartNivra.Maui
       </div>
 
-      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">2. Add ChartView in XAML</h3>
-      <div style="background:#0f172a; color:#f8fafc; padding:1.25rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.9rem; line-height:1.6; margin-bottom:1.75rem; overflow-x:auto;">
-&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:charts="clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra.Maui"&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;charts:ChartView Title="Weekly Activity"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theme="{x:Static themes:ChartTheme.CleanLight}"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HeightRequest="300" /&gt;<br>
-&lt;/ContentPage&gt;
-      </div>
-
-      <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-title); margin-bottom:1rem;">3. Feed Series Data in C#</h3>
-      <div style="background:#0f172a; color:#f8fafc; padding:1.25rem 1.5rem; border-radius:12px; font-family:var(--font-mono); font-size:0.9rem; line-height:1.6; overflow-x:auto;">
-chart.Model.Series.Add(new LineSeriesModel<br>
-{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Title = "Steps",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Color = ChartColor.FromHex("#00C096"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;StrokeWidth = 3.5f,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Points = new List&lt;ChartPoint&gt; { new(1, 45), new(2, 52), new(3, 49), new(4, 78) }<br>
-});
+      <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem;">Step 2: Add ChartView in XAML</h4>
+      <div style="background:#0f172a; color:#f8fafc; padding:1rem 1.25rem; border-radius:10px; font-family:var(--font-mono); font-size:0.88rem; line-height:1.6; overflow-x:auto;">
+&lt;charts:ChartView Title="Weekly Activity"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theme="{x:Static themes:ChartTheme.CleanLight}"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HeightRequest="300" /&gt;
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>Released under the <a href="https://github.com/kjagdeesh/ChartNivra/blob/main/LICENSE" target="_blank">MIT License</a>. Created for the .NET MAUI community.</p>
-    <p style="margin-top:0.5rem;">Repository: <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">github.com/kjagdeesh/ChartNivra</a></p>
+    <p>Released under the <a href="https://github.com/kjagdeesh/ChartNivra/blob/main/LICENSE" target="_blank">MIT License</a>. Created for the modern .NET ecosystem.</p>
+    <p style="margin-top:0.5rem;">GitHub: <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">github.com/kjagdeesh/ChartNivra</a></p>
   </footer>
 
   <script src="assets/js/main.js"></script>
