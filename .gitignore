@@ -1,0 +1,32 @@
+## .NET and Build artifacts
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
+
+## Test & Coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## OS specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+## Antigravity / Brain / Logs
+.gemini/
+*.log
