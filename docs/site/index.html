@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChartNivra.Maui — Modern High-Performance 2D & 3D Charting for .NET MAUI</title>
+  <meta name="description" content="ChartNivra.Maui is a fast, modular, open-source 2D and analytical 3D charting library built for .NET MAUI with SkiaSharp.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <a href="#" class="logo-container">
+      <span>📊 ChartNivra</span>
+      <span class="logo-badge">MAUI 10</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#showcase">Gallery & Code</a></li>
+      <li><a href="#3d-depth">True 3D Engine</a></li>
+      <li><a href="#documentation">Documentation</a></li>
+      <li>
+        <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="btn-github">
+          <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">🚀 Next-Gen .NET 10 MAUI Charting Engine</div>
+    <h1>The Modern 2D &amp; <span class="gradient-text">True 3D</span> Charting Framework</h1>
+    <p class="hero-subtitle">
+      Engineered for .NET MAUI. Powered by SkiaSharp and real 3D perspective projection. Built for unmatched performance with streaming FIFO buffers, LTTB decimation, and native multi-platform compilation.
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="#showcase" class="btn-primary">Explore Interactive Gallery</a>
+      <a href="#documentation" class="btn-secondary">Read Documentation</a>
+    </div>
+
+    <div class="install-command">
+      <span>dotnet add package ChartNivra.Maui</span>
+      <button class="copy-btn" onclick="copyInstall()">Copy</button>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section id="features" class="features-section">
+    <div class="section-header">
+      <h2>Engineered Without Compromise</h2>
+      <p>Built as an extensible enterprise framework, not just another drawing canvas wrapper.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">🧊</div>
+        <h3>True 3D Analytical Engine</h3>
+        <p>Real 3-dimensional world coordinates, Camera3D view/projection matrices, Lambertian directional lighting, and depth-sorted polygon rendering. Not fake 2D shadows.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-emerald">⚡</div>
+        <h3>High-Throughput Streaming</h3>
+        <p>Built-in <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> algorithms capable of handling 100,000+ points and 60 FPS real-time streaming with zero memory reallocations.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-purple">📈</div>
+        <h3>Comprehensive Chart Suite</h3>
+        <p>Line, Spline, Area, Bar, Column, Scatter, Pie, Donut, Radial Gauges, Histograms, Box Plots, and Financial Candlesticks with SMA/EMA indicators.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-amber">🎨</div>
+        <h3>Enterprise Theming &amp; Palettes</h3>
+        <p>First-class Dark, Light, High-Contrast themes and categorical palettes (Vibrant, Ocean) with per-series overrides and accessible contrast ratios.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-rose">📱</div>
+        <h3>Native Multi-Platform MAUI</h3>
+        <p>Direct support for Windows, Android, iOS, and macOS MacCatalyst. Fully supports XAML collection syntax, MVVM data-binding, and smooth gesture zoom/pan.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">💾</div>
+        <h3>Off-Screen Image Export</h3>
+        <p>High-resolution headless PNG raster rendering with <code>ChartImageExporter</code> without needing a visible screen host control.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Gallery & Code Showcase -->
+  <section id="showcase" class="showcase-section">
+    <div class="showcase-container">
+      <div class="section-header">
+        <h2>Interactive Gallery &amp; Code</h2>
+        <p>Clean XAML and C# syntax designed for maximum developer ergonomics.</p>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="line" onclick="switchTab('line')">Line &amp; Area</button>
+        <button class="tab-btn" data-tab="bar" onclick="switchTab('bar')">3D Column</button>
+        <button class="tab-btn" data-tab="pie" onclick="switchTab('pie')">Donut &amp; Pie</button>
+        <button class="tab-btn" data-tab="financial" onclick="switchTab('financial')">Financial Candlestick</button>
+        <button class="tab-btn" data-tab="gauge" onclick="switchTab('gauge')">Radial Gauge</button>
+      </div>
+
+      <div class="showcase-preview-card">
+        <div class="preview-visual">
+          <div id="showcase-svg" class="svg-chart-container"></div>
+        </div>
+        <div class="preview-code">
+          <div class="code-header">
+            <span id="showcase-title" class="code-title">Cartesian Line &amp; Spline Chart</span>
+            <span style="font-size:0.75rem; color:#64748b; font-family:var(--font-mono);">XAML / C#</span>
+          </div>
+          <pre><code id="showcase-code"></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- True 3D Depth Spotlight -->
+  <section id="3d-depth" class="features-section" style="background:#090d16;">
+    <div class="section-header">
+      <h2>The True 3D Analytical Advantage</h2>
+      <p>Why ChartNivra delivers real three-dimensional insight instead of decorative 2.5D visual tricks.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem;">
+      <div style="background:var(--bg-card); padding:2rem; border-radius:16px; border:1px solid var(--border-color);">
+        <h4 style="color:#f43f5e; margin-bottom:0.75rem; font-size:1.15rem;">❌ Other "3D" Libraries (Fake 2D)</h4>
+        <ul style="color:var(--text-muted); font-size:0.95rem; line-height:1.8; padding-left:1.25rem;">
+          <li>Simple drop shadows and gradient skewing.</li>
+          <li>Fixed viewing angle with zero camera rotation or orbit.</li>
+          <li>No depth testing; geometry renders in arbitrary order.</li>
+          <li>Distorts data and provides misleading presentation.</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--bg-card); padding:2rem; border-radius:16px; border:1px solid var(--accent-blue); box-shadow: 0 0 20px rgba(59,130,246,0.15);">
+        <h4 style="color:#38bdf8; margin-bottom:0.75rem; font-size:1.15rem;">✅ ChartNivra True 3D Subsystem</h4>
+        <ul style="color:var(--text-main); font-size:0.95rem; line-height:1.8; padding-left:1.25rem;">
+          <li>Real 3D coordinates (X, Y, Z) and World Space.</li>
+          <li><code>Camera3D</code> with full LookAt View and Perspective Projection matrices.</li>
+          <li>Directional Lambertian lighting with ambient and diffuse shading.</li>
+          <li>Painter's depth sorting algorithm for accurate occlusion.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation Section -->
+  <section id="documentation" class="docs-section">
+    <div class="section-header">
+      <h2>Developer Documentation</h2>
+      <p>Everything you need to integrate, customize, and extend ChartNivra in minutes.</p>
+    </div>
+
+    <div class="docs-grid">
+      <div class="doc-block">
+        <h3>🚀 Getting Started</h3>
+        <ul>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Installation via NuGet</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">MAUI App Registration</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">First 2D Cartesian Chart</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">MVVM Data Binding</a></li>
+        </ul>
+      </div>
+
+      <div class="doc-block">
+        <h3>📊 Chart Types</h3>
+        <ul>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Line, Spline, and Area Series</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Bar and Column Series</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Pie and Donut Slices</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Candlestick and Technical Indicators</a></li>
+        </ul>
+      </div>
+
+      <div class="doc-block">
+        <h3>⚡ Real-Time &amp; High Perf</h3>
+        <ul>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">StreamingRingBuffer Usage</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">LTTB Downsampling Decimation</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Gesture Zoom &amp; Pan State</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Memory Optimization Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="doc-block">
+        <h3>🧊 3D Analytical</h3>
+        <ul>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Camera3D Projection</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Lighting &amp; Material Shading</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">3D Column Mesh Generator</a></li>
+          <li><a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">Depth Sorting Architecture</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Released under the <a href="https://github.com/kjagdeesh/ChartNivra/blob/main/LICENSE" target="_blank">MIT License</a>. Created for the .NET MAUI community.</p>
+    <p style="margin-top:0.5rem;">Repository: <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">github.com/kjagdeesh/ChartNivra</a></p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
