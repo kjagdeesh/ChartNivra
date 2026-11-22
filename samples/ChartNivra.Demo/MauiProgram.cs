@@ -1,12 +1,15 @@
 namespace ChartNivra.Demo;
 
+using SkiaSharp.Views.Maui.Controls.Hosting;
+
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<App>();
+            .UseMauiApp<App>()
+            .UseSkiaSharp();
 
         return builder.Build();
     }
