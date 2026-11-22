@@ -3,330 +3,1471 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChartNivra.Maui — Modern 2D & 3D Charting for .NET MAUI</title>
-  <meta name="description" content="ChartNivra brings modern Dribbble and SaaS aesthetics to .NET MAUI. Hardware-accelerated 2D and analytical 3D charts with 60 FPS streaming.">
+  <title>ChartNivra — Enterprise .NET MAUI Charting Library</title>
+  <meta name="description" content="ChartNivra: Production-ready 2D & 3D charting for .NET MAUI. 25+ chart types, 60 FPS real-time, cross-platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="navbar">
-    <a href="#" class="brand">
-      <div class="brand-badge">📊</div>
-      <span>ChartNivra</span>
+<!-- ═══════════════════════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════════════════════════ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#0EA5E9"/>
+        <path d="M7 22 L11 15 L15 18 L19 10 L23 13 L25 10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="23" cy="13" r="2" fill="white"/>
+      </svg>
+      <span class="logo-text">ChartNivra</span>
+      <span class="logo-badge">.MAUI</span>
     </a>
 
-    <ul class="nav-links">
-      <li><a href="#showcase-stage">Live Apps</a></li>
-      <li><a href="#interactive-suite">Chart Suite</a></li>
-      <li><a href="#features">Architecture</a></li>
-      <li><a href="#quickstart">Quick Start</a></li>
-      <li>
-        <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="btn-github">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
-          GitHub
+    <nav class="nav-links">
+      <a href="#charts">Chart Types</a>
+      <a href="#features">Features</a>
+      <a href="#samples">Samples</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="#docs">Docs</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank" class="nav-github">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="#quickstart" class="btn-primary-sm">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="container hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Built for .NET 10 · MIT License · Open Source
+      </div>
+
+      <h1 class="hero-title">
+        Enterprise Charts<br>for <span class="gradient-text">.NET MAUI</span>
+      </h1>
+
+      <p class="hero-sub">
+        25+ chart types with true 3D perspective, 60 FPS real-time streaming, and pixel-perfect rendering across Windows, iOS, Android & macOS — all powered by SkiaSharp.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>25+</strong>
+          <span>Chart Types</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>60 FPS</strong>
+          <span>Real-Time</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>4</strong>
+          <span>Platforms</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>MIT</strong>
+          <span>License</span>
+        </div>
+      </div>
+
+      <div class="hero-ctas">
+        <a href="#quickstart" class="cta-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Get Started
         </a>
-      </li>
-    </ul>
-  </header>
+        <a href="#charts" class="cta-secondary">
+          View Chart Gallery
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-pill">
-      <span class="pill-dot"></span>
-      Built &amp; Optimized for .NET 10 MAUI
-    </div>
-
-    <h1>Next-Gen <span class="hero-gradient">2D &amp; True 3D</span> Charting for .NET MAUI</h1>
-
-    <p>
-      Give your mobile and desktop apps the modern SaaS polish they deserve. Beautiful fluid splines, true 3D perspective cuboids, activity progress rings, and real-time 60 FPS streaming without commercial licensing fees.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#interactive-suite" class="btn-primary">Explore Chart Catalog</a>
-      <div class="install-pill">
-        <code>dotnet add package ChartNivra.Maui</code>
-        <button class="copy-button" onclick="copyInstall()">Copy</button>
+      <div class="install-box">
+        <span class="install-label">Install</span>
+        <code class="install-cmd">dotnet add package ChartNivra.Maui</code>
+        <button class="copy-btn" onclick="copyInstall(this)" title="Copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
       </div>
     </div>
-  </section>
 
-  <!-- Side-by-Side Mobile & Desktop Mockup Stage (Reference Style) -->
-  <section id="showcase-stage" class="device-stage">
-    <div class="stage-card">
-
-      <!-- Left: Mobile Phone Mockup -->
-      <div class="phone-frame">
-        <div class="phone-header">
-          <span>9:41</span>
-          <span class="phone-date-pill">May 20, 2026</span>
+    <div class="hero-right">
+      <!-- Dashboard mockup -->
+      <div class="device-frame desktop-frame">
+        <div class="device-screen">
+          <div class="dash-header">
+            <div class="dash-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#0EA5E9"/><path d="M7 22 L11 15 L15 18 L19 10 L23 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              ChartNivra
+            </div>
+            <div class="dash-nav-items">
+              <span class="dash-nav-item active">Overview</span>
+              <span class="dash-nav-item">Analytics</span>
+              <span class="dash-nav-item">Reports</span>
+            </div>
+          </div>
+          <div class="dash-kpis">
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background:#EFF6FF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="kpi-val">8,432</div>
+              <div class="kpi-lbl">Data Points</div>
+              <div class="kpi-chg up">+12.4%</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background:#F0FDF4">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="kpi-val">60 FPS</div>
+              <div class="kpi-lbl">Render Rate</div>
+              <div class="kpi-chg up">Stable</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background:#FFF7ED">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+              </div>
+              <div class="kpi-val">25+</div>
+              <div class="kpi-lbl">Chart Types</div>
+              <div class="kpi-chg up">All Included</div>
+            </div>
+          </div>
+          <!-- Mini line chart SVG -->
+          <div class="dash-chart-area">
+            <div class="dash-chart-title">Weekly Performance</div>
+            <svg viewBox="0 0 320 90" class="mini-chart" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="20" x2="320" y2="20" stroke="#F1F5F9" stroke-width="1"/>
+              <line x1="0" y1="45" x2="320" y2="45" stroke="#F1F5F9" stroke-width="1"/>
+              <line x1="0" y1="70" x2="320" y2="70" stroke="#F1F5F9" stroke-width="1"/>
+              <!-- Area fill 1 -->
+              <path d="M0,70 C40,55 80,30 120,25 C160,20 200,40 240,35 C280,30 300,20 320,18 L320,90 L0,90 Z" fill="url(#g1)"/>
+              <!-- Area fill 2 -->
+              <path d="M0,80 C40,70 80,60 120,55 C160,50 200,65 240,58 C280,51 300,45 320,42 L320,90 L0,90 Z" fill="url(#g2)"/>
+              <!-- Line 1 -->
+              <path d="M0,70 C40,55 80,30 120,25 C160,20 200,40 240,35 C280,30 300,20 320,18" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round"/>
+              <!-- Line 2 -->
+              <path d="M0,80 C40,70 80,60 120,55 C160,50 200,65 240,58 C280,51 300,45 320,42" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-dasharray="none"/>
+              <!-- Data point highlight -->
+              <circle cx="240" cy="35" r="4" fill="white" stroke="#0EA5E9" stroke-width="2"/>
+              <!-- Labels -->
+              <text x="4" y="88" font-size="7" fill="#94A3B8">Mon</text>
+              <text x="47" y="88" font-size="7" fill="#94A3B8">Tue</text>
+              <text x="90" y="88" font-size="7" fill="#94A3B8">Wed</text>
+              <text x="133" y="88" font-size="7" fill="#94A3B8">Thu</text>
+              <text x="176" y="88" font-size="7" fill="#94A3B8">Fri</text>
+              <text x="219" y="88" font-size="7" fill="#94A3B8">Sat</text>
+              <text x="262" y="88" font-size="7" fill="#94A3B8">Sun</text>
+            </svg>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="leg-dot" style="background:#0EA5E9"></span>Series A</span>
+              <span class="legend-item"><span class="leg-dot" style="background:#8B5CF6"></span>Series B</span>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="phone-metric-box">
-          <div class="phone-metric-title">Daily Steps</div>
-          <div class="phone-metric-num">8,432</div>
-          <div class="phone-metric-status">● 84% of daily goal</div>
+      <!-- Floating phone with donut -->
+      <div class="device-frame phone-frame">
+        <div class="device-screen phone-screen">
+          <div class="phone-header">
+            <span>Reports</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+          </div>
+          <svg viewBox="0 0 120 120" width="100" height="100" style="margin:8px auto;display:block">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#F1F5F9" stroke-width="12"/>
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#0EA5E9" stroke-width="12" stroke-dasharray="169 113" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#8B5CF6" stroke-width="12" stroke-dasharray="80 202" stroke-dashoffset="-169" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#22C55E" stroke-width="12" stroke-dasharray="33 249" stroke-dashoffset="-249" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" font-size="13" font-weight="700" fill="#0F172A">75%</text>
+            <text x="60" y="68" text-anchor="middle" font-size="7" fill="#64748B">Complete</text>
+          </svg>
+          <div class="phone-legend">
+            <div class="pl-item"><span style="background:#0EA5E9"></span>Mobile 60%</div>
+            <div class="pl-item"><span style="background:#8B5CF6"></span>Web 29%</div>
+            <div class="pl-item"><span style="background:#22C55E"></span>API 11%</div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Phone Embedded Mini Spline -->
-        <div style="background:#ffffff; border:1px solid #edf2f7; border-radius:18px; padding:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.02);">
-          <div style="font-size:0.85rem; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Weekly Activity</div>
-          <svg viewBox="0 0 300 140" width="100%" height="110" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 20 90 C 70 70, 90 100, 140 50 C 190 20, 230 70, 280 30 L 280 130 L 20 130 Z" fill="#00C096" opacity="0.12" />
-            <path d="M 20 90 C 70 70, 90 100, 140 50 C 190 20, 230 70, 280 30" fill="none" stroke="#00C096" stroke-width="3.5" stroke-linecap="round" />
-            <circle cx="140" cy="50" r="5" fill="#00C096" stroke="#fff" stroke-width="2.5" />
-            <circle cx="280" cy="30" r="5" fill="#00C096" stroke="#fff" stroke-width="2.5" />
+<!-- ═══════════════════════════════════════════════════════════════
+     PLATFORM BADGES
+══════════════════════════════════════════════════════════════════ -->
+<section class="platforms">
+  <div class="container">
+    <p class="platforms-label">Runs everywhere .NET MAUI runs</p>
+    <div class="platform-list">
+      <div class="platform-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Windows
+      </div>
+      <div class="platform-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Android
+      </div>
+      <div class="platform-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        iOS
+      </div>
+      <div class="platform-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M8 2l4 4 4-4"/></svg>
+        macOS
+      </div>
+      <div class="platform-badge powered">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        SkiaSharp
+      </div>
+      <div class="platform-badge powered">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        .NET 10
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHART GALLERY
+══════════════════════════════════════════════════════════════════ -->
+<section class="charts-section" id="charts">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-pill">Chart Gallery</div>
+      <h2>Every Chart Type You Need</h2>
+      <p>From simple line charts to true 3D surfaces — all rendered with hardware-accelerated SkiaSharp.</p>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="chart-tabs" id="chartTabs">
+      <button class="tab-btn active" data-category="all">All Charts</button>
+      <button class="tab-btn" data-category="cartesian">Cartesian</button>
+      <button class="tab-btn" data-category="circular">Circular</button>
+      <button class="tab-btn" data-category="financial">Financial</button>
+      <button class="tab-btn" data-category="statistical">Statistical</button>
+      <button class="tab-btn" data-category="threed">3D Charts</button>
+      <button class="tab-btn" data-category="gauges">Gauges</button>
+      <button class="tab-btn" data-category="special">Special</button>
+    </div>
+
+    <!-- Chart Grid -->
+    <div class="chart-grid" id="chartGrid">
+
+      <!-- LINE CHART -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('line')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="20" x2="200" y2="20" stroke="#F1F5F9" stroke-width="1"/>
+            <line x1="0" y1="50" x2="200" y2="50" stroke="#F1F5F9" stroke-width="1"/>
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#F1F5F9" stroke-width="1"/>
+            <path d="M10,75 C40,60 70,30 100,25 C130,20 160,45 190,30" fill="none" stroke="#0EA5E9" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10,75 C40,60 70,30 100,25 C130,20 160,45 190,30 L190,90 L10,90 Z" fill="url(#lg1)"/>
+            <path d="M10,85 C40,78 70,65 100,60 C130,55 160,70 190,55" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
           </svg>
         </div>
-
-        <!-- Mini Donut Allocation -->
-        <div style="display:flex; align-items:center; gap:1rem; background:var(--bg-subtle); border-radius:18px; padding:0.9rem;">
-          <svg viewBox="0 0 80 80" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="40" r="28" fill="none" stroke="#F1F5F9" stroke-width="12" />
-            <circle cx="40" cy="40" r="28" fill="none" stroke="#00C096" stroke-width="12" stroke-dasharray="110 180" stroke-linecap="round" />
-          </svg>
-          <div>
-            <div style="font-size:1.15rem; font-weight:800; color:#0f172a;">78%</div>
-            <div style="font-size:0.75rem; color:#64748b; font-weight:600;">Work Time Allocation</div>
-          </div>
+        <div class="chart-info">
+          <div class="chart-name">Line Chart</div>
+          <div class="chart-desc">Smooth spline with area fill, multi-series, real-time capable</div>
+          <div class="chart-tags"><span>Spline</span><span>Area</span><span>Multi-Series</span></div>
         </div>
       </div>
 
-      <!-- Right: Desktop & Tablet Executive Dashboard -->
-      <div class="desktop-frame">
-        <div class="desktop-header">
-          <div class="desktop-greeting">
-            <h3>Good morning, Alex! 👋</h3>
-            <p>Here's your comprehensive health &amp; activity overview for today.</p>
-          </div>
-          <div style="background:#ffffff; border:1px solid #e2e8f0; padding:0.45rem 1rem; border-radius:9999px; font-size:0.85rem; font-weight:700; color:#0f172a; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-            Wednesday, May 20, 2026 📅
-          </div>
-        </div>
-
-        <!-- 4 KPI Metrics Row -->
-        <div class="metric-cards-row">
-          <div class="metric-card">
-            <div class="metric-card-top">
-              <span class="metric-card-label">Heart Rate</span>
-              <div class="metric-icon-bubble" style="background:#e6f9f4; color:#00C096;">❤️</div>
-            </div>
-            <div class="metric-card-num">72 <span style="font-size:0.9rem; color:#94a3b8; font-weight:600;">bpm</span></div>
-            <span style="font-size:0.8rem; font-weight:700; color:#00a883;">● Normal</span>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-card-top">
-              <span class="metric-card-label">Sleep Quality</span>
-              <div class="metric-icon-bubble" style="background:#f5f3ff; color:#8B5CF6;">🌙</div>
-            </div>
-            <div class="metric-card-num">85 <span style="font-size:0.9rem; color:#94a3b8; font-weight:600;">Score</span></div>
-            <span style="font-size:0.8rem; font-weight:700; color:#8B5CF6;">● Good</span>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-card-top">
-              <span class="metric-card-label">Daily Steps</span>
-              <div class="metric-icon-bubble" style="background:#eff6ff; color:#3B82F6;">👟</div>
-            </div>
-            <div class="metric-card-num">8,432 <span style="font-size:0.9rem; color:#94a3b8; font-weight:600;">Steps</span></div>
-            <span style="font-size:0.8rem; font-weight:700; color:#3B82F6;">● 84% of goal</span>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-card-top">
-              <span class="metric-card-label">Water Intake</span>
-              <div class="metric-icon-bubble" style="background:#ecfeff; color:#06B6D4;">💧</div>
-            </div>
-            <div class="metric-card-num">6 <span style="font-size:0.9rem; color:#94a3b8; font-weight:600;">Glasses</span></div>
-            <span style="font-size:0.8rem; font-weight:700; color:#06B6D4;">● 75% of goal</span>
-          </div>
-        </div>
-
-        <!-- Big Chart Card -->
-        <div class="big-chart-card">
-          <div class="chart-card-header">
-            <div>
-              <h4>Weekly Progress</h4>
-              <p style="font-size:0.85rem; color:#64748b;">Tracking Steps, Active Minutes, and Calorie Burn</p>
-            </div>
-            <div class="legend-group">
-              <div class="legend-item"><span class="legend-dot" style="background:#00C096;"></span> Steps</div>
-              <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span> Active Min</div>
-              <div class="legend-item"><span class="legend-dot" style="background:#8B5CF6;"></span> Calories</div>
-            </div>
-          </div>
-
-          <svg viewBox="0 0 900 240" width="100%" height="200" xmlns="http://www.w3.org/2000/svg">
-            <line x1="40" y1="30" x2="860" y2="30" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="85" x2="860" y2="85" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="140" x2="860" y2="140" stroke="#F1F5F9" stroke-width="1.2" />
-            <line x1="40" y1="195" x2="860" y2="195" stroke="#E2E8F0" stroke-width="1.5" />
-            <!-- Path 1 Steps (Teal) -->
-            <path d="M 60 135 C 160 110, 220 150, 320 85 C 430 40, 500 100, 610 55 C 710 25, 780 70, 840 40" fill="none" stroke="#00C096" stroke-width="3.5" stroke-linecap="round" />
-            <circle cx="320" cy="85" r="5.5" fill="#00C096" stroke="#fff" stroke-width="2.5" />
-            <circle cx="610" cy="55" r="5.5" fill="#00C096" stroke="#fff" stroke-width="2.5" />
-            <!-- Path 2 Active (Blue) -->
-            <path d="M 60 165 C 160 145, 220 165, 320 130 C 430 95, 500 135, 610 105 C 710 80, 780 115, 840 85" fill="none" stroke="#3B82F6" stroke-width="3.0" stroke-linecap="round" />
-            <!-- Path 3 Calories (Purple) -->
-            <path d="M 60 185 C 160 175, 220 185, 320 160 C 430 140, 500 170, 610 145 C 710 130, 780 155, 840 130" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
-            <!-- Days -->
-            <text x="60" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Mon</text>
-            <text x="190" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Tue</text>
-            <text x="320" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Wed</text>
-            <text x="450" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Thu</text>
-            <text x="580" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Fri</text>
-            <text x="710" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Sat</text>
-            <text x="840" y="222" text-anchor="middle" fill="#64748B" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif">Sun</text>
+      <!-- BAR CHART -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('bar')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#E2E8F0" stroke-width="1"/>
+            <rect x="15" y="45" width="18" height="35" rx="2" fill="#0EA5E9" opacity="0.9"/>
+            <rect x="40" y="30" width="18" height="50" rx="2" fill="#0EA5E9"/>
+            <rect x="65" y="55" width="18" height="25" rx="2" fill="#0EA5E9" opacity="0.9"/>
+            <rect x="90" y="20" width="18" height="60" rx="2" fill="#0EA5E9"/>
+            <rect x="115" y="40" width="18" height="40" rx="2" fill="#0EA5E9" opacity="0.9"/>
+            <rect x="140" y="25" width="18" height="55" rx="2" fill="#0EA5E9"/>
+            <rect x="165" y="50" width="18" height="30" rx="2" fill="#0EA5E9" opacity="0.9"/>
+            <text x="20" y="95" font-size="6" fill="#94A3B8">Jan</text>
+            <text x="45" y="95" font-size="6" fill="#94A3B8">Feb</text>
+            <text x="70" y="95" font-size="6" fill="#94A3B8">Mar</text>
+            <text x="95" y="95" font-size="6" fill="#94A3B8">Apr</text>
+            <text x="120" y="95" font-size="6" fill="#94A3B8">May</text>
+            <text x="145" y="95" font-size="6" fill="#94A3B8">Jun</text>
+            <text x="170" y="95" font-size="6" fill="#94A3B8">Jul</text>
           </svg>
         </div>
+        <div class="chart-info">
+          <div class="chart-name">Bar / Column Chart</div>
+          <div class="chart-desc">Vertical & horizontal bars, grouped, stacked, 100% stacked</div>
+          <div class="chart-tags"><span>Grouped</span><span>Stacked</span><span>100%</span></div>
+        </div>
+      </div>
+
+      <!-- AREA CHART -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('area')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.05"/>
+              </linearGradient>
+              <linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0.05"/>
+              </linearGradient>
+            </defs>
+            <path d="M10,80 L40,55 L80,45 L120,30 L160,50 L190,35 L190,90 L10,90 Z" fill="url(#ag1)"/>
+            <path d="M10,80 L40,55 L80,45 L120,30 L160,50 L190,35" fill="none" stroke="#8B5CF6" stroke-width="2.5"/>
+            <path d="M10,90 L40,70 L80,65 L120,55 L160,70 L190,58 L190,90 L10,90 Z" fill="url(#ag2)"/>
+            <path d="M10,90 L40,70 L80,65 L120,55 L160,70 L190,58" fill="none" stroke="#0EA5E9" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Area Chart</div>
+          <div class="chart-desc">Stacked and overlapping area charts with gradient fills</div>
+          <div class="chart-tags"><span>Stacked</span><span>Gradient</span><span>Multi-Layer</span></div>
+        </div>
+      </div>
+
+      <!-- SCATTER -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('scatter')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="20" y1="10" x2="20" y2="85" stroke="#E2E8F0" stroke-width="1"/>
+            <line x1="20" y1="85" x2="190" y2="85" stroke="#E2E8F0" stroke-width="1"/>
+            <circle cx="45" cy="60" r="5" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="70" cy="40" r="7" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="90" cy="70" r="4" fill="#8B5CF6" opacity="0.75"/>
+            <circle cx="110" cy="30" r="6" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="130" cy="55" r="8" fill="#8B5CF6" opacity="0.75"/>
+            <circle cx="150" cy="20" r="5" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="165" cy="65" r="6" fill="#22C55E" opacity="0.75"/>
+            <circle cx="60" cy="75" r="4" fill="#22C55E" opacity="0.75"/>
+            <circle cx="175" cy="40" r="7" fill="#8B5CF6" opacity="0.75"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Scatter / Bubble Chart</div>
+          <div class="chart-desc">XY scatter with variable-size bubbles and color encoding</div>
+          <div class="chart-tags"><span>XY Plot</span><span>Bubble</span><span>Clustering</span></div>
+        </div>
+      </div>
+
+      <!-- SPLINE / STEP -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('spline')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#F1F5F9" stroke-width="1"/>
+            <path d="M10,70 C30,70 30,30 60,30 C90,30 90,30 90,30 L90,30 C120,30 120,60 150,60 C170,60 170,20 190,20" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="10" cy="70" r="3" fill="white" stroke="#F97316" stroke-width="2"/>
+            <circle cx="60" cy="30" r="3" fill="white" stroke="#F97316" stroke-width="2"/>
+            <circle cx="90" cy="30" r="3" fill="white" stroke="#F97316" stroke-width="2"/>
+            <circle cx="150" cy="60" r="3" fill="white" stroke="#F97316" stroke-width="2"/>
+            <circle cx="190" cy="20" r="3" fill="white" stroke="#F97316" stroke-width="2"/>
+            <!-- Step line -->
+            <path d="M10,75 L50,75 L50,50 L90,50 L90,65 L130,65 L130,35 L170,35 L170,55 L190,55" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="square"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Spline / Step Line</div>
+          <div class="chart-desc">Cubic bezier spline and step-line with configurable tension</div>
+          <div class="chart-tags"><span>Bezier</span><span>Step</span><span>Smooth</span></div>
+        </div>
+      </div>
+
+      <!-- RANGE / BAND -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('range')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0.1"/>
+              </linearGradient>
+            </defs>
+            <path d="M10,20 C50,15 100,25 150,18 C170,15 185,22 195,20 L195,70 C185,65 170,58 150,62 C100,70 50,55 10,60 Z" fill="url(#rg1)" stroke="none"/>
+            <path d="M10,20 C50,15 100,25 150,18 C170,15 185,22 195,20" fill="none" stroke="#0EA5E9" stroke-width="2"/>
+            <path d="M10,60 C50,55 100,70 150,62 C170,58 185,65 195,70" fill="none" stroke="#0EA5E9" stroke-width="2"/>
+            <path d="M10,40 C50,35 100,47 150,40 C170,36 185,43 195,45" fill="none" stroke="#0EA5E9" stroke-width="1.5" stroke-dasharray="4,3"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Range / Band Chart</div>
+          <div class="chart-desc">High-Low range bands, confidence intervals, error bars</div>
+          <div class="chart-tags"><span>Hi-Lo</span><span>Band</span><span>Confidence</span></div>
+        </div>
+      </div>
+
+      <!-- WATERFALL -->
+      <div class="chart-card" data-category="cartesian" onclick="openChart('waterfall')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#E2E8F0" stroke-width="1"/>
+            <rect x="12" y="40" width="20" height="40" rx="2" fill="#0EA5E9"/>
+            <rect x="40" y="30" width="20" height="10" rx="2" fill="#22C55E"/>
+            <rect x="68" y="30" width="20" height="20" rx="2" fill="#22C55E"/>
+            <rect x="96" y="20" width="20" height="10" rx="2" fill="#22C55E"/>
+            <rect x="124" y="30" width="20" height="10" rx="2" fill="#EF4444"/>
+            <rect x="152" y="20" width="20" height="40" rx="2" fill="#0EA5E9"/>
+            <line x1="22" y1="40" x2="40" y2="40" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="50" y1="30" x2="68" y2="30" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="78" y1="20" x2="96" y2="20" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="106" y1="20" x2="124" y2="20" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,2"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Waterfall Chart</div>
+          <div class="chart-desc">Running total waterfall with positive/negative color encoding</div>
+          <div class="chart-tags"><span>Bridge</span><span>P&L</span><span>Running Total</span></div>
+        </div>
+      </div>
+
+      <!-- PIE CHART -->
+      <div class="chart-card" data-category="circular" onclick="openChart('pie')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <g transform="translate(100,50)">
+              <path d="M0,-42 A42,42 0 0,1 36,21 L0,0 Z" fill="#0EA5E9"/>
+              <path d="M36,21 A42,42 0 0,1 -21,37 L0,0 Z" fill="#8B5CF6"/>
+              <path d="M-21,37 A42,42 0 0,1 -36,-21 L0,0 Z" fill="#22C55E"/>
+              <path d="M-36,-21 A42,42 0 0,1 0,-42 L0,0 Z" fill="#F97316"/>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Pie Chart</div>
+          <div class="chart-desc">Classic pie with explode-on-tap, animated entry, custom labels</div>
+          <div class="chart-tags"><span>Explode</span><span>Labels</span><span>Animated</span></div>
+        </div>
+      </div>
+
+      <!-- DONUT / DOUGHNUT -->
+      <div class="chart-card" data-category="circular" onclick="openChart('donut')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <g transform="translate(100,50)">
+              <circle cx="0" cy="0" r="42" fill="none" stroke="#F1F5F9" stroke-width="16"/>
+              <circle cx="0" cy="0" r="42" fill="none" stroke="#0EA5E9" stroke-width="16" stroke-dasharray="105 159" stroke-linecap="round" transform="rotate(-90)"/>
+              <circle cx="0" cy="0" r="42" fill="none" stroke="#8B5CF6" stroke-width="16" stroke-dasharray="60 204" stroke-dashoffset="-105" stroke-linecap="round" transform="rotate(-90)"/>
+              <circle cx="0" cy="0" r="42" fill="none" stroke="#22C55E" stroke-width="16" stroke-dasharray="40 224" stroke-dashoffset="-165" stroke-linecap="round" transform="rotate(-90)"/>
+              <text y="-6" text-anchor="middle" font-size="13" font-weight="700" fill="#0F172A">68%</text>
+              <text y="8" text-anchor="middle" font-size="7" fill="#64748B">Total</text>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Donut / Doughnut</div>
+          <div class="chart-desc">Ring chart with center label, multi-ring and progress variants</div>
+          <div class="chart-tags"><span>Ring</span><span>Progress</span><span>Multi-Ring</span></div>
+        </div>
+      </div>
+
+      <!-- SUNBURST -->
+      <div class="chart-card" data-category="circular" onclick="openChart('sunburst')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <g transform="translate(100,50)">
+              <!-- Inner ring -->
+              <path d="M0,-30 A30,30 0 0,1 26,15 L0,0 Z" fill="#0EA5E9"/>
+              <path d="M26,15 A30,30 0 0,1 -26,15 L0,0 Z" fill="#8B5CF6"/>
+              <path d="M-26,15 A30,30 0 0,1 0,-30 L0,0 Z" fill="#22C55E"/>
+              <!-- Outer ring segments -->
+              <path d="M0,-30 A30,30 0 0,1 15,-26 L22,-38 A44,44 0 0,0 0,-44 Z" fill="#38BDF8"/>
+              <path d="M15,-26 A30,30 0 0,1 26,15 L38,22 A44,44 0 0,0 22,-38 Z" fill="#38BDF8" opacity="0.7"/>
+              <path d="M26,15 A30,30 0 0,1 0,30 L0,44 A44,44 0 0,0 38,22 Z" fill="#A78BFA"/>
+              <path d="M0,30 A30,30 0 0,1 -26,15 L-38,22 A44,44 0 0,0 0,44 Z" fill="#A78BFA" opacity="0.7"/>
+              <path d="M-26,15 A30,30 0 0,1 0,-30 L0,-44 A44,44 0 0,0 -38,22 Z" fill="#4ADE80"/>
+              <circle cx="0" cy="0" r="16" fill="white"/>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Sunburst Chart</div>
+          <div class="chart-desc">Hierarchical sunburst with drill-down and breadcrumb navigation</div>
+          <div class="chart-tags"><span>Hierarchical</span><span>Drill-Down</span></div>
+        </div>
+      </div>
+
+      <!-- RADAR -->
+      <div class="chart-card" data-category="special" onclick="openChart('radar')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <g transform="translate(100,50)">
+              <!-- Background webs -->
+              <polygon points="0,-38 36,-12 22,32 -22,32 -36,-12" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+              <polygon points="0,-26 24,-8 15,22 -15,22 -24,-8" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+              <polygon points="0,-14 13,-4 8,12 -8,12 -13,-4" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+              <!-- Axes -->
+              <line x1="0" y1="-38" x2="0" y2="0" stroke="#E2E8F0" stroke-width="1"/>
+              <line x1="36" y1="-12" x2="0" y2="0" stroke="#E2E8F0" stroke-width="1"/>
+              <line x1="22" y1="32" x2="0" y2="0" stroke="#E2E8F0" stroke-width="1"/>
+              <line x1="-22" y1="32" x2="0" y2="0" stroke="#E2E8F0" stroke-width="1"/>
+              <line x1="-36" y1="-12" x2="0" y2="0" stroke="#E2E8F0" stroke-width="1"/>
+              <!-- Data -->
+              <polygon points="0,-30 28,-9 15,24 -18,24 -30,-9" fill="#0EA5E9" fill-opacity="0.2" stroke="#0EA5E9" stroke-width="2"/>
+              <polygon points="0,-20 15,-5 10,16 -12,16 -20,-6" fill="#8B5CF6" fill-opacity="0.2" stroke="#8B5CF6" stroke-width="2"/>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Radar / Spider Chart</div>
+          <div class="chart-desc">Multi-axis radar with configurable axes, fill opacity, and labels</div>
+          <div class="chart-tags"><span>Spider</span><span>Polar</span><span>Multi-Axis</span></div>
+        </div>
+      </div>
+
+      <!-- HEATMAP -->
+      <div class="chart-card" data-category="special" onclick="openChart('heatmap')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="heat1"><stop offset="0%" stop-color="#EFF6FF"/><stop offset="100%" stop-color="#0EA5E9"/></linearGradient>
+            </defs>
+            <!-- Heatmap grid -->
+            <rect x="10" y="10" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="33" y="10" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="56" y="10" width="20" height="16" rx="2" fill="#3B82F6"/>
+            <rect x="79" y="10" width="20" height="16" rx="2" fill="#1D4ED8"/>
+            <rect x="102" y="10" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="125" y="10" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="148" y="10" width="20" height="16" rx="2" fill="#60A5FA"/>
+
+            <rect x="10" y="30" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="33" y="30" width="20" height="16" rx="2" fill="#1D4ED8"/>
+            <rect x="56" y="30" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="79" y="30" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="102" y="30" width="20" height="16" rx="2" fill="#3B82F6"/>
+            <rect x="125" y="30" width="20" height="16" rx="2" fill="#1D4ED8"/>
+            <rect x="148" y="30" width="20" height="16" rx="2" fill="#93C5FD"/>
+
+            <rect x="10" y="50" width="20" height="16" rx="2" fill="#3B82F6"/>
+            <rect x="33" y="50" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="56" y="50" width="20" height="16" rx="2" fill="#1D4ED8"/>
+            <rect x="79" y="50" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="102" y="50" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="125" y="50" width="20" height="16" rx="2" fill="#60A5FA"/>
+            <rect x="148" y="50" width="20" height="16" rx="2" fill="#3B82F6"/>
+
+            <rect x="10" y="70" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="33" y="70" width="20" height="16" rx="2" fill="#60A5FA"/>
+            <rect x="56" y="70" width="20" height="16" rx="2" fill="#93C5FD"/>
+            <rect x="79" y="70" width="20" height="16" rx="2" fill="#1D4ED8"/>
+            <rect x="102" y="70" width="20" height="16" rx="2" fill="#3B82F6"/>
+            <rect x="125" y="70" width="20" height="16" rx="2" fill="#DBEAFE"/>
+            <rect x="148" y="70" width="20" height="16" rx="2" fill="#1D4ED8"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Heatmap</div>
+          <div class="chart-desc">Calendar heatmap and matrix heatmap with custom color scales</div>
+          <div class="chart-tags"><span>Calendar</span><span>Matrix</span><span>Color Scale</span></div>
+        </div>
+      </div>
+
+      <!-- TREEMAP -->
+      <div class="chart-card" data-category="special" onclick="openChart('treemap')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <rect x="5" y="5" width="85" height="60" rx="3" fill="#0EA5E9" opacity="0.85"/>
+            <rect x="5" y="68" width="85" height="27" rx="3" fill="#0EA5E9" opacity="0.5"/>
+            <rect x="94" y="5" width="55" height="45" rx="3" fill="#8B5CF6" opacity="0.85"/>
+            <rect x="94" y="53" width="55" height="42" rx="3" fill="#8B5CF6" opacity="0.5"/>
+            <rect x="153" y="5" width="42" height="30" rx="3" fill="#22C55E" opacity="0.85"/>
+            <rect x="153" y="38" width="42" height="22" rx="3" fill="#F97316" opacity="0.85"/>
+            <rect x="153" y="63" width="42" height="32" rx="3" fill="#22C55E" opacity="0.5"/>
+            <text x="47" y="38" font-size="8" fill="white" text-anchor="middle" font-weight="600">Revenue</text>
+            <text x="121" y="30" font-size="7" fill="white" text-anchor="middle">Mobile</text>
+            <text x="174" y="22" font-size="6" fill="white" text-anchor="middle">Web</text>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Treemap</div>
+          <div class="chart-desc">Hierarchical treemap with proportional area and drill-down</div>
+          <div class="chart-tags"><span>Hierarchical</span><span>Proportional</span></div>
+        </div>
+      </div>
+
+      <!-- CANDLESTICK -->
+      <div class="chart-card" data-category="financial" onclick="openChart('candlestick')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#E2E8F0" stroke-width="1"/>
+            <!-- Up candles (green) -->
+            <line x1="22" y1="30" x2="22" y2="68" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="17" y="45" width="10" height="20" rx="1" fill="#22C55E"/>
+            <line x1="42" y1="25" x2="42" y2="62" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="37" y="38" width="10" height="20" rx="1" fill="#22C55E"/>
+            <!-- Down candles (red) -->
+            <line x1="62" y1="32" x2="62" y2="72" stroke="#EF4444" stroke-width="1.5"/>
+            <rect x="57" y="40" width="10" height="25" rx="1" fill="#EF4444"/>
+            <line x1="82" y1="40" x2="82" y2="78" stroke="#EF4444" stroke-width="1.5"/>
+            <rect x="77" y="52" width="10" height="20" rx="1" fill="#EF4444"/>
+            <!-- Up candles -->
+            <line x1="102" y1="35" x2="102" y2="68" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="97" y="45" width="10" height="20" rx="1" fill="#22C55E"/>
+            <line x1="122" y1="22" x2="122" y2="58" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="117" y="32" width="10" height="22" rx="1" fill="#22C55E"/>
+            <line x1="142" y1="28" x2="142" y2="62" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="137" y="38" width="10" height="20" rx="1" fill="#22C55E"/>
+            <line x1="162" y1="20" x2="162" y2="52" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="157" y="30" width="10" height="18" rx="1" fill="#22C55E"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Candlestick / OHLC</div>
+          <div class="chart-desc">Financial OHLC, candlestick with volume bars and technical overlays</div>
+          <div class="chart-tags"><span>OHLC</span><span>Volume</span><span>Indicators</span></div>
+        </div>
+      </div>
+
+      <!-- BOLLINGER / TECHNICAL -->
+      <div class="chart-card" data-category="financial" onclick="openChart('technical')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.1"/>
+                <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <!-- Bollinger bands -->
+            <path d="M10,15 C50,10 100,20 150,12 C170,9 185,15 195,13 L195,65 C185,60 170,55 150,58 C100,65 50,55 10,60 Z" fill="url(#bg1)"/>
+            <path d="M10,15 C50,10 100,20 150,12 C170,9 185,15 195,13" fill="none" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4,3"/>
+            <path d="M10,60 C50,55 100,65 150,58 C170,55 185,60 195,65" fill="none" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4,3"/>
+            <!-- SMA line -->
+            <path d="M10,37 C50,32 100,42 150,35 C170,32 185,37 195,39" fill="none" stroke="#F97316" stroke-width="2"/>
+            <!-- Price line -->
+            <path d="M10,45 C50,30 100,55 150,25 C170,15 185,35 195,20" fill="none" stroke="#0EA5E9" stroke-width="2.5"/>
+            <!-- Volume bars at bottom -->
+            <rect x="10" y="82" width="8" height="12" rx="1" fill="#0EA5E9" opacity="0.5"/>
+            <rect x="30" y="78" width="8" height="16" rx="1" fill="#22C55E" opacity="0.5"/>
+            <rect x="50" y="85" width="8" height="9" rx="1" fill="#EF4444" opacity="0.5"/>
+            <rect x="70" y="80" width="8" height="14" rx="1" fill="#22C55E" opacity="0.5"/>
+            <rect x="90" y="83" width="8" height="11" rx="1" fill="#0EA5E9" opacity="0.5"/>
+            <rect x="110" y="76" width="8" height="18" rx="1" fill="#22C55E" opacity="0.5"/>
+            <rect x="130" y="81" width="8" height="13" rx="1" fill="#22C55E" opacity="0.5"/>
+            <rect x="150" y="78" width="8" height="16" rx="1" fill="#22C55E" opacity="0.5"/>
+            <rect x="170" y="82" width="8" height="12" rx="1" fill="#EF4444" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Technical Indicators</div>
+          <div class="chart-desc">Bollinger Bands, SMA/EMA/RSI/MACD/Stochastic overlays</div>
+          <div class="chart-tags"><span>Bollinger</span><span>RSI</span><span>MACD</span></div>
+        </div>
+      </div>
+
+      <!-- HISTOGRAM -->
+      <div class="chart-card" data-category="statistical" onclick="openChart('histogram')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="10" y1="80" x2="190" y2="80" stroke="#E2E8F0" stroke-width="1"/>
+            <rect x="12" y="72" width="22" height="8" rx="2" fill="#0EA5E9" opacity="0.6"/>
+            <rect x="37" y="60" width="22" height="20" rx="2" fill="#0EA5E9" opacity="0.75"/>
+            <rect x="62" y="40" width="22" height="40" rx="2" fill="#0EA5E9"/>
+            <rect x="87" y="25" width="22" height="55" rx="2" fill="#0EA5E9"/>
+            <rect x="112" y="35" width="22" height="45" rx="2" fill="#0EA5E9"/>
+            <rect x="137" y="55" width="22" height="25" rx="2" fill="#0EA5E9" opacity="0.75"/>
+            <rect x="162" y="68" width="22" height="12" rx="2" fill="#0EA5E9" opacity="0.6"/>
+            <!-- Normal curve -->
+            <path d="M12,78 C30,75 50,45 87,22 C120,45 155,72 190,78" fill="none" stroke="#F97316" stroke-width="2" stroke-dasharray="4,3"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Histogram</div>
+          <div class="chart-desc">Frequency histogram with normal distribution overlay and bin config</div>
+          <div class="chart-tags"><span>Frequency</span><span>Distribution</span><span>Bins</span></div>
+        </div>
+      </div>
+
+      <!-- BOX PLOT -->
+      <div class="chart-card" data-category="statistical" onclick="openChart('boxplot')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <line x1="0" y1="80" x2="200" y2="80" stroke="#E2E8F0" stroke-width="1"/>
+            <!-- Box plots -->
+            <line x1="30" y1="20" x2="30" y2="75" stroke="#0EA5E9" stroke-width="1.5"/>
+            <line x1="20" y1="20" x2="40" y2="20" stroke="#0EA5E9" stroke-width="1.5"/>
+            <line x1="20" y1="75" x2="40" y2="75" stroke="#0EA5E9" stroke-width="1.5"/>
+            <rect x="20" y="35" width="20" height="28" rx="2" fill="none" stroke="#0EA5E9" stroke-width="2"/>
+            <line x1="20" y1="49" x2="40" y2="49" stroke="#0EA5E9" stroke-width="2.5"/>
+
+            <line x1="75" y1="15" x2="75" y2="70" stroke="#8B5CF6" stroke-width="1.5"/>
+            <line x1="65" y1="15" x2="85" y2="15" stroke="#8B5CF6" stroke-width="1.5"/>
+            <line x1="65" y1="70" x2="85" y2="70" stroke="#8B5CF6" stroke-width="1.5"/>
+            <rect x="65" y="30" width="20" height="25" rx="2" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+            <line x1="65" y1="43" x2="85" y2="43" stroke="#8B5CF6" stroke-width="2.5"/>
+
+            <line x1="120" y1="25" x2="120" y2="68" stroke="#22C55E" stroke-width="1.5"/>
+            <line x1="110" y1="25" x2="130" y2="25" stroke="#22C55E" stroke-width="1.5"/>
+            <line x1="110" y1="68" x2="130" y2="68" stroke="#22C55E" stroke-width="1.5"/>
+            <rect x="110" y="38" width="20" height="20" rx="2" fill="none" stroke="#22C55E" stroke-width="2"/>
+            <line x1="110" y1="47" x2="130" y2="47" stroke="#22C55E" stroke-width="2.5"/>
+            <!-- Outliers -->
+            <circle cx="30" cy="10" r="2.5" fill="none" stroke="#0EA5E9" stroke-width="1.5"/>
+            <circle cx="75" cy="82" r="2.5" fill="none" stroke="#8B5CF6" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Box Plot</div>
+          <div class="chart-desc">Quartile box plot with whiskers, outliers, and violin variants</div>
+          <div class="chart-tags"><span>Quartile</span><span>Outliers</span><span>Violin</span></div>
+        </div>
+      </div>
+
+      <!-- RADIAL GAUGE -->
+      <div class="chart-card" data-category="gauges" onclick="openChart('gauge')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <g transform="translate(100,70)">
+              <path d="M-60,0 A60,60 0 0,1 60,0" fill="none" stroke="#F1F5F9" stroke-width="12" stroke-linecap="round"/>
+              <path d="M-60,0 A60,60 0 0,1 30,-52" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#22C55E"/>
+                  <stop offset="60%" stop-color="#F97316"/>
+                  <stop offset="100%" stop-color="#EF4444"/>
+                </linearGradient>
+              </defs>
+              <!-- Needle -->
+              <line x1="0" y1="0" x2="28" y2="-48" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="0" cy="0" r="6" fill="#0F172A"/>
+              <circle cx="0" cy="0" r="3" fill="white"/>
+              <text y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#0F172A">73%</text>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Radial Gauge</div>
+          <div class="chart-desc">Semi-circle and full-circle gauges with zones, needle, and bands</div>
+          <div class="chart-tags"><span>Needle</span><span>Zones</span><span>Speed</span></div>
+        </div>
+      </div>
+
+      <!-- LINEAR GAUGE -->
+      <div class="chart-card" data-category="gauges" onclick="openChart('lineargauge')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <!-- Background track -->
+            <rect x="20" y="30" width="160" height="12" rx="6" fill="#F1F5F9"/>
+            <!-- Value fill -->
+            <rect x="20" y="30" width="110" height="12" rx="6" fill="url(#lgGrad)"/>
+            <defs>
+              <linearGradient id="lgGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#22C55E"/>
+                <stop offset="100%" stop-color="#0EA5E9"/>
+              </linearGradient>
+            </defs>
+            <!-- Tick marks -->
+            <line x1="60" y1="46" x2="60" y2="52" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="100" y1="46" x2="100" y2="52" stroke="#CBD5E1" stroke-width="1"/>
+            <line x1="140" y1="46" x2="140" y2="52" stroke="#CBD5E1" stroke-width="1"/>
+            <text x="20" y="62" font-size="7" fill="#94A3B8">0</text>
+            <text x="57" y="62" font-size="7" fill="#94A3B8">25</text>
+            <text x="97" y="62" font-size="7" fill="#94A3B8">50</text>
+            <text x="137" y="62" font-size="7" fill="#94A3B8">75</text>
+            <text x="174" y="62" font-size="7" fill="#94A3B8">100</text>
+            <!-- Pointer -->
+            <polygon points="130,24 125,30 135,30" fill="#0F172A"/>
+            <text x="100" y="20" font-size="10" font-weight="700" fill="#0F172A" text-anchor="middle">68 / 100</text>
+            <!-- Second gauge -->
+            <rect x="20" y="72" width="160" height="8" rx="4" fill="#F1F5F9"/>
+            <rect x="20" y="72" width="45" height="8" rx="4" fill="#EF4444"/>
+            <rect x="65" y="72" width="55" height="8" fill="#F97316"/>
+            <rect x="120" y="72" width="60" height="8" rx="4" fill="#22C55E" transform="scale(-1,1) translate(-200,0)"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Linear / Bullet Gauge</div>
+          <div class="chart-desc">Horizontal and vertical bar gauges with target markers and zones</div>
+          <div class="chart-tags"><span>Bullet</span><span>Progress</span><span>KPI</span></div>
+        </div>
+      </div>
+
+      <!-- FUNNEL -->
+      <div class="chart-card" data-category="special" onclick="openChart('funnel')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <polygon points="30,10 170,10 155,30 45,30" fill="#0EA5E9" opacity="0.9"/>
+            <polygon points="45,33 155,33 143,53 57,53" fill="#38BDF8" opacity="0.9"/>
+            <polygon points="57,56 143,56 133,76 67,76" fill="#7DD3FC" opacity="0.9"/>
+            <polygon points="67,79 133,79 125,95 75,95" fill="#BAE6FD" opacity="0.9"/>
+            <text x="100" y="23" text-anchor="middle" font-size="7" fill="white" font-weight="600">Visitors 10,000</text>
+            <text x="100" y="46" text-anchor="middle" font-size="7" fill="white" font-weight="600">Leads 6,500</text>
+            <text x="100" y="69" text-anchor="middle" font-size="7" fill="#0369A1" font-weight="600">Trials 3,200</text>
+            <text x="100" y="90" text-anchor="middle" font-size="7" fill="#0369A1" font-weight="600">Sales 980</text>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">Funnel / Pyramid</div>
+          <div class="chart-desc">Sales funnel and pyramid charts with conversion rate labels</div>
+          <div class="chart-tags"><span>Funnel</span><span>Pyramid</span><span>Conversion</span></div>
+        </div>
+      </div>
+
+      <!-- 3D BAR -->
+      <div class="chart-card" data-category="threed" onclick="openChart('3dbar')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <!-- 3D bar chart isometric style -->
+            <g transform="translate(10,70)">
+              <!-- Bar 1 -->
+              <polygon points="0,0 20,0 20,-45 0,-45" fill="#2563EB"/>
+              <polygon points="20,0 30,-8 30,-53 20,-45" fill="#1D4ED8"/>
+              <polygon points="0,-45 20,-45 30,-53 10,-61" fill="#60A5FA"/>
+              <!-- Bar 2 -->
+              <polygon points="35,0 55,0 55,-30 35,-30" fill="#7C3AED"/>
+              <polygon points="55,0 65,-8 65,-38 55,-30" fill="#6D28D9"/>
+              <polygon points="35,-30 55,-30 65,-38 45,-46" fill="#A78BFA"/>
+              <!-- Bar 3 -->
+              <polygon points="70,0 90,0 90,-55 70,-55" fill="#059669"/>
+              <polygon points="90,0 100,-8 100,-63 90,-55" fill="#047857"/>
+              <polygon points="70,-55 90,-55 100,-63 80,-71" fill="#34D399"/>
+              <!-- Bar 4 -->
+              <polygon points="105,0 125,0 125,-35 105,-35" fill="#D97706"/>
+              <polygon points="125,0 135,-8 135,-43 125,-35" fill="#B45309"/>
+              <polygon points="105,-35 125,-35 135,-43 115,-51" fill="#FCD34D"/>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">3D Column / Bar Chart</div>
+          <div class="chart-desc">True perspective 3D bars with Camera3D, orbit, pan, and zoom</div>
+          <div class="chart-tags"><span>3D</span><span>Perspective</span><span>Orbit</span></div>
+        </div>
+      </div>
+
+      <!-- 3D SURFACE -->
+      <div class="chart-card" data-category="threed" onclick="openChart('3dsurface')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <defs>
+              <linearGradient id="sf1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#0EA5E9"/>
+                <stop offset="100%" stop-color="#8B5CF6"/>
+              </linearGradient>
+            </defs>
+            <!-- Surface mesh rows -->
+            <path d="M10,80 Q40,55 70,65 Q100,75 130,50 Q160,25 190,40" fill="none" stroke="#94A3B8" stroke-width="0.8" opacity="0.6"/>
+            <path d="M10,70 Q40,45 70,52 Q100,60 130,38 Q160,16 190,28" fill="none" stroke="#94A3B8" stroke-width="0.8" opacity="0.6"/>
+            <path d="M10,60 Q40,35 70,40 Q100,45 130,25 Q160,5 190,16" fill="none" stroke="#94A3B8" stroke-width="0.8" opacity="0.5"/>
+            <!-- Filled surface polygons -->
+            <path d="M10,80 Q40,55 70,65 Q70,52 Q40,45 Q10,70 Z" fill="#38BDF8" opacity="0.4"/>
+            <path d="M70,65 Q100,75 130,50 Q130,38 Q100,60 Q70,52 Z" fill="#818CF8" opacity="0.4"/>
+            <path d="M130,50 Q160,25 190,40 Q190,28 Q160,16 Q130,38 Z" fill="#C084FC" opacity="0.4"/>
+            <!-- Column lines -->
+            <path d="M10,80 Q25,55 40,45 Q55,35 70,52" fill="none" stroke="#0EA5E9" stroke-width="0.8" opacity="0.7"/>
+            <path d="M70,65 Q85,55 100,55 Q115,55 130,38" fill="none" stroke="#8B5CF6" stroke-width="0.8" opacity="0.7"/>
+            <path d="M130,50 Q147,35 160,20 Q175,10 190,28" fill="none" stroke="#C084FC" stroke-width="0.8" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">3D Surface / Mesh</div>
+          <div class="chart-desc">Parametric 3D surface with Painter's algorithm depth sort and lighting</div>
+          <div class="chart-tags"><span>Mesh</span><span>Wireframe</span><span>Lighting</span></div>
+        </div>
+      </div>
+
+      <!-- 3D SCATTER -->
+      <div class="chart-card" data-category="threed" onclick="openChart('3dscatter')">
+        <div class="chart-preview">
+          <svg viewBox="0 0 200 100" class="preview-svg">
+            <!-- 3D axes -->
+            <line x1="30" y1="85" x2="180" y2="85" stroke="#E2E8F0" stroke-width="1.5"/>
+            <line x1="30" y1="85" x2="30" y2="10" stroke="#E2E8F0" stroke-width="1.5"/>
+            <line x1="30" y1="85" x2="5" y2="98" stroke="#E2E8F0" stroke-width="1.5"/>
+            <!-- Points with depth simulation -->
+            <circle cx="60" cy="65" r="6" fill="#0EA5E9" opacity="0.5"/>
+            <circle cx="90" cy="45" r="8" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="50" cy="40" r="5" fill="#8B5CF6" opacity="0.5"/>
+            <circle cx="130" cy="30" r="9" fill="#8B5CF6" opacity="0.9"/>
+            <circle cx="110" cy="70" r="6" fill="#22C55E" opacity="0.6"/>
+            <circle cx="155" cy="55" r="7" fill="#0EA5E9" opacity="0.75"/>
+            <circle cx="75" cy="75" r="5" fill="#F97316" opacity="0.6"/>
+            <circle cx="165" cy="38" r="8" fill="#22C55E" opacity="0.75"/>
+            <circle cx="140" cy="78" r="4" fill="#8B5CF6" opacity="0.5"/>
+            <!-- Projections -->
+            <line x1="90" y1="45" x2="90" y2="85" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="3,2"/>
+            <line x1="130" y1="30" x2="130" y2="85" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="3,2"/>
+          </svg>
+        </div>
+        <div class="chart-info">
+          <div class="chart-name">3D Scatter / Point Cloud</div>
+          <div class="chart-desc">3D point cloud with XYZ projections, orbit gestures, size encoding</div>
+          <div class="chart-tags"><span>Point Cloud</span><span>XYZ</span><span>Orbit</span></div>
+        </div>
+      </div>
+
+    </div><!-- end chart-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHART DETAIL MODAL
+══════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="chartModal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Line Chart</h3>
+        <p id="modalDesc">Smooth spline with area fill</p>
+      </div>
+      <div class="modal-tags" id="modalTags"></div>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="mtab active" onclick="switchCodeTab('xaml', this)">XAML</button>
+      <button class="mtab" onclick="switchCodeTab('csharp', this)">C#</button>
+      <button class="mtab" onclick="switchCodeTab('mvvm', this)">MVVM</button>
+    </div>
+
+    <div class="modal-code-wrap">
+      <button class="code-copy-btn" onclick="copyCode()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy
+      </button>
+      <pre class="modal-code" id="modalCode"><code id="modalCodeInner"></code></pre>
+    </div>
+
+    <div class="modal-props">
+      <h4>Key Properties</h4>
+      <div class="props-grid" id="modalProps"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FEATURES
+══════════════════════════════════════════════════════════════════ -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-pill">Architecture</div>
+      <h2>Built for Production</h2>
+      <p>Modular, extensible, and optimized — every component designed for enterprise scale.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3>60 FPS Real-Time</h3>
+        <p>LTTB decimation and StreamingRingBuffer enable sub-millisecond ingestion with smooth 60 FPS rendering for live sensor, financial, and telemetry data.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>True 3D Perspective</h3>
+        <p>Camera3D projection with Painter's algorithm depth sorting and Lambertian shading — real 3D, not faked isometric, with orbit, pan, and zoom gestures.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3>Cross-Platform</h3>
+        <p>One codebase, four platforms. Windows, iOS, Android, and macOS (Mac Catalyst) with SkiaSharp hardware-accelerated rendering on all targets.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h3>Customizable Themes</h3>
+        <p>Built-in Clean, Dark, Vibrant, Ocean palettes with live palette switching. Full XAML bindable properties — colors, fonts, borders, shadows.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Financial Suite</h3>
+        <p>Candlestick, OHLC, volume bars plus SMA, EMA, RSI, MACD, Bollinger Bands, and Stochastic — everything a trading app needs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>PNG & SVG Export</h3>
+        <p>Off-screen SkiaSharp rendering for server-side PNG export at any resolution. SVG vector export via the Export module with configurable DPI.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Master Interactive Chart Suite & Workbench -->
-  <section id="interactive-suite" class="suite-section">
-    <div class="suite-title">
-      <h2>Interactive Chart Suite &amp; Code Workbench</h2>
-      <p>Select any chart family to preview its rendered aesthetic and copy drop-in XAML &amp; C# code.</p>
+<!-- ═══════════════════════════════════════════════════════════════
+     PHONE SAMPLES SHOWCASE
+══════════════════════════════════════════════════════════════════ -->
+<section class="showcase" id="samples">
+  <div class="container">
+    <div class="section-header light">
+      <div class="section-pill light">Sample Apps</div>
+      <h2>Beautiful on Every Screen</h2>
+      <p>All sample apps include a live color palette picker and dark/light theme toggle.</p>
     </div>
 
-    <div class="suite-grid">
-      <!-- Left Category Navigation -->
-      <aside class="suite-nav-card">
-        <div class="nav-group">
-          <div class="nav-group-header">Cartesian 2D</div>
-          <button class="nav-item-btn active" data-suite="line" onclick="selectSuite('line')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            Multi-Series Spline
-          </button>
-          <button class="nav-item-btn" data-suite="bars" onclick="selectSuite('bars')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="13" y2="18"/></svg>
-            Segmented Bars
-          </button>
-        </div>
-
-        <div class="nav-group">
-          <div class="nav-group-header">Circular &amp; Gauges</div>
-          <button class="nav-item-btn" data-suite="rings" onclick="selectSuite('rings')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 22v-4"/><path d="m19.07 19.07-2.83-2.83"/><path d="M22 12h-4"/><path d="m19.07 4.93-2.83 2.83"/></svg>
-            Activity Rings
-          </button>
-          <button class="nav-item-btn" data-suite="donut" onclick="selectSuite('donut')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-            Donut Allocation
-          </button>
-        </div>
-
-        <div class="nav-group">
-          <div class="nav-group-header">Financial</div>
-          <button class="nav-item-btn" data-suite="candlestick" onclick="selectSuite('candlestick')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="9" y1="2" x2="9" y2="22"/><rect x="6" y="6" width="6" height="10" rx="1"/><line x1="17" y1="2" x2="17" y2="22"/><rect x="14" y="10" width="6" height="8" rx="1"/></svg>
-            Candlestick + SMA
-          </button>
-        </div>
-
-        <div class="nav-group">
-          <div class="nav-group-header">True 3D Analytical</div>
-          <button class="nav-item-btn" data-suite="threed" onclick="selectSuite('threed')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            3D Cuboid Columns
-          </button>
-        </div>
-      </aside>
-
-      <!-- Right Stage Workbench & Code -->
-      <main class="workbench-card">
-        <div class="workbench-preview">
-          <div class="workbench-meta">
-            <span id="wb-tag" class="workbench-tag">Cartesian 2D</span>
-            <h3 id="wb-name">Multi-Series Spline Chart</h3>
-            <p id="wb-desc">Cubic Hermite &amp; Catmull-Rom spline curves with customizable data points, hover markers, and crisp anti-aliasing.</p>
+    <div class="phones-row">
+      <!-- Phone 1: Line -->
+      <div class="phone-showcase">
+        <div class="phone-mockup">
+          <div class="pm-notch"></div>
+          <div class="pm-screen">
+            <div class="pm-header">
+              <div class="pm-title">Line Graph 1</div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="pm-sub">Variable Difference · $827 · $603</div>
+            <svg viewBox="0 0 160 90" width="100%" style="margin-top:6px">
+              <defs>
+                <linearGradient id="pma1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="20" x2="160" y2="20" stroke="#F8FAFC" stroke-width="1"/>
+              <line x1="0" y1="45" x2="160" y2="45" stroke="#F8FAFC" stroke-width="1"/>
+              <line x1="0" y1="70" x2="160" y2="70" stroke="#F8FAFC" stroke-width="1"/>
+              <path d="M5,65 C25,55 45,35 65,30 C85,25 105,45 125,38 C140,33 150,22 155,18" fill="none" stroke="#0EA5E9" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M5,65 C25,55 45,35 65,30 C85,25 105,45 125,38 C140,33 150,22 155,18 L155,80 L5,80 Z" fill="url(#pma1)"/>
+              <path d="M5,75 C25,70 45,62 65,58 C85,54 105,68 125,62 C140,57 150,50 155,46" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+              <text x="4" y="85" font-size="6" fill="#CBD5E1">Jan</text>
+              <text x="28" y="85" font-size="6" fill="#CBD5E1">Feb</text>
+              <text x="52" y="85" font-size="6" fill="#CBD5E1">Mar</text>
+              <text x="76" y="85" font-size="6" fill="#CBD5E1">Apr</text>
+              <text x="100" y="85" font-size="6" fill="#CBD5E1">May</text>
+              <text x="124" y="85" font-size="6" fill="#CBD5E1">Jun</text>
+              <text x="148" y="85" font-size="6" fill="#CBD5E1">Jul</text>
+            </svg>
+            <div class="pm-footer">
+              <select class="pm-select">
+                <option>MONTHLY</option>
+                <option>WEEKLY</option>
+                <option>YEARLY</option>
+              </select>
+            </div>
           </div>
-          <div id="wb-svg" class="svg-canvas-box"></div>
         </div>
+        <div class="phone-label">Line / Area Chart</div>
+      </div>
 
-        <div class="workbench-code">
-          <div class="code-topbar">
-            <span class="code-title">XAML / C# DECLARATION</span>
-            <button class="btn-code-copy" onclick="copyCode()">Copy Code</button>
+      <!-- Phone 2: Bar -->
+      <div class="phone-showcase featured-phone">
+        <div class="phone-mockup featured">
+          <div class="pm-notch"></div>
+          <div class="pm-screen">
+            <div class="pm-header">
+              <div class="pm-title">Bar Graph</div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="pm-sub">Variable Difference · $827 · $603</div>
+            <svg viewBox="0 0 160 95" width="100%" style="margin-top:6px">
+              <line x1="0" y1="80" x2="160" y2="80" stroke="#F1F5F9" stroke-width="1"/>
+              <rect x="6" y="45" width="14" height="35" rx="2" fill="#38BDF8"/>
+              <rect x="27" y="30" width="14" height="50" rx="2" fill="#38BDF8"/>
+              <rect x="48" y="55" width="14" height="25" rx="2" fill="#38BDF8"/>
+              <rect x="69" y="20" width="14" height="60" rx="2" fill="#38BDF8"/>
+              <rect x="90" y="38" width="14" height="42" rx="2" fill="#38BDF8"/>
+              <rect x="111" y="25" width="14" height="55" rx="2" fill="#38BDF8"/>
+              <rect x="132" y="50" width="14" height="30" rx="2" fill="#38BDF8"/>
+              <text x="9" y="92" font-size="6" fill="#CBD5E1">Jan</text>
+              <text x="30" y="92" font-size="6" fill="#CBD5E1">Feb</text>
+              <text x="51" y="92" font-size="6" fill="#CBD5E1">Mar</text>
+              <text x="72" y="92" font-size="6" fill="#CBD5E1">Apr</text>
+              <text x="93" y="92" font-size="6" fill="#CBD5E1">May</text>
+              <text x="114" y="92" font-size="6" fill="#CBD5E1">Jun</text>
+              <text x="135" y="92" font-size="6" fill="#CBD5E1">Jul</text>
+            </svg>
+            <div class="pm-footer">
+              <select class="pm-select">
+                <option>MONTHLY</option>
+                <option>WEEKLY</option>
+              </select>
+            </div>
           </div>
-          <pre><code id="wb-code"></code></pre>
         </div>
-      </main>
-    </div>
-  </section>
+        <div class="phone-label">Bar / Column Chart</div>
+      </div>
 
-  <!-- Architectural Pillars -->
-  <section id="features" class="pillars-section">
-    <div class="suite-title">
-      <h2>Architectural Advantages</h2>
-      <p>Built as a dedicated graphics engine for enterprise .NET workloads.</p>
-    </div>
-
-    <div class="pillars-grid">
-      <div class="pillar-item">
-        <div class="pillar-icon" style="background:#e6f9f4; color:#00C096;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <!-- Phone 3: Donut -->
+      <div class="phone-showcase">
+        <div class="phone-mockup">
+          <div class="pm-notch"></div>
+          <div class="pm-screen">
+            <div class="pm-header">
+              <div class="pm-title">Circle Graph</div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="pm-sub">Grouped by category</div>
+            <svg viewBox="0 0 160 115" width="100%" style="margin-top:4px">
+              <g transform="translate(80,58)">
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#F1F5F9" stroke-width="16"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#0EA5E9" stroke-width="16" stroke-dasharray="188 126" stroke-linecap="round" transform="rotate(-90)"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#8B5CF6" stroke-width="16" stroke-dasharray="88 226" stroke-dashoffset="-188" stroke-linecap="round" transform="rotate(-90)"/>
+                <text y="-6" text-anchor="middle" font-size="18" font-weight="800" fill="#0F172A">85%</text>
+                <text y="12" text-anchor="middle" font-size="8" fill="#64748B">Progress</text>
+              </g>
+            </svg>
+          </div>
         </div>
-        <h4>True 3D Analytical Subsystem</h4>
-        <p>No flat 2D perspective hacks. Real world-space coordinates, <code>Camera3D</code> view/perspective matrices, Lambertian directional lighting, and depth-sorted occlusion.</p>
+        <div class="phone-label">Donut / Ring Chart</div>
       </div>
 
-      <div class="pillar-item">
-        <div class="pillar-icon" style="background:#eff6ff; color:#3B82F6;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <!-- Phone 4: Stats -->
+      <div class="phone-showcase">
+        <div class="phone-mockup">
+          <div class="pm-notch"></div>
+          <div class="pm-screen">
+            <div class="pm-header">
+              <div class="pm-title">Numbers</div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="pm-sub">Performance overview</div>
+            <div class="pm-stats">
+              <div class="pm-stat-item">
+                <div class="pm-stat-val">4.9m</div>
+                <div class="pm-stat-lbl">FOLLOWERS</div>
+              </div>
+              <div class="pm-stat-item">
+                <div class="pm-stat-val">+12k</div>
+                <div class="pm-stat-lbl">LIKES</div>
+              </div>
+              <div class="pm-stat-item">
+                <div class="pm-stat-val">9,231</div>
+                <div class="pm-stat-lbl">COMMENTS</div>
+              </div>
+            </div>
+            <div class="pm-stats" style="margin-top:4px">
+              <div class="pm-stat-item down">
+                <div class="pm-stat-val">-2,149</div>
+                <div class="pm-stat-lbl">FOLLOWS LOST</div>
+              </div>
+              <div class="pm-stat-item up">
+                <div class="pm-stat-val">+59%</div>
+                <div class="pm-stat-lbl">ENGAGEMENT</div>
+              </div>
+              <div class="pm-stat-item">
+                <div class="pm-stat-val">1.9m</div>
+                <div class="pm-stat-lbl">REACH</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h4>60 FPS Real-Time Streaming</h4>
-        <p>Pre-allocated thread-safe <code>StreamingRingBuffer</code> and <code>LttbDecimation</code> downsampling allow continuous 100k+ point telemetry streaming with zero heap churn.</p>
+        <div class="phone-label">KPI / Stats Cards</div>
       </div>
+    </div>
 
-      <div class="pillar-item">
-        <div class="pillar-icon" style="background:#f5f3ff; color:#8B5CF6;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/></svg>
+    <!-- Color Palette Picker -->
+    <div class="palette-picker">
+      <span class="palette-label">Live Palette Preview:</span>
+      <div class="palette-options">
+        <button class="palette-btn active" data-palette="blue" onclick="switchPalette('blue', this)">
+          <span class="pal-swatch" style="background:#0EA5E9"></span>
+          <span class="pal-swatch" style="background:#38BDF8"></span>
+          <span class="pal-swatch" style="background:#7DD3FC"></span>
+          Ocean Blue
+        </button>
+        <button class="palette-btn" data-palette="violet" onclick="switchPalette('violet', this)">
+          <span class="pal-swatch" style="background:#8B5CF6"></span>
+          <span class="pal-swatch" style="background:#A78BFA"></span>
+          <span class="pal-swatch" style="background:#C4B5FD"></span>
+          Violet
+        </button>
+        <button class="palette-btn" data-palette="emerald" onclick="switchPalette('emerald', this)">
+          <span class="pal-swatch" style="background:#059669"></span>
+          <span class="pal-swatch" style="background:#34D399"></span>
+          <span class="pal-swatch" style="background:#6EE7B7"></span>
+          Emerald
+        </button>
+        <button class="palette-btn" data-palette="rose" onclick="switchPalette('rose', this)">
+          <span class="pal-swatch" style="background:#E11D48"></span>
+          <span class="pal-swatch" style="background:#FB7185"></span>
+          <span class="pal-swatch" style="background:#FDA4AF"></span>
+          Rose
+        </button>
+        <button class="palette-btn" data-palette="amber" onclick="switchPalette('amber', this)">
+          <span class="pal-swatch" style="background:#D97706"></span>
+          <span class="pal-swatch" style="background:#FBBF24"></span>
+          <span class="pal-swatch" style="background:#FDE68A"></span>
+          Amber
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     QUICK START
+══════════════════════════════════════════════════════════════════ -->
+<section class="quickstart" id="quickstart">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-pill">Quick Start</div>
+      <h2>Up and Running in Minutes</h2>
+    </div>
+
+    <div class="steps">
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Install the NuGet Package</h3>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-label">Terminal</span>
+              <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
+            </div>
+            <pre><code>dotnet add package ChartNivra.Maui --version 1.0.0</code></pre>
+          </div>
         </div>
-        <h4>Modern CleanLight Theming</h4>
-        <p>Designed from the ground up with soft gradients, rounded cards, subtle gridlines, and high-contrast accessible palettes matching current product design standards.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quick Start -->
-  <section id="quickstart" class="pillars-section" style="padding-top:0;">
-    <div class="suite-title">
-      <h2>Getting Started</h2>
-      <p>Add ChartNivra to your .NET MAUI project in seconds.</p>
-    </div>
-
-    <div style="background:#ffffff; border:1px solid var(--border-card); border-radius:var(--radius-xl); padding:2.5rem; max-width:900px; margin:0 auto; box-shadow:var(--shadow-card);">
-      <h4 style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">1. Install NuGet Package</h4>
-      <div style="background:#0b0f19; color:#f8fafc; padding:1rem 1.4rem; border-radius:12px; font-family:var(--font-mono); font-size:0.92rem; margin-bottom:1.75rem;">
-        dotnet add package ChartNivra.Maui
       </div>
 
-      <h4 style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">2. Add ChartView in XAML</h4>
-      <div style="background:#0b0f19; color:#f8fafc; padding:1.25rem 1.4rem; border-radius:12px; font-family:var(--font-mono); font-size:0.88rem; line-height:1.6; overflow-x:auto;">
-&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:charts="clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra.Maui"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:themes="clr-namespace:ChartNivra.Core.Themes;assembly=ChartNivra.Core"&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;charts:ChartView Title="Weekly Activity"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theme="{x:Static themes:ChartTheme.CleanLight}"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HeightRequest="320" /&gt;<br>
-&lt;/ContentPage&gt;
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Register in MauiProgram.cs</h3>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-label">MauiProgram.cs</span>
+              <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
+            </div>
+            <pre><code>builder
+    .UseMauiApp&lt;App&gt;()
+    .UseChartNivra(options =&gt;
+    {
+        options.DefaultTheme = ChartTheme.CleanLight;
+        options.DefaultPalette = ChartPalette.Ocean;
+    });</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Add a Chart in XAML</h3>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-label">MainPage.xaml</span>
+              <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
+            </div>
+            <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:cn="clr-namespace:ChartNivra.Maui;assembly=ChartNivra.Maui"&gt;
+
+  &lt;cn:LineChartView
+      Title="Monthly Revenue"
+      Series="{Binding RevenueSeries}"
+      Theme="{Binding AppTheme}"
+      Palette="{Binding ColorPalette}"
+      ShowGrid="True"
+      ShowLegend="True"
+      AnimationDuration="800"
+      HeightRequest="300" /&gt;
+
+&lt;/ContentPage&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Bind Data in C# / MVVM</h3>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-label">ViewModel.cs</span>
+              <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
+            </div>
+            <pre><code>using ChartNivra.Core;
+using ChartNivra.Maui;
+
+public class DashboardViewModel : ObservableObject
+{
+    public ObservableCollection&lt;LineSeriesModel&gt; RevenueSeries { get; }
+
+    public DashboardViewModel()
+    {
+        var series = new LineSeriesModel
+        {
+            Label = "Revenue",
+            Smooth = true,       // cubic bezier spline
+            ShowArea = true,     // gradient area fill
+            Points =
+            {
+                new ChartPoint { X = 0, Y = 12400 },
+                new ChartPoint { X = 1, Y = 15200 },
+                new ChartPoint { X = 2, Y = 11800 },
+                new ChartPoint { X = 3, Y = 18600 },
+                new ChartPoint { X = 4, Y = 21000 },
+                new ChartPoint { X = 5, Y = 19400 },
+            }
+        };
+        RevenueSeries = new([series]);
+    }
+}</code></pre>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer>
-    <p>Released under the <a href="https://github.com/kjagdeesh/ChartNivra/blob/main/LICENSE" target="_blank">MIT License</a>. Created for the modern .NET ecosystem.</p>
-    <p style="margin-top:0.5rem;">GitHub: <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">github.com/kjagdeesh/ChartNivra</a></p>
-  </footer>
+<!-- ═══════════════════════════════════════════════════════════════
+     ARCHITECTURE / PACKAGES
+══════════════════════════════════════════════════════════════════ -->
+<section class="packages" id="docs">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-pill">Packages</div>
+      <h2>Modular Architecture</h2>
+      <p>Install only what you need. All packages share ChartNivra.Core.</p>
+    </div>
 
-  <script src="assets/js/main.js"></script>
+    <div class="pkg-grid">
+      <div class="pkg-card">
+        <div class="pkg-icon" style="background:#EFF6FF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.Core</div>
+        <div class="pkg-desc">Primitives, models, themes, palettes, NiceScale, LTTB, transforms</div>
+        <code class="pkg-install">dotnet add package ChartNivra.Core</code>
+      </div>
+      <div class="pkg-card highlight">
+        <div class="pkg-icon" style="background:#F0FDF4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.Maui <span class="pkg-badge">Recommended</span></div>
+        <div class="pkg-desc">Full MAUI controls, all chart types, MVVM bindings, themes</div>
+        <code class="pkg-install">dotnet add package ChartNivra.Maui</code>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-icon" style="background:#FFF7ED">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.Financial</div>
+        <div class="pkg-desc">Candlestick, OHLC, volume, Bollinger, RSI, MACD, EMA, Stochastic</div>
+        <code class="pkg-install">dotnet add package ChartNivra.Financial</code>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-icon" style="background:#FDF4FF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.ThreeD</div>
+        <div class="pkg-desc">3D bars, surface mesh, scatter, orbit camera, Painter's algorithm</div>
+        <code class="pkg-install">dotnet add package ChartNivra.ThreeD</code>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-icon" style="background:#F0FDFA">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.Statistical</div>
+        <div class="pkg-desc">Box plots, histograms, violin, error bars, regression lines</div>
+        <code class="pkg-install">dotnet add package ChartNivra.Statistical</code>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-icon" style="background:#FFF1F2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="pkg-name">ChartNivra.Export</div>
+        <div class="pkg-desc">Off-screen PNG export, SVG vector export, server-side rendering</div>
+        <code class="pkg-install">dotnet add package ChartNivra.Export</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="#0EA5E9"/>
+          <path d="M7 22 L11 15 L15 18 L19 10 L23 13 L25 10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="23" cy="13" r="2" fill="white"/>
+        </svg>
+        <span class="logo-text">ChartNivra</span>
+      </a>
+      <p>Enterprise .NET MAUI charting library.<br>MIT License · Open Source · .NET 10</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="fc-title">Charts</div>
+        <a href="#charts">Cartesian</a>
+        <a href="#charts">Circular</a>
+        <a href="#charts">Financial</a>
+        <a href="#charts">3D Charts</a>
+        <a href="#charts">Gauges</a>
+      </div>
+      <div class="footer-col">
+        <div class="fc-title">Resources</div>
+        <a href="https://github.com/kjagdeesh/ChartNivra" target="_blank">GitHub</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#docs">API Docs</a>
+        <a href="https://github.com/kjagdeesh/ChartNivra/issues" target="_blank">Issues</a>
+      </div>
+      <div class="footer-col">
+        <div class="fc-title">Packages</div>
+        <a href="#docs">ChartNivra.Maui</a>
+        <a href="#docs">ChartNivra.Financial</a>
+        <a href="#docs">ChartNivra.ThreeD</a>
+        <a href="#docs">ChartNivra.Export</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <span>© 2026 ChartNivra. MIT License.</span>
+      <span>Built with ♥ for the .NET MAUI community</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>
