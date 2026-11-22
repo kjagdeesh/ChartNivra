@@ -10,6 +10,9 @@
     <ApplicationId>com.chartnivra.dashboarddemo</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <Version>1.0</Version>
+    <PackageVersion>1.0</PackageVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
