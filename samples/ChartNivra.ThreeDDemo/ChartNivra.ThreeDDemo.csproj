@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net10.0-windows10.0.19041.0;net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <WindowsPackageType>None</WindowsPackageType>
+    <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+    <ApplicationTitle>ChartNivra 3D Visualization Studio</ApplicationTitle>
+    <ApplicationId>com.chartnivra.threeddemo</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Maui\ChartNivra.Maui.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.ThreeD\ChartNivra.ThreeD.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Rendering.3D.Abstractions\ChartNivra.Rendering.3D.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Rendering.3D.Backend\ChartNivra.Rendering.3D.Backend.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra.Themes\ChartNivra.Themes.csproj" />
+  </ItemGroup>
+</Project>

@@ -8,7 +8,7 @@ using System.Numerics;
 /// <summary>
 /// Renders 3D geometry onto an IChartCanvas using painter's depth sorting and lighting.
 /// </summary>
-public class ThreeDChartRenderer
+public class ThreeDChartRenderer : IChartRenderer
 {
     public Camera3D Camera { get; set; } = new();
     public Light3D Light { get; set; } = new();

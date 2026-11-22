@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
+    <WindowsPackageType>None</WindowsPackageType>
     <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
     <ApplicationTitle>ChartNivra Gallery</ApplicationTitle>
     <ApplicationId>com.chartnivra.demo</ApplicationId>

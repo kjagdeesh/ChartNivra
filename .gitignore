@@ -1,6 +1,7 @@
 ## .NET and Build artifacts
 bin/
 obj/
+artifacts/
 *.user
 *.suo
 *.userosscache

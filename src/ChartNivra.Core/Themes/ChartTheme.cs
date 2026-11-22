@@ -15,7 +15,7 @@ public record ChartPalette(string Name, IReadOnlyList<ChartColor> Colors)
 
     /// <summary>
     /// Modern SaaS Clean Palette (Teal, Cyan, Purple, Amber, Rose, Indigo)
-    /// Matches Pulsey & Dribbble reference designs.
+    /// Matches Pulsey and Dribbble reference designs.
     /// </summary>
     public static readonly ChartPalette Clean = new("Clean", new[]
     {
@@ -63,7 +63,7 @@ public record ChartTheme(
     ChartPalette DefaultPalette)
 {
     /// <summary>
-    /// Light Theme designed after Dribbble & Modern Health Dashboard aesthetics
+    /// Light Theme designed after Dribbble and Modern Health Dashboard aesthetics
     /// (Crisp white cards, subtle borders #E2E8F0, dark slate text, mint/cyan/purple accents)
     /// </summary>
     public static readonly ChartTheme CleanLight = new(

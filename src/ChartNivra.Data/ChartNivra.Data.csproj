@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>High-performance streaming data pipelines, ring buffers, and batch queues for ChartNivra.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
+  </ItemGroup>
+</Project>

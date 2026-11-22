@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Financial chart series, indicators (SMA, EMA, Bollinger, RSI, MACD), and OHLC analysis for ChartNivra.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
+    <ProjectReference Include="..\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

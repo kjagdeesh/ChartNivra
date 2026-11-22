@@ -8,7 +8,7 @@
     <Company>ChartNivra</Company>
     <Product>ChartNivra.Maui</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/microcharts-dotnet/Microcharts</RepositoryUrl>
+    <RepositoryUrl>https://github.com/kjagdeesh/ChartNivra.git</RepositoryUrl>
     <Version>0.1.0-preview1</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>

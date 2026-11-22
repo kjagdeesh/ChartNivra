@@ -5,6 +5,7 @@ using ChartNivra.Core.Series;
 using ChartNivra.Core.Themes;
 using ChartNivra.Maui.Controls;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 
 public class MainPage : ContentPage

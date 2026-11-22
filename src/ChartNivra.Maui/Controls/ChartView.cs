@@ -21,11 +21,12 @@ public class ChartView : SKCanvasView
         BindableProperty.Create(nameof(Theme), typeof(ChartTheme), typeof(ChartView), ChartTheme.Dark, propertyChanged: OnChartPropertyChanged);
 
     private readonly CartesianChartModel _model = new();
-    private readonly CartesianChartRenderer _renderer;
+    private readonly CartesianChartRenderer _defaultRenderer;
+    private IChartRenderer? _renderer;
 
     public ChartView()
     {
-        _renderer = new CartesianChartRenderer(_model);
+        _defaultRenderer = new CartesianChartRenderer(_model);
         PaintSurface += OnPaintSurface;
     }
 
@@ -42,6 +43,18 @@ public class ChartView : SKCanvasView
     }
 
     public CartesianChartModel Model => _model;
+
+    public IChartRenderer? Renderer
+    {
+        get => _renderer;
+        set
+        {
+            _renderer = value;
+            InvalidateSurface();
+        }
+    }
+
+    public void Invalidate() => InvalidateSurface();
 
     private static void OnChartPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -60,6 +73,7 @@ public class ChartView : SKCanvasView
 
         using var canvas = new SkiaChartCanvas(skCanvas);
         var bounds = new ChartRect(0, 0, info.Width, info.Height);
-        _renderer.Render(canvas, bounds);
+        var activeRenderer = _renderer ?? _defaultRenderer;
+        activeRenderer.Render(canvas, bounds);
     }
 }
