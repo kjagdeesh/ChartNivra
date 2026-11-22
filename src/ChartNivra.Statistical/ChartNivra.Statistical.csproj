@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Statistical series including Box Plot, Histogram, and Heatmaps for ChartNivra.</Description>
   </PropertyGroup>
   <ItemGroup>

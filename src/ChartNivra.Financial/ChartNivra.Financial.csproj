@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Financial chart series, indicators (SMA, EMA, Bollinger, RSI, MACD), and OHLC analysis for ChartNivra.</Description>
   </PropertyGroup>
   <ItemGroup>

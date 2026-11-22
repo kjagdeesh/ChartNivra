@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>3D rendering abstractions, camera interfaces, and depth pipeline for ChartNivra.</Description>
   </PropertyGroup>
   <ItemGroup>
