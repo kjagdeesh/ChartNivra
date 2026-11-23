@@ -3,6 +3,7 @@ namespace ChartNivra.Statistical;
 using ChartNivra.Core.Axes;
 using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Series;
+using ChartNivra.Core.Themes;
 
 /// <summary>
 /// Data item for five-number summary Box Plot.
@@ -29,6 +30,18 @@ public class BoxPlotSeriesModel : SeriesModelBase
         }
         return new DataRange(min, max);
     }
+}
+
+/// <summary>
+/// Histogram chart model for frequency distribution visualization.
+/// </summary>
+public class HistogramModel
+{
+    public string Title { get; set; } = "Histogram";
+    public int BinCount { get; set; } = 20;
+    public ChartColor BarColor { get; set; } = ChartColor.FromHex("#00C096");
+    public float BarOpacity { get; set; } = 0.8f;
+    public List<double> Data { get; set; } = new();
 }
 
 /// <summary>

@@ -6,6 +6,11 @@
   <ItemGroup>
     <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
     <ProjectReference Include="..\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
+    <ProjectReference Include="..\ChartNivra.Cartesian\ChartNivra.Cartesian.csproj" />
+    <ProjectReference Include="..\ChartNivra.Financial\ChartNivra.Financial.csproj" />
+    <ProjectReference Include="..\ChartNivra.Statistical\ChartNivra.Statistical.csproj" />
+    <ProjectReference Include="..\ChartNivra.Pie\ChartNivra.Pie.csproj" />
+    <ProjectReference Include="..\ChartNivra.Annotations\ChartNivra.Annotations.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="2.88.9" />
