@@ -56,7 +56,7 @@ timer.Start();
     public RealTimePage()
     {
         BackgroundColor = PageBg;
-        Shell.SetNavBarIsVisible(this, false);
+        Shell.SetNavBarIsVisible(this, true);
         Title = "Real-Time";
 
         _series = new LineSeriesModel

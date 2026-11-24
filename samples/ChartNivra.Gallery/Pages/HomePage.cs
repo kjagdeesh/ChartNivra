@@ -3,362 +3,205 @@ namespace ChartNivra.Gallery.Pages;
 using ChartNivra.Gallery.Controls;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Layouts;
 
-/// <summary>Welcome / landing page - Clean white design with professional MONOCHROME icons.</summary>
+/// <summary>A dashboard that exposes every available chart sample without a side menu.</summary>
 public class HomePage : ContentPage
 {
-    private static readonly Color Background = Colors.White;
-    private static readonly Color CardBg = Colors.White;
-    private static readonly Color CardBorder = Color.FromArgb("#E2E8F0");
-    private static readonly Color Accent = Color.FromArgb("#6366F1");
-    private static readonly Color AccentSubtle = Color.FromArgb("#EEF2FF");
-    private static readonly Color TextPrimary = Color.FromArgb("#0F172A");
-    private static readonly Color TextSecondary = Color.FromArgb("#475569");
-    private static readonly Color TextMuted = Color.FromArgb("#94A3B8");
-    private readonly Border _hero;
+    private static readonly Color PageBackground = Color.FromArgb("#F8FAFC");
+    private static readonly Color Surface = Colors.White;
+    private static readonly Color Border = Color.FromArgb("#E2E8F0");
+    private static readonly Color Accent = Color.FromArgb("#4F46E5");
+    private static readonly Color AccentSoft = Color.FromArgb("#EEF2FF");
+    private static readonly Color Text = Color.FromArgb("#0F172A");
+    private static readonly Color Muted = Color.FromArgb("#64748B");
+
+    private readonly Grid _chartGrid;
+    private readonly Border[] _chartCards;
     private readonly Grid _statisticsGrid;
-    private readonly Grid _categoriesGrid;
-    private readonly Border[] _categoryCards;
+    private readonly Border _hero;
 
     public HomePage()
     {
-        BackgroundColor = Background;
+        Title = "ChartNivra";
+        BackgroundColor = PageBackground;
         Shell.SetNavBarIsVisible(this, false);
-        Title = "Home";
 
         _hero = BuildHero(out _statisticsGrid);
-        var categoriesHeader = BuildCategoriesHeader();
-        (_categoriesGrid, _categoryCards) = BuildCategoriesGrid();
-        var techSection = BuildTechSection();
+        (_chartGrid, _chartCards) = BuildChartGrid();
 
         Content = new ScrollView
         {
             Content = new VerticalStackLayout
             {
                 Spacing = 0,
-                Children = { _hero, categoriesHeader, _categoriesGrid, techSection }
+                Children =
+                {
+                    _hero,
+                    new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(24, 4, 24, 14) },
+                    _chartGrid,
+                    new Label { Text = "Choose a chart type to open its interactive sample and source preview.", FontSize = 12, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(24, 0, 24, 28) },
+                }
             }
         };
 
         SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
     }
 
-    private Border BuildHero(out Grid statisticsGrid)
+    private static Border BuildHero(out Grid statisticsGrid)
     {
-        statisticsGrid = new Grid
-        {
-            Margin = new Thickness(0, 8, 0, 0),
-            ColumnSpacing = 12,
-            RowSpacing = 12,
-        };
+        statisticsGrid = new Grid { ColumnSpacing = 10, RowSpacing = 10, Margin = new Thickness(0, 4, 0, 0) };
+        AddStatistics(statisticsGrid, 2);
 
-        var hero = new Border
+        return new Border
         {
-            Margin = new Thickness(24, 32, 24, 24),
-            Padding = new Thickness(32, 32),
-            StrokeShape = new RoundRectangle { CornerRadius = 16 },
-            BackgroundColor = AccentSubtle,
+            Margin = new Thickness(24, 28, 24, 22),
+            Padding = new Thickness(28),
+            BackgroundColor = AccentSoft,
             Stroke = Color.FromArgb("#C7D2FE"),
             StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 16 },
             Content = new VerticalStackLayout
             {
-                Spacing = 16,
+                Spacing = 14,
                 Children =
                 {
-                    new HorizontalStackLayout
-                    {
-                        Spacing = 12,
-                        VerticalOptions = LayoutOptions.Center,
-                        Children =
-                        {
-                            new Label
-                            {
-                                FontFamily = "Segoe UI Symbol, Segoe UI Emoji, Noto Sans Symbols",
-                                Text = "\u25B6",
-                                FontSize = 32,
-                                TextColor = Accent,
-                                VerticalOptions = LayoutOptions.Center,
-                            },
-                            new VerticalStackLayout
-                            {
-                                Spacing = 2,
-                                Children =
-                                {
-                                    new Label
-                                    {
-                                        Text = "ChartNivra Gallery",
-                                        FontSize = 28,
-                                        FontAttributes = FontAttributes.Bold,
-                                        TextColor = TextPrimary,
-                                    },
-                                    new Label
-                                    {
-                                        Text = "Professional charting library for .NET MAUI",
-                                        FontSize = 14,
-                                        TextColor = TextSecondary,
-                                    },
-                                }
-                            }
-                        }
-                    },
+                    new Label { Text = "ChartNivra", FontSize = 30, FontAttributes = FontAttributes.Bold, TextColor = Text },
+                    new Label { Text = "A focused gallery of native, interactive .NET MAUI chart samples.", FontSize = 15, TextColor = Muted, LineBreakMode = LineBreakMode.WordWrap },
+                    statisticsGrid,
+                }
+            }
+        };
+    }
 
-                    new Label
-                    {
-                        Text = "A comprehensive collection of chart types built with .NET MAUI and SkiaSharp \u2014 featuring Cartesian, Circular, Financial, Statistical, and Advanced visualizations.",
-                        FontSize = 15,
-                        TextColor = TextSecondary,
-                        LineBreakMode = LineBreakMode.WordWrap,
-                    },
+    private static (Grid Grid, Border[] Cards) BuildChartGrid()
+    {
+        var grid = new Grid { Margin = new Thickness(24, 0, 24, 24), ColumnSpacing = 14, RowSpacing = 14 };
+        var samples = new (string Name, string Category, string Description, string? Route, ChartThumbnailKind Kind, string[] Tags)[]
+        {
+            ("Line Chart", "Cartesian", "Smooth line series and multiple data sets", "line", ChartThumbnailKind.Line, ["Spline", "Area", "Multi-series"]),
+            ("Bar / Column", "Cartesian", "Grouped, stacked and horizontal bars", null, ChartThumbnailKind.Bar, ["Grouped", "Stacked", "100%"]),
+            ("Area Chart", "Cartesian", "Overlapping and stacked area series", null, ChartThumbnailKind.Area, ["Stacked", "Gradient", "Multi-layer"]),
+            ("Scatter / Bubble", "Cartesian", "XY points with variable-size bubbles", null, ChartThumbnailKind.Bubble, ["XY plot", "Bubble", "Clustering"]),
+            ("Spline / Step", "Cartesian", "Curved and stepped line transitions", null, ChartThumbnailKind.Step, ["Bezier", "Step", "Smooth"]),
+            ("Range / Band", "Cartesian", "High-low ranges and confidence bands", null, ChartThumbnailKind.Range, ["Hi-lo", "Band", "Confidence"]),
+            ("Waterfall", "Cartesian", "Running totals with positive and negative changes", null, ChartThumbnailKind.Waterfall, ["Bridge", "P&L", "Running total"]),
+            ("Pie Chart", "Circular", "Classic part-to-whole proportions", "pie", ChartThumbnailKind.Pie, ["Explode", "Labels", "Animated"]),
+            ("Donut / Doughnut", "Circular", "Center labels and multi-ring compositions", "donut", ChartThumbnailKind.Donut, ["Ring", "Progress", "Multi-ring"]),
+            ("Sunburst", "Circular", "Hierarchical drill-down segments", null, ChartThumbnailKind.Sunburst, ["Hierarchical", "Drill-down"]),
+            ("Radar / Spider", "Statistical", "Multi-axis comparisons", "radar", ChartThumbnailKind.Radar, ["Spider", "Polar", "Multi-axis"]),
+            ("Heatmap", "Statistical", "Calendar and matrix intensity maps", "heatmap", ChartThumbnailKind.Heatmap, ["Calendar", "Matrix", "Color scale"]),
+            ("Treemap", "Hierarchical", "Proportional area hierarchy", null, ChartThumbnailKind.Treemap, ["Hierarchical", "Proportional"]),
+            ("Candlestick / OHLC", "Financial", "Open, high, low and close values", "candlestick", ChartThumbnailKind.Candlestick, ["OHLC", "Volume", "Indicators"]),
+            ("Technical Indicators", "Financial", "Bands, moving averages and oscillators", null, ChartThumbnailKind.Indicator, ["Bollinger", "RSI", "MACD"]),
+            ("Histogram", "Statistical", "Frequency distribution by bins", null, ChartThumbnailKind.Histogram, ["Frequency", "Distribution", "Bins"]),
+            ("Box Plot", "Statistical", "Quartiles, outliers and variation", "boxplot", ChartThumbnailKind.BoxPlot, ["Quartile", "Outliers", "Violin"]),
+            ("Radial Gauge", "Gauges", "Progress and target performance", "gauge", ChartThumbnailKind.Gauge, ["Needle", "Zones", "Speed"]),
+            ("Linear / Bullet", "Gauges", "Compact target-versus-actual gauges", null, ChartThumbnailKind.Bullet, ["Bullet", "Progress", "KPI"]),
+            ("Funnel / Pyramid", "Conversion", "Stage-based conversion analysis", null, ChartThumbnailKind.Funnel, ["Funnel", "Pyramid", "Conversion"]),
+            ("3D Column / Bar", "3D", "Perspective columns with camera controls", null, ChartThumbnailKind.ThreeD, ["3D", "Perspective", "Orbit"]),
+            ("3D Surface / Mesh", "3D", "Parametric surfaces and wireframes", null, ChartThumbnailKind.Surface, ["Mesh", "Wireframe", "Lighting"]),
+            ("3D Scatter / Point Cloud", "3D", "XYZ points with depth and orbit controls", null, ChartThumbnailKind.Bubble, ["Point cloud", "XYZ", "Orbit"]),
+        };
 
-                    statisticsGrid
+        var cards = new Border[samples.Length];
+        for (var i = 0; i < samples.Length; i++)
+        {
+            var (name, category, description, route, kind, tags) = samples[i];
+            cards[i] = MakeChartCard(name, category, description, route, kind, tags);
+        }
+
+        AddChartCards(grid, cards, 2);
+        return (grid, cards);
+    }
+
+    private static Border MakeChartCard(string name, string category, string description, string? route, ChartThumbnailKind kind, string[] tags)
+    {
+        var card = new Border
+        {
+            Padding = new Thickness(18),
+            BackgroundColor = Surface,
+            Stroke = Border,
+            StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 12 },
+            MinimumHeightRequest = 294,
+            Content = new VerticalStackLayout
+            {
+                Spacing = 0,
+                Children =
+                {
+                    new ChartThumbnailView(kind) { Margin = new Thickness(0, 0, 0, 10) },
+                    new BoxView { HeightRequest = 1, BackgroundColor = Border, Margin = new Thickness(-18, 0, -18, 14) },
+                    new Label { Text = category.ToUpperInvariant(), FontSize = 10, FontAttributes = FontAttributes.Bold, TextColor = Accent, Margin = new Thickness(0, 0, 0, 5) },
+                    new Label { Text = name, FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(0, 0, 0, 6) },
+                    new Label { Text = description, FontSize = 12, TextColor = Muted, LineBreakMode = LineBreakMode.WordWrap, Margin = new Thickness(0, 0, 0, 10) },
+                    MakeTags(tags),
                 }
             }
         };
 
-        AddStatistics(statisticsGrid, 2);
-        return hero;
+        var tap = new TapGestureRecognizer();
+        var destination = route ?? $"catalog?name={Uri.EscapeDataString(name)}&kind={kind}";
+        tap.Tapped += async (_, _) => await Shell.Current.GoToAsync(destination);
+        card.GestureRecognizers.Add(tap);
+        return card;
     }
 
-    private Label BuildCategoriesHeader()
+    private static FlexLayout MakeTags(IEnumerable<string> tags)
     {
-        return new Label
+        var layout = new FlexLayout { Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap };
+        foreach (var tag in tags)
         {
-            Text = "Chart Categories",
-            FontSize = 20,
-            FontAttributes = FontAttributes.Bold,
-            TextColor = TextPrimary,
-            Margin = new Thickness(24, 8, 24, 16),
-        };
-    }
-
-    private (Grid Grid, Border[] Cards) BuildCategoriesGrid()
-    {
-        var grid = new Grid
-        {
-            Margin = new Thickness(24, 0, 24, 24),
-            ColumnSpacing = 16,
-            RowSpacing = 16,
-            ColumnDefinitions = new ColumnDefinitionCollection
+            layout.Add(new Border
             {
-                new ColumnDefinition { Width = GridLength.Star },
-                new ColumnDefinition { Width = GridLength.Star },
-            },
-        };
-
-        var categories = new[]
-        {
-            ("line_chart", "Cartesian", "Line, Area, Bar, Scatter"),
-            ("pie_chart", "Circular", "Pie & Donut charts"),
-            ("candlestick", "Financial", "Candlestick & OHLC"),
-            ("radial_gauge", "Gauges", "Radial & arc gauges"),
-            ("radar_chart", "Statistical", "Box Plot, Radar, Heatmap"),
-            ("realtime", "Advanced", "Real-time & Annotations"),
-        };
-
-        var cards = new Border[categories.Length];
-        for (int i = 0; i < categories.Length; i++)
-        {
-            var (icon, name, desc) = categories[i];
-            var card = MakeCategoryCard(icon, name, desc);
-            cards[i] = card;
+                Padding = new Thickness(8, 3), Margin = new Thickness(0, 0, 5, 5),
+                BackgroundColor = AccentSoft, Stroke = Color.FromArgb("#BAE6FD"), StrokeThickness = 1,
+                StrokeShape = new RoundRectangle { CornerRadius = 9 },
+                Content = new Label { Text = tag, FontSize = 10, TextColor = Accent },
+            });
         }
-
-        AddCategoryCards(grid, cards, 2);
-        return (grid, cards);
+        return layout;
     }
 
     private void UpdateLayoutForWidth(double width)
     {
         if (width <= 0) return;
-
         var compact = ResponsiveLayout.IsCompact(width);
-        _hero.Margin = compact ? new Thickness(12, 16, 12, 16) : new Thickness(24, 32, 24, 24);
-        _hero.Padding = compact ? new Thickness(20) : new Thickness(32);
+        _hero.Margin = compact ? new Thickness(12, 16, 12, 18) : new Thickness(24, 28, 24, 22);
+        _hero.Padding = compact ? new Thickness(20) : new Thickness(28);
         AddStatistics(_statisticsGrid, compact ? 2 : 4);
-        AddCategoryCards(_categoriesGrid, _categoryCards, compact ? 1 : 2);
+        AddChartCards(_chartGrid, _chartCards, compact ? 1 : width >= 1180 ? 4 : width >= 820 ? 3 : 2);
     }
 
     private static void AddStatistics(Grid grid, int columns)
     {
         grid.Children.Clear();
         grid.ColumnDefinitions.Clear();
-        for (var i = 0; i < columns; i++)
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-
-        var statistics = new[]
-        {
-            MakeStatItem("15+", "Chart Types"), MakeStatItem("3", "Categories"),
-            MakeStatItem("MAUI", "Native"), MakeStatItem("SkiaSharp", "Rendering"),
-        };
-        for (var i = 0; i < statistics.Length; i++)
-            grid.Add(statistics[i], i % columns, i / columns);
+        for (var i = 0; i < columns; i++) grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+        var values = new[] { ("23", "Chart types"), ("8", "Families"), ("MAUI", "Native"), ("Skia", "Rendered") };
+        for (var i = 0; i < values.Length; i++) grid.Add(MakeStat(values[i].Item1, values[i].Item2), i % columns, i / columns);
     }
 
-    private static void AddCategoryCards(Grid grid, Border[] cards, int columns)
+    private static Border MakeStat(string value, string label) => new()
+    {
+        Padding = new Thickness(12, 10), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1,
+        StrokeShape = new RoundRectangle { CornerRadius = 8 },
+        Content = new VerticalStackLayout
+        {
+            Spacing = 1,
+            Children =
+            {
+                new Label { Text = value, FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Text, HorizontalTextAlignment = TextAlignment.Center },
+                new Label { Text = label, FontSize = 10, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center },
+            }
+        }
+    };
+
+    private static void AddChartCards(Grid grid, Border[] cards, int columns)
     {
         grid.Children.Clear();
         grid.ColumnDefinitions.Clear();
-        for (var i = 0; i < columns; i++)
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-        for (var i = 0; i < cards.Length; i++)
-            grid.Add(cards[i], i % columns, i / columns);
-    }
-
-    private Border BuildTechSection()
-    {
-        return new Border
-        {
-            Margin = new Thickness(24, 0, 24, 32),
-            Padding = new Thickness(24, 20),
-            StrokeShape = new RoundRectangle { CornerRadius = 12 },
-            BackgroundColor = CardBg,
-            Stroke = CardBorder,
-            StrokeThickness = 1,
-            Content = new VerticalStackLayout
-            {
-                Spacing = 16,
-                Children =
-                {
-                    new Label
-                    {
-                        Text = "Technology Stack",
-                        FontSize = 16,
-                        FontAttributes = FontAttributes.Bold,
-                        TextColor = TextPrimary,
-                    },
-                    MakeTechRow("\u26A1", ".NET MAUI 10", "Cross-platform UI framework"),
-                    MakeTechRow("\u25CE", "SkiaSharp 2.88", "High-performance 2D rendering"),
-                    MakeTechRow("\u25A1", "ChartNivra Core", "Pure C# chart model layer"),
-                }
-            }
-        };
-    }
-
-    private static Border MakeCategoryCard(string iconName, string name, string desc)
-    {
-        return new Border
-        {
-            Padding = new Thickness(20),
-            StrokeShape = new RoundRectangle { CornerRadius = 12 },
-            BackgroundColor = CardBg,
-            Stroke = CardBorder,
-            StrokeThickness = 1,
-            Content = new VerticalStackLayout
-            {
-                Spacing = 12,
-                Children =
-                {
-                    new Label
-                    {
-                        FontFamily = "Segoe UI Symbol, Segoe UI Emoji, Noto Sans Symbols",
-                        Text = GetIcon(iconName),
-                        FontSize = 28,
-                        TextColor = Accent,
-                        HorizontalOptions = LayoutOptions.Start,
-                    },
-
-                    new VerticalStackLayout
-                    {
-                        Spacing = 4,
-                        Children =
-                        {
-                            new Label
-                            {
-                                Text = name,
-                                FontSize = 16,
-                                FontAttributes = FontAttributes.Bold,
-                                TextColor = TextPrimary,
-                            },
-                            new Label
-                            {
-                                Text = desc,
-                                FontSize = 13,
-                                TextColor = TextSecondary,
-                                LineBreakMode = LineBreakMode.WordWrap,
-                            }
-                        }
-                    }
-                }
-            }
-        };
-    }
-
-    private static Border MakeStatItem(string value, string label)
-    {
-        return new Border
-        {
-            Padding = new Thickness(16, 12),
-            StrokeShape = new RoundRectangle { CornerRadius = 8 },
-            BackgroundColor = Colors.White,
-            Stroke = CardBorder,
-            StrokeThickness = 1,
-            Content = new VerticalStackLayout
-            {
-                Spacing = 2,
-                HorizontalOptions = LayoutOptions.Center,
-                Children =
-                {
-                    new Label
-                    {
-                        Text = value,
-                        FontSize = 18,
-                        FontAttributes = FontAttributes.Bold,
-                        TextColor = TextPrimary,
-                        HorizontalOptions = LayoutOptions.Center,
-                    },
-                    new Label
-                    {
-                        Text = label,
-                        FontSize = 11,
-                        TextColor = TextMuted,
-                        HorizontalOptions = LayoutOptions.Center,
-                    }
-                }
-            }
-        };
-    }
-
-    private static View MakeTechRow(string icon, string name, string detail)
-    {
-        return new HorizontalStackLayout
-        {
-            Spacing = 12,
-            Children =
-            {
-                new Label
-                {
-                    FontFamily = "Segoe UI Symbol, Segoe UI Emoji, Noto Sans Symbols",
-                    Text = icon,
-                    FontSize = 20,
-                    TextColor = Accent,
-                    VerticalOptions = LayoutOptions.Center,
-                    WidthRequest = 28,
-                },
-                new VerticalStackLayout
-                {
-                    Spacing = 2,
-                    Children =
-                    {
-                        new Label { Text = name, FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = TextPrimary },
-                        new Label { Text = detail, FontSize = 12, TextColor = TextMuted },
-                    }
-                }
-            }
-        };
-    }
-
-    private static string GetIcon(string iconName)
-    {
-        // MONOCHROME only - no color emojis
-        return iconName switch
-        {
-            "line_chart" => "\u25B6",
-            "pie_chart" => "\u229A",
-            "candlestick" => "\u25B2\u25BC",
-            "radial_gauge" => "\u23F0",
-            "radar_chart" => "\u2315",
-            "realtime" => "\u26A1",
-            _ => "\u25B6",
-        };
+        for (var i = 0; i < columns; i++) grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+        for (var i = 0; i < cards.Length; i++) grid.Add(cards[i], i % columns, i / columns);
     }
 }

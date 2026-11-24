@@ -21,7 +21,7 @@ public class ThemesPage : ContentPage
     public ThemesPage()
     {
         BackgroundColor = PageBg;
-        Shell.SetNavBarIsVisible(this, false);
+        Shell.SetNavBarIsVisible(this, true);
         Title = "Themes";
 
         var header = new VerticalStackLayout

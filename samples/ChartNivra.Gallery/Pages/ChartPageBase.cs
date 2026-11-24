@@ -32,7 +32,8 @@ public abstract class ChartPageBase : ContentPage
     protected ChartPageBase(string title, string subtitle, string codeSnippet)
     {
         BackgroundColor = PageBg;
-        Shell.SetNavBarIsVisible(this, false);
+        Title = title;
+        Shell.SetNavBarIsVisible(this, true);
 
         ChartView = new ChartView
         {
