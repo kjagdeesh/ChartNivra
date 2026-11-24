@@ -16,17 +16,11 @@ public class HeatmapRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Dark;
+        var theme = _model.Theme ?? ChartTheme.Light;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
+        var top = ChartDrawing.DrawTitle(canvas, _model.Title, bounds, theme);
 
-        var topMargin = 20.0;
-        if (!string.IsNullOrEmpty(_model.Title))
-        {
-            canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16f, isBold: true);
-            topMargin = 50.0;
-        }
-
-        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + topMargin, bounds.Width - 80, bounds.Height - topMargin - 40);
+        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + top, bounds.Width - 80, bounds.Height - top - 40);
 
         if (_model.Rows <= 0 || _model.Columns <= 0) return;
 

@@ -15,6 +15,15 @@ public class LineSeriesModel
     public bool ShowMarkers { get; set; } = true;
     public float MarkerRadius { get; set; } = 4f;
 
+    /// <summary>Renders the line as a smooth Catmull-Rom spline instead of straight segments.</summary>
+    public bool Smooth { get; set; }
+
+    /// <summary>Fills the region between the line and the X axis.</summary>
+    public bool ShowArea { get; set; }
+
+    /// <summary>Alpha (0-255) of the area fill.</summary>
+    public byte AreaOpacity { get; set; } = 60;
+
     public List<ChartPoint> Points { get; set; } = new();
 
     public DataRange GetXRange()

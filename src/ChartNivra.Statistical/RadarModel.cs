@@ -25,6 +25,7 @@ public class RadarSeriesModel
 public class RadarChartModel
 {
     public string Title { get; set; } = "Radar Chart";
+    public ChartNivra.Core.Themes.ChartTheme Theme { get; set; } = ChartNivra.Core.Themes.ChartTheme.Light;
     public List<string> Axes { get; set; } = new();
     public List<RadarSeriesModel> Series { get; set; } = new();
     public double MaxScale { get; set; } = 100.0;

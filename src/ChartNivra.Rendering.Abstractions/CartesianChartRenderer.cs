@@ -1,13 +1,12 @@
 namespace ChartNivra.Rendering.Abstractions;
 
-using ChartNivra.Core.Axes;
 using ChartNivra.Core.Charts;
 using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Themes;
 using ChartNivra.Core.Transforms;
 
 /// <summary>
-/// Default 2D Cartesian chart renderer using the IChartCanvas abstraction.
+/// Default 2D Cartesian renderer: lines, splines, area fills, markers, legend and category labels.
 /// </summary>
 public class CartesianChartRenderer : IChartRenderer
 {
@@ -18,93 +17,86 @@ public class CartesianChartRenderer : IChartRenderer
         _model = model ?? throw new ArgumentNullException(nameof(model));
     }
 
+    /// <summary>Plot area used for the given bounds. Exposed so annotation overlays can align.</summary>
+    public ChartRect GetPlotArea(ChartRect bounds)
+    {
+        var top = string.IsNullOrEmpty(_model.Title) ? 16 : 44;
+        var bottom = _model.ShowLegend && _model.Series.Count > 1 ? 62 : 36;
+        return new ChartRect(bounds.Left + 48, bounds.Top + top, Math.Max(10, bounds.Width - 48 - 20), Math.Max(10, bounds.Height - top - bottom));
+    }
+
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = _model.Theme ?? ChartTheme.Dark;
-
-        // 1. Draw Background
+        var theme = _model.Theme ?? ChartTheme.Light;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
+        ChartDrawing.DrawTitle(canvas, _model.Title, bounds, theme);
 
-        // 2. Measure Title
-        var topMargin = 20.0;
-        if (!string.IsNullOrEmpty(_model.Title))
-        {
-            canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16f, isBold: true);
-            topMargin = 50.0;
-        }
-
-        // 3. Define Plot Area
-        var paddingLeft = 50.0;
-        var paddingRight = 25.0;
-        var paddingBottom = 40.0;
-
-        var plotArea = new ChartRect(
-            bounds.Left + paddingLeft,
-            bounds.Top + topMargin,
-            Math.Max(10, bounds.Width - paddingLeft - paddingRight),
-            Math.Max(10, bounds.Height - topMargin - paddingBottom)
-        );
-
-        // Draw Plot Area Background
-        canvas.DrawRectangle(plotArea, new ChartBrush(theme.PlotAreaColor));
-
+        var plot = GetPlotArea(bounds);
         if (_model.Series.Count == 0) return;
 
-        // 4. Compute Data Ranges across all series
         var (xRange, yRange, niceMinY, niceMaxY, stepY) = _model.ComputeRanges();
-        var transform = new CartesianTransform(xRange, yRange, plotArea);
+        var transform = new CartesianTransform(xRange, yRange, plot);
 
-        // 5. Draw Horizontal Grid lines & Y Axis labels
+        // Horizontal grid + Y labels
         for (var v = niceMinY; v <= niceMaxY + 1e-9; v += stepY)
         {
             var pt = transform.DataToPixel(xRange.Min, v);
-            var endPt = new ChartPoint(plotArea.Right, pt.Y);
-            canvas.DrawLine(pt, endPt, new ChartPen(theme.GridLineColor, 1f));
-
+            canvas.DrawLine(new ChartPoint(plot.Left, pt.Y), new ChartPoint(plot.Right, pt.Y), new ChartPen(theme.GridLineColor, 1f));
             var label = v.ToString("G4");
-            var labelSize = canvas.MeasureText(label, 11f);
-            canvas.DrawText(label, new ChartPoint(plotArea.Left - labelSize.Width - 8, pt.Y + 4), theme.SecondaryTextColor, 11f);
+            var size = canvas.MeasureText(label, 11f);
+            canvas.DrawText(label, new ChartPoint(plot.Left - size.Width - 8, pt.Y + 4), theme.SecondaryTextColor, 11f);
         }
 
-        // 6. Clip to Plot Area and draw series
-        canvas.Save();
-        canvas.ClipRect(plotArea);
+        // X labels
+        if (_model.XLabels.Count > 0)
+        {
+            var step = Math.Max(1, (int)Math.Ceiling(_model.XLabels.Count / Math.Max(1.0, plot.Width / 56)));
+            for (var i = 0; i < _model.XLabels.Count; i += step)
+            {
+                var p = transform.DataToPixel(i, yRange.Min);
+                var size = canvas.MeasureText(_model.XLabels[i], 11f);
+                canvas.DrawText(_model.XLabels[i], new ChartPoint(p.X - size.Width / 2, plot.Bottom + 18), theme.SecondaryTextColor, 11f);
+            }
+        }
 
+        canvas.Save();
+        canvas.ClipRect(new ChartRect(plot.Left - 6, plot.Top - 6, plot.Width + 12, plot.Height + 12));
+
+        var legend = new List<(string, ChartColor)>();
         for (var i = 0; i < _model.Series.Count; i++)
         {
             var s = _model.Series[i];
-            var color = s.Color;
-            if (color == ChartColor.Black || color == ChartColor.FromHex("#3B82F6"))
+            var color = s.Color == ChartColor.FromHex("#3B82F6") || s.Color == ChartColor.Black
+                ? theme.DefaultPalette.GetColor(i) : s.Color;
+            legend.Add((string.IsNullOrEmpty(s.Title) ? $"Series {i + 1}" : s.Title, color));
+            if (s.Points.Count == 0) continue;
+
+            var screen = new List<ChartPoint>(s.Points.Count);
+            foreach (var pt in s.Points) screen.Add(transform.DataToPixel(pt.X, pt.Y));
+            var path = s.Smooth ? ChartDrawing.Smooth(screen) : screen;
+
+            if (s.ShowArea && path.Count > 1)
             {
-                color = theme.DefaultPalette.GetColor(i);
+                var baseY = transform.DataToPixel(xRange.Min, Math.Max(yRange.Min, 0)).Y;
+                var poly = new List<ChartPoint>(path.Count + 2) { new(path[0].X, baseY) };
+                poly.AddRange(path);
+                poly.Add(new ChartPoint(path[^1].X, baseY));
+                canvas.DrawPolygon(poly, new ChartBrush(color.WithAlpha(s.AreaOpacity)));
             }
 
-            if (s.Points.Count > 0)
+            canvas.DrawLines(path, new ChartPen(color, s.StrokeWidth));
+
+            if (s.ShowMarkers)
             {
-                var screenPoints = new List<ChartPoint>(s.Points.Count);
-                foreach (var pt in s.Points)
-                {
-                    screenPoints.Add(transform.DataToPixel(pt.X, pt.Y));
-                }
-
-                var pen = new ChartPen(color, s.StrokeWidth);
-                canvas.DrawLines(screenPoints, pen);
-
-                if (s.ShowMarkers)
-                {
-                    var brush = new ChartBrush(color);
-                    var markerBorder = new ChartPen(ChartColor.White, 1.5f);
-                    foreach (var pt in screenPoints)
-                    {
-                        canvas.DrawCircle(pt, s.MarkerRadius, brush, markerBorder);
-                    }
-                }
+                var fill = new ChartBrush(theme.BackgroundColor);
+                foreach (var pt in screen)
+                    canvas.DrawCircle(pt, s.MarkerRadius, fill, new ChartPen(color, 2f));
             }
         }
 
         canvas.Restore();
+        canvas.DrawLine(new ChartPoint(plot.Left, plot.Bottom), new ChartPoint(plot.Right, plot.Bottom), new ChartPen(theme.AxisLineColor, 1f));
 
-        // 7. Draw Plot Border
-        canvas.DrawRectangle(plotArea, null, new ChartPen(theme.AxisLineColor, 1.5f));
+        if (_model.ShowLegend && legend.Count > 1) ChartDrawing.DrawLegend(canvas, legend, bounds, theme);
     }
 }

@@ -19,15 +19,12 @@ public class BoxPlotRenderer : IChartRenderer
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
         canvas.DrawRectangle(bounds, new ChartBrush(_theme.BackgroundColor));
-
-        var topMargin = 20.0;
-        canvas.DrawText("Box Plot", new ChartPoint(bounds.Left + 20, bounds.Top + 30), _theme.TextColor, 16f, isBold: true);
-        topMargin = 50.0;
+        var top = ChartDrawing.DrawTitle(canvas, "Box Plot", bounds, _theme);
 
         var data = _series.Data;
         if (data.Count == 0) return;
 
-        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + topMargin, bounds.Width - 80, bounds.Height - topMargin - 40);
+        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + top, bounds.Width - 80, bounds.Height - top - 40);
 
         double minVal = double.MaxValue, maxVal = double.MinValue;
         foreach (var p in data)
@@ -60,8 +57,8 @@ public class BoxPlotRenderer : IChartRenderer
             // Min/Max caps
             canvas.DrawLine(new ChartPoint(x - 4, minY), new ChartPoint(x + 4, minY), new ChartPen(color, 1.5f));
             canvas.DrawLine(new ChartPoint(x - 4, maxY), new ChartPoint(x + 4, maxY), new ChartPen(color, 1.5f));
-            // Box
-            canvas.DrawRectangle(new ChartRect(x - halfW, q3Y, boxWidth, q1Y - q3Y), new ChartBrush(color.WithAlpha(80)), new ChartPen(color, 1.5f));
+            // Box with rounded corners
+            canvas.DrawRoundRect(new ChartRect(x - halfW, q3Y, boxWidth, q1Y - q3Y), 2f, new ChartBrush(color.WithAlpha(80)), new ChartPen(color, 1.5f));
             // Median line
             canvas.DrawLine(new ChartPoint(x - halfW, medY), new ChartPoint(x + halfW, medY), new ChartPen(ChartColor.White, 2f));
 
@@ -70,6 +67,6 @@ public class BoxPlotRenderer : IChartRenderer
             canvas.DrawText(p.Category, new ChartPoint(x - labelSize.Width / 2, plotArea.Bottom + 18), _theme.SecondaryTextColor, 10f);
         }
 
-        canvas.DrawRectangle(plotArea, null, new ChartPen(_theme.AxisLineColor, 1f));
+        canvas.DrawLine(new ChartPoint(plotArea.Left, plotArea.Bottom), new ChartPoint(plotArea.Right, plotArea.Bottom), new ChartPen(_theme.AxisLineColor, 1f));
     }
 }

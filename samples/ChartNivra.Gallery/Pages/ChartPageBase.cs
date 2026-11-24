@@ -24,6 +24,9 @@ public abstract class ChartPageBase : ContentPage
     private   readonly Label           _previewTab;
     private   readonly Label           _codeTab;
     private   readonly ContentView     _tabContent;
+    private   readonly Frame           _chartCard;
+    private   readonly Frame           _tabSection;
+    private   readonly VerticalStackLayout _headerSection;
     private   bool _showingCode = false;
 
     protected ChartPageBase(string title, string subtitle, string codeSnippet)
@@ -65,7 +68,7 @@ public abstract class ChartPageBase : ContentPage
         tabBar.Add(_codeTab,    1, 0);
 
         // Page header
-        var headerSection = new VerticalStackLayout
+        _headerSection = new VerticalStackLayout
         {
             Spacing         = 4,
             Padding         = new Thickness(20, 20, 20, 0),
@@ -95,7 +98,7 @@ public abstract class ChartPageBase : ContentPage
         };
 
         // Chart card
-        var chartCard = new Frame
+        _chartCard = new Frame
         {
             Margin          = new Thickness(16, 12),
             Padding         = new Thickness(4),
@@ -107,7 +110,7 @@ public abstract class ChartPageBase : ContentPage
         };
 
         // Code/Preview tabs section
-        var tabSection = new Frame
+        _tabSection = new Frame
         {
             Margin          = new Thickness(16, 0, 16, 16),
             Padding         = new Thickness(0),
@@ -138,9 +141,9 @@ public abstract class ChartPageBase : ContentPage
                 Spacing  = 0,
                 Children =
                 {
-                    headerSection,
-                    chartCard,
-                    tabSection,
+                    _headerSection,
+                    _chartCard,
+                    _tabSection,
                 }
             }
         };
@@ -149,10 +152,26 @@ public abstract class ChartPageBase : ContentPage
         SwitchTab(false);
         // Allow derived classes to configure ChartView
         ConfigureChart();
+        SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
     }
 
     /// <summary>Derived classes configure the ChartView / Renderer here.</summary>
     protected abstract void ConfigureChart();
+
+    private void UpdateLayoutForWidth(double width)
+    {
+        if (width <= 0) return;
+
+        var compact = ResponsiveLayout.IsCompact(width);
+        var horizontalMargin = compact ? 12 : 16;
+        _headerSection.Padding = compact
+            ? new Thickness(16, 16, 16, 0)
+            : new Thickness(20, 20, 20, 0);
+        _chartCard.Margin = new Thickness(horizontalMargin, compact ? 10 : 12);
+        _tabSection.Margin = new Thickness(horizontalMargin, 0, horizontalMargin, compact ? 12 : 16);
+        ChartView.HeightRequest = compact ? 240 : 320;
+        _snippet.HeightRequest = compact ? 220 : 260;
+    }
 
     private void SwitchTab(bool showCode)
     {

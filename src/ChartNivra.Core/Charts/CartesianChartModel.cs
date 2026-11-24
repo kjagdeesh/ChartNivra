@@ -12,7 +12,12 @@ using ChartNivra.Core.Transforms;
 public class CartesianChartModel
 {
     public string Title { get; set; } = string.Empty;
-    public ChartTheme Theme { get; set; } = ChartTheme.Dark;
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
+
+    /// <summary>Optional category labels shown on the X axis (index = X value).</summary>
+    public List<string> XLabels { get; } = new();
+
+    public bool ShowLegend { get; set; } = true;
     public List<LineSeriesModel> Series { get; } = new();
 
     public (DataRange xRange, DataRange yRange, double niceMinY, double niceMaxY, double stepY) ComputeRanges()

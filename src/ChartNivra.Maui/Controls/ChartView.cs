@@ -18,7 +18,7 @@ public class ChartView : SKCanvasView
         BindableProperty.Create(nameof(Title), typeof(string), typeof(ChartView), string.Empty, propertyChanged: OnChartPropertyChanged);
 
     public static readonly BindableProperty ThemeProperty =
-        BindableProperty.Create(nameof(Theme), typeof(ChartTheme), typeof(ChartView), ChartTheme.Dark, propertyChanged: OnChartPropertyChanged);
+        BindableProperty.Create(nameof(Theme), typeof(ChartTheme), typeof(ChartView), ChartTheme.Light, propertyChanged: OnChartPropertyChanged);
 
     private readonly CartesianChartModel _model = new();
     private readonly CartesianChartRenderer _defaultRenderer;
@@ -71,8 +71,13 @@ public class ChartView : SKCanvasView
         var skCanvas = e.Surface.Canvas;
         var info = e.Info;
 
+        // Draw in device-independent units so text and strokes stay crisp and correctly sized on high-DPI screens.
+        var scale = Width > 0 ? info.Width / (float)Width : 1f;
+        skCanvas.Clear();
+        skCanvas.Scale(scale);
+
         using var canvas = new SkiaChartCanvas(skCanvas);
-        var bounds = new ChartRect(0, 0, info.Width, info.Height);
+        var bounds = new ChartRect(0, 0, info.Width / scale, info.Height / scale);
         var activeRenderer = _renderer ?? _defaultRenderer;
         activeRenderer.Render(canvas, bounds);
     }

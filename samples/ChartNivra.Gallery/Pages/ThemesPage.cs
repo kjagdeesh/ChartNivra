@@ -5,6 +5,7 @@ using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Series;
 using ChartNivra.Core.Themes;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Layouts;
 
 /// <summary>
 /// Themes demo — shows the same chart rendered in Light, Dark, and custom palette modes.
@@ -55,6 +56,13 @@ public class ThemesPage : ContentPage
         stacks.Add(BuildPaletteSection());
 
         Content = new ScrollView { Content = stacks };
+        SizeChanged += (_, _) =>
+        {
+            if (Width <= 0) return;
+            var compact = Controls.ResponsiveLayout.IsCompact(Width);
+            foreach (var child in stacks.Children.OfType<Frame>())
+                child.Margin = new Thickness(compact ? 12 : 16, 12, compact ? 12 : 16, 0);
+        };
     }
 
     private static View BuildThemeCard(string label, ChartTheme theme, string colorHex)
@@ -134,8 +142,8 @@ public class ThemesPage : ContentPage
 
         foreach (var (name, colors) in palettes)
         {
-            var row = new HorizontalStackLayout { Spacing = 6 };
-            var nameLabel = new Label { Text = name, FontSize = 12, TextColor = Color.FromArgb("#64748B"), WidthRequest = 60, VerticalOptions = LayoutOptions.Center };
+            var row = new FlexLayout { Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap, AlignItems = FlexAlignItems.Center };
+            var nameLabel = new Label { Text = name, FontSize = 12, TextColor = Color.FromArgb("#64748B"), WidthRequest = 60, Margin = new Thickness(0, 0, 6, 6), VerticalOptions = LayoutOptions.Center };
             row.Add(nameLabel);
             foreach (var hex in colors)
             {
@@ -147,7 +155,7 @@ public class ThemesPage : ContentPage
                     HasShadow       = false,
                     BackgroundColor = Color.FromArgb(hex),
                     BorderColor     = Colors.Transparent,
-                    Padding         = new Thickness(0),
+                    Padding         = new Thickness(0), Margin = new Thickness(0, 0, 6, 6),
                 });
             }
             stack.Add(row);

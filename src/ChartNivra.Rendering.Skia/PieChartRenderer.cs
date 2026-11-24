@@ -20,111 +20,63 @@ namespace ChartNivra.Rendering.Skia
 
         public void Render(IChartCanvas canvas, ChartRect bounds)
         {
-            var theme = _model.Theme ?? ChartTheme.Dark;
-
-            // Draw background
+            var theme = _model.Theme ?? ChartTheme.Light;
             canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
-
-            // Draw title
-            var topMargin = 20.0;
-            if (!string.IsNullOrEmpty(_model.Title))
-            {
-                canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16f, isBold: true);
-                topMargin = 50.0;
-            }
-
-            var centerX = bounds.Left + bounds.Width / 2;
-            var centerY = bounds.Top + topMargin + (bounds.Height - topMargin) / 2;
-            var radius = Math.Min(bounds.Width, bounds.Height - topMargin) * 0.35;
+            var top = ChartDrawing.DrawTitle(canvas, _model.Title, bounds, theme);
 
             var total = _model.TotalValue;
             if (total <= 0) return;
 
-            double currentAngle = -90; // Start at top
+            const double legendHeight = 40;
+            var availH = bounds.Height - top - legendHeight;
+            var radius = (float)(Math.Min(bounds.Width - 40, availH) / 2 - 6);
+            if (radius < 10) return;
+            var center = new ChartPoint(bounds.Left + bounds.Width / 2, bounds.Top + top + availH / 2);
+            var inner = radius * _model.HoleRadiusRatio;
 
-            foreach (var slice in _model.Slices)
+            var legend = new List<(string, ChartColor)>();
+            float angle = -90;
+            for (var i = 0; i < _model.Slices.Count; i++)
             {
+                var slice = _model.Slices[i];
                 if (slice.Value <= 0) continue;
+                var color = slice.Color == ChartColor.Transparent ? theme.DefaultPalette.GetColor(i) : slice.Color;
+                legend.Add(($"{slice.Label}  {slice.Value / total * 100:F0}%", color));
 
-                var sweepAngle = (slice.Value / total) * 360;
-                var sliceColor = slice.Color == ChartColor.Transparent ? theme.DefaultPalette.GetColor(0) : slice.Color;
-
-                // Draw slice
-                var startRad = currentAngle * Math.PI / 180;
-                var endRad = (currentAngle + sweepAngle) * Math.PI / 180;
-
-                var innerRadius = radius * _model.HoleRadiusRatio;
-                var outerRadius = radius;
-
+                var sweep = (float)(slice.Value / total * 360);
+                var mid = (angle + sweep / 2) * Math.PI / 180;
+                var c = center;
                 if (slice.IsExploded)
+                    c = new ChartPoint(center.X + radius * 0.08 * Math.Cos(mid), center.Y + radius * 0.08 * Math.Sin(mid));
+
+                canvas.DrawArc(c, radius, inner, angle, sweep, new ChartBrush(color), new ChartPen(theme.BackgroundColor, 2.5f));
+
+                // Percentage label inside the slice when there is room
+                if (sweep >= 18)
                 {
-                    var midAngle = (currentAngle + sweepAngle / 2) * Math.PI / 180;
-                    var explodeDist = radius * 0.1;
-                    centerX += explodeDist * Math.Cos(midAngle);
-                    centerY += explodeDist * Math.Sin(midAngle);
+                    var lr = inner > 0 ? (radius + inner) / 2 : radius * 0.65;
+                    var text = $"{slice.Value / total * 100:F0}%";
+                    var size = canvas.MeasureText(text, 12f, true);
+                    canvas.DrawText(text, new ChartPoint(c.X + lr * Math.Cos(mid) - size.Width / 2, c.Y + lr * Math.Sin(mid) + size.Height / 2),
+                        ChartColor.White, 12f, true);
                 }
-
-                // Draw outer arc
-                var points = new List<ChartPoint>();
-                var segments = Math.Max(1, (int)(sweepAngle / 5));
-                for (int i = 0; i <= segments; i++)
-                {
-                    var angle = currentAngle + (sweepAngle * i / segments);
-                    var rad = angle * Math.PI / 180;
-                    points.Add(new ChartPoint(
-                        centerX + outerRadius * Math.Cos(rad),
-                        centerY + outerRadius * Math.Sin(rad)));
-                }
-
-                // Draw inner arc (for donut)
-                if (innerRadius > 0)
-                {
-                    for (int i = segments; i >= 0; i--)
-                    {
-                        var angle = currentAngle + (sweepAngle * i / segments);
-                        var rad = angle * Math.PI / 180;
-                        points.Add(new ChartPoint(
-                            centerX + innerRadius * Math.Cos(rad),
-                            centerY + innerRadius * Math.Sin(rad)));
-                    }
-                }
-
-                // Close the path
-                points.Add(points[0]);
-
-                // Fill
-                var brush = new ChartBrush(sliceColor);
-                var pen = new ChartPen(theme.BackgroundColor, 2f);
-                canvas.DrawLines(points, pen);
-                // Note: Would need polygon fill - simplified for now
-
-                // Draw label
-                if (!string.IsNullOrEmpty(slice.Label))
-                {
-                    var labelAngle = (currentAngle + sweepAngle / 2) * Math.PI / 180;
-                    var labelRadius = radius + 15;
-                    var labelX = centerX + labelRadius * Math.Cos(labelAngle);
-                    var labelY = centerY + labelRadius * Math.Sin(labelAngle);
-                    var percent = (slice.Value / total * 100).ToString("F1");
-                    canvas.DrawText($"{slice.Label} {percent}%", new ChartPoint(labelX, labelY), theme.TextColor, 11f);
-                }
-
-                currentAngle += sweepAngle;
+                angle += sweep;
             }
 
-            // Draw center text for donut
             if (_model is DonutChartModel donut && !string.IsNullOrEmpty(donut.CenterTitle))
             {
-                var text = donut.CenterTitle;
-                var size = canvas.MeasureText(text, 18f, isBold: true);
-                canvas.DrawText(text, new ChartPoint(centerX - size.Width / 2, centerY - 10), donut.CenterTextColor, 18f, isBold: true);
-
-                if (!string.IsNullOrEmpty(donut.CenterSubtitle))
+                var tColor = theme.TextColor;
+                var ts = canvas.MeasureText(donut.CenterTitle, 12f);
+                var hasSub = !string.IsNullOrEmpty(donut.CenterSubtitle);
+                canvas.DrawText(donut.CenterTitle, new ChartPoint(center.X - ts.Width / 2, center.Y - (hasSub ? 8 : -4)), theme.SecondaryTextColor, 12f);
+                if (hasSub)
                 {
-                    var subSize = canvas.MeasureText(donut.CenterSubtitle, 14f);
-                    canvas.DrawText(donut.CenterSubtitle, new ChartPoint(centerX - subSize.Width / 2, centerY + 12), donut.CenterTextColor, 14f);
+                    var ss = canvas.MeasureText(donut.CenterSubtitle!, 22f, true);
+                    canvas.DrawText(donut.CenterSubtitle!, new ChartPoint(center.X - ss.Width / 2, center.Y + 18), tColor, 22f, true);
                 }
             }
+
+            ChartDrawing.DrawLegend(canvas, legend, bounds, theme);
         }
     }
 }

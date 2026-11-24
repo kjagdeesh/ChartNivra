@@ -18,6 +18,9 @@ public record HeatmapCell(int Row, int Column, double Value, string? Label = nul
 public class HeatmapModel
 {
     public string Title { get; set; } = "Heatmap Analysis";
+    public ChartNivra.Core.Themes.ChartTheme Theme { get; set; } = ChartNivra.Core.Themes.ChartTheme.Light;
+    public List<string> RowLabels { get; set; } = new();
+    public List<string> ColumnLabels { get; set; } = new();
     public HeatmapMode Mode { get; set; } = HeatmapMode.Matrix;
     public int Rows { get; set; }
     public int Columns { get; set; }

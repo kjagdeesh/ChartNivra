@@ -22,6 +22,10 @@ public interface IChartCanvas : IDisposable
     void DrawLines(IReadOnlyList<ChartPoint> points, ChartPen pen);
     void DrawRectangle(ChartRect rect, ChartBrush? brush, ChartPen? pen = null);
     void DrawCircle(ChartPoint center, float radius, ChartBrush? brush, ChartPen? pen = null);
+    void DrawRoundRect(ChartRect rect, float radius, ChartBrush? brush, ChartPen? pen = null);
+    void DrawPolygon(IReadOnlyList<ChartPoint> points, ChartBrush? brush, ChartPen? pen = null);
+    /// <summary>Draws an arc (angles in degrees, 0 = 3 o'clock, clockwise). Ring when <paramref name="innerRadius"/> &gt; 0 and a brush is given.</summary>
+    void DrawArc(ChartPoint center, float outerRadius, float innerRadius, float startAngle, float sweepAngle, ChartBrush? brush, ChartPen? pen = null);
     void DrawText(string text, ChartPoint position, ChartColor color, float fontSize, bool isBold = false);
     ChartSize MeasureText(string text, float fontSize, bool isBold = false);
     void Save();

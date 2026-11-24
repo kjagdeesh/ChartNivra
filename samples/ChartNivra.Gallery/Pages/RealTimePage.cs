@@ -21,6 +21,9 @@ public class RealTimePage : ContentPage
     private double _lastY = 50;
     private readonly System.Random _rng = new(1);
     private readonly Label _statusLabel;
+    private readonly Frame _chartCard;
+    private readonly Frame _controlCard;
+    private readonly Button _startButton;
     private bool _running = false;
 
     private const string Code = """
@@ -88,7 +91,7 @@ timer.Start();
             HorizontalOptions = LayoutOptions.End,
         };
 
-        var startBtn = new Button
+        _startButton = new Button
         {
             Text            = "⏸  Pause",
             BackgroundColor = Color.FromArgb("#6366F1"),
@@ -97,16 +100,16 @@ timer.Start();
             Padding         = new Thickness(20, 10),
             FontSize        = 14,
         };
-        startBtn.Clicked += (_, _) =>
+        _startButton.Clicked += (_, _) =>
         {
             _running = !_running;
-            if (_running) { _timer?.Start(); startBtn.Text = "⏸  Pause";  _statusLabel.Text = "▶  Running";  _statusLabel.TextColor = Color.FromArgb("#10B981"); }
-            else          { _timer?.Stop();  startBtn.Text = "▶  Resume"; _statusLabel.Text = "⏸  Paused";   _statusLabel.TextColor = Color.FromArgb("#F59E0B"); }
+            if (_running) { _timer?.Start(); _startButton.Text = "⏸  Pause";  _statusLabel.Text = "▶  Running";  _statusLabel.TextColor = Color.FromArgb("#10B981"); }
+            else          { _timer?.Stop();  _startButton.Text = "▶  Resume"; _statusLabel.Text = "⏸  Paused";   _statusLabel.TextColor = Color.FromArgb("#F59E0B"); }
         };
 
         var snippet = new Controls.CodeSnippetView { Code = Code, HeightRequest = 240 };
 
-        var chartCard = new Frame
+        _chartCard = new Frame
         {
             Margin          = new Thickness(16, 12),
             Padding         = new Thickness(4),
@@ -117,7 +120,7 @@ timer.Start();
             Content         = _chart,
         };
 
-        var controlCard = new Frame
+        _controlCard = new Frame
         {
             Margin          = new Thickness(16, 0, 16, 10),
             Padding         = new Thickness(16, 12),
@@ -132,10 +135,10 @@ timer.Start();
                     new ColumnDefinition { Width = GridLength.Star },
                     new ColumnDefinition { Width = GridLength.Auto },
                 },
-                Children = { _statusLabel, startBtn }
+                Children = { _statusLabel, _startButton }
             }
         };
-        Grid.SetColumn(startBtn, 1);
+        Grid.SetColumn(_startButton, 1);
 
         Content = new ScrollView
         {
@@ -155,8 +158,8 @@ timer.Start();
                             new BoxView { HeightRequest = 1, BackgroundColor = CardBorder, Margin = new Thickness(0,12,0,0) },
                         }
                     },
-                    chartCard,
-                    controlCard,
+                    _chartCard,
+                    _controlCard,
                     new Frame
                     {
                         Margin = new Thickness(16, 0, 16, 16), Padding = new Thickness(0),
@@ -185,6 +188,7 @@ timer.Start();
 
         StartTimer();
         _running = true;
+        SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
     }
 
     private void StartTimer()
@@ -201,6 +205,40 @@ timer.Start();
             _chart.Invalidate();
         };
         _timer.Start();
+    }
+
+    private void UpdateLayoutForWidth(double width)
+    {
+        if (width <= 0) return;
+        var compact = Controls.ResponsiveLayout.IsCompact(width);
+        var margin = compact ? 12 : 16;
+        _chart.HeightRequest = compact ? 240 : 320;
+        _chartCard.Margin = new Thickness(margin, compact ? 10 : 12);
+        _controlCard.Margin = new Thickness(margin, 0, margin, 10);
+        if (compact)
+        {
+            _controlCard.Content = new VerticalStackLayout
+            {
+                Spacing = 10,
+                Children = { _statusLabel, _startButton }
+            };
+            _startButton.HorizontalOptions = LayoutOptions.Fill;
+        }
+        else
+        {
+            var grid = new Grid
+            {
+                ColumnDefinitions = new ColumnDefinitionCollection
+                {
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Auto },
+                }
+            };
+            grid.Add(_statusLabel, 0, 0);
+            grid.Add(_startButton, 1, 0);
+            _controlCard.Content = grid;
+            _startButton.HorizontalOptions = LayoutOptions.End;
+        }
     }
 
     protected override void OnDisappearing()
