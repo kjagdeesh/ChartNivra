@@ -12,7 +12,7 @@ public class PieChartPage : ChartPageBase
 var model = new PieChartModel
 {
     Title = "Market Share",
-    Theme = ChartTheme.Dark,
+    Theme = ChartTheme.Light,
     HoleRadiusRatio = 0f, // 0 = Pie, 0.6 = Donut
 };
 
@@ -33,7 +33,7 @@ chartView.Renderer = renderer;
         var model = new PieChartModel
         {
             Title = "Market Share",
-            Theme = ChartTheme.Dark,
+            Theme = ChartTheme.Light,
         };
 
         model.Slices.Add(new PieSliceModel { Label = "Mobile",  Value = 42, Color = ChartColor.FromHex("#00C096") });

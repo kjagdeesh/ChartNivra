@@ -14,7 +14,7 @@ public sealed class StepLineRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Dark;
+        var theme = ChartTheme.Light;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
         canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16, true);
         if (_model.Points.Count == 0) return;

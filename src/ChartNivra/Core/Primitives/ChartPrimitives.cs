@@ -12,6 +12,23 @@ public readonly record struct ChartPoint(double X, double Y)
 }
 
 /// <summary>
+/// A rich chart datum for production data sets. It preserves the numeric coordinates used by renderers
+/// while carrying the human-readable and domain-specific information needed for labels, tooltips,
+/// accessibility, and drill-down experiences.
+/// </summary>
+public sealed record ChartDataPoint(
+    double X,
+    double Y,
+    string? Label = null,
+    string? ValueLabel = null,
+    string? Tooltip = null,
+    ChartColor? Color = null,
+    IReadOnlyDictionary<string, object?>? Metadata = null)
+{
+    public ChartPoint ToChartPoint() => new(X, Y);
+}
+
+/// <summary>
 /// Represents a 2D size with double precision.
 /// </summary>
 public readonly record struct ChartSize(double Width, double Height)

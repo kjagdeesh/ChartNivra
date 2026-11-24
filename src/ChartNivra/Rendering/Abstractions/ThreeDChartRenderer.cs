@@ -12,7 +12,7 @@ public class ThreeDChartRenderer : IChartRenderer
 {
     public Camera3D Camera { get; set; } = new();
     public Light3D Light { get; set; } = new();
-    public ChartTheme Theme { get; set; } = ChartTheme.Dark;
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     public List<Triangle3D> Meshes { get; } = new();
 
     public void Render(IChartCanvas canvas, ChartRect viewport)

@@ -66,7 +66,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
             }
         };
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
-        var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Dark\" />" };
+        var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Light\" />" };
         var active = new ContentView { Content = csharp };
         var csTab = MakeTab("C#", true); var xamlTab = MakeTab("XAML", false);
         csTab.GestureRecognizers.Add(Tap(() => { active.Content = csharp; SetTab(csTab, true); SetTab(xamlTab, false); }));
@@ -82,11 +82,11 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
 
     private View BuildChart()
     {
-        var chart = new ChartView { HeightRequest = 360, Theme = ChartTheme.Dark, Title = _name };
+        var chart = new ChartView { HeightRequest = 360, Theme = ChartTheme.Light, Title = _name };
         switch (_kind)
         {
             case ChartThumbnailKind.Bar:
-                var bar = new BarChartModel { Title = _name, Theme = ChartTheme.Dark, ShowValueLabels = true };
+                var bar = new BarChartModel { Title = _name, Theme = ChartTheme.Light, ShowValueLabels = true };
                 bar.Categories.AddRange(["Q1", "Q2", "Q3", "Q4"]);
                 bar.Series.Add(new BarSeriesModel { Title = "Revenue", Color = ChartColor.FromHex("#38BDF8"), Points = [new(0, 42), new(1, 68), new(2, 57), new(3, 84)] });
                 chart.Renderer = new BarChartRenderer(bar); break;
@@ -176,7 +176,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
 
     private string CreateCsharpSource()
     {
-        if (_kind == ChartThumbnailKind.Bar) return "var model = new BarChartModel { Title = \"Quarterly Revenue\", Theme = ChartTheme.Dark, ShowValueLabels = true };\nmodel.Categories.AddRange([\"Q1\", \"Q2\", \"Q3\", \"Q4\"]);\nmodel.Series.Add(new BarSeriesModel { Title = \"Revenue\", Color = ChartColor.FromHex(\"#38BDF8\"), Points = [new(0, 42), new(1, 68), new(2, 57), new(3, 84)] });\nchartView.Renderer = new BarChartRenderer(model);";
+        if (_kind == ChartThumbnailKind.Bar) return "var model = new BarChartModel { Title = \"Quarterly Revenue\", Theme = ChartTheme.Light, ShowValueLabels = true };\nmodel.Categories.AddRange([\"Q1\", \"Q2\", \"Q3\", \"Q4\"]);\nmodel.Series.Add(new BarSeriesModel { Title = \"Revenue\", Color = ChartColor.FromHex(\"#38BDF8\"), Points = [new(0, 42), new(1, 68), new(2, 57), new(3, 84)] });\nchartView.Renderer = new BarChartRenderer(model);";
         if (_kind == ChartThumbnailKind.Bubble) return _name.StartsWith("3D Scatter", StringComparison.Ordinal)
             ? "var model = new ScatterChart3DModel { Title = \"Point cloud\", XAxisTitle = \"X\", YAxisTitle = \"Y\", ZAxisTitle = \"Z\" };\nmodel.Points.AddRange([new(-3, 1, -2, 7, null, \"North\"), new(-1, 3, 1, 9, null, \"East\"), new(1, 2, -1, 8, null, \"Core\"), new(3, 4, 2, 10, null, \"West\"), new(0, 5, 0, 7, null, \"Peak\")]);\nchartView.Renderer = new ScatterChart3DRenderer(model);"
             : "var model = new BubbleSeriesModel(\"Market\", ChartColor.FromHex(\"#38BDF8\"));\nmodel.Points.AddRange([new(10, 40, 12, \"A\"), new(24, 65, 22, \"B\"), new(42, 52, 16, \"C\"), new(58, 82, 28, \"D\")]);\nchartView.Renderer = new BubbleChartRenderer(model);";

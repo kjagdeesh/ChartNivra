@@ -11,7 +11,7 @@ public class LineChartPage : ChartPageBase
 var model = new CartesianChartModel
 {
     Title = "Monthly Revenue",
-    Theme = ChartTheme.Dark,
+    Theme = ChartTheme.Light,
 };
 
 model.Series.Add(new LineSeriesModel
@@ -20,6 +20,7 @@ model.Series.Add(new LineSeriesModel
     Color       = ChartColor.FromHex("#00C096"),
     StrokeWidth = 2.5f,
     ShowMarkers = true,
+    ShowDataLabels = true,
     Points = new List<ChartPoint>
     {
         new(0, 42), new(1, 58), new(2, 51),
@@ -37,7 +38,7 @@ chartView.Model.Series.AddRange(model.Series);
     protected override void ConfigureChart()
     {
         ChartView.Title = "Monthly Revenue";
-        ChartView.Theme = ChartTheme.Dark;
+        ChartView.Theme = ChartTheme.Light;
 
         ChartView.Model.Series.Add(new LineSeriesModel
         {
@@ -45,6 +46,7 @@ chartView.Model.Series.AddRange(model.Series);
             Color       = ChartColor.FromHex("#00C096"),
             StrokeWidth = 2.5f,
             ShowMarkers = true,
+            ShowDataLabels = true,
             Points      = new System.Collections.Generic.List<ChartPoint>
             {
                 new(0,42), new(1,58), new(2,51), new(3,76),

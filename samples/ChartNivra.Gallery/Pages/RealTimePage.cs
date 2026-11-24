@@ -79,7 +79,7 @@ timer.Start();
             HeightRequest   = 320,
             BackgroundColor = Colors.Transparent,
             Title           = "Live Data Stream",
-            Theme           = ChartTheme.Dark,
+            Theme           = ChartTheme.Light,
         };
         _chart.Model.Series.Add(_series);
 

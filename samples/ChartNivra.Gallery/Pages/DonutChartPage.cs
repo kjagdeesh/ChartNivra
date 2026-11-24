@@ -11,7 +11,7 @@ public class DonutChartPage : ChartPageBase
     private const string Code = """
 var model = new DonutChartModel("Revenue Breakdown")
 {
-    Theme           = ChartTheme.Dark,
+    Theme           = ChartTheme.Light,
     HoleRadiusRatio = 0.6f,
     CenterTitle     = "Total",
     CenterSubtitle  = "$1.24M",
@@ -30,7 +30,7 @@ chartView.Renderer = new PieChartRenderer(model);
     {
         var model = new DonutChartModel("Revenue Breakdown")
         {
-            Theme           = ChartTheme.Dark,
+            Theme           = ChartTheme.Light,
             HoleRadiusRatio = 0.6f,
             CenterTitle     = "Total",
             CenterSubtitle  = "$1.24M",

@@ -11,8 +11,8 @@ internal static class ThreeDRenderSupport
 {
     public static void DrawBackground(IChartCanvas canvas, ChartRect bounds, string title)
     {
-        canvas.DrawRectangle(bounds, new ChartBrush(ChartTheme.Dark.BackgroundColor));
-        canvas.DrawText(title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), ChartTheme.Dark.TextColor, 16, true);
+        canvas.DrawRectangle(bounds, new ChartBrush(ChartTheme.Light.BackgroundColor));
+        canvas.DrawText(title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), ChartTheme.Light.TextColor, 16, true);
     }
 
     public static ChartPoint Project(Camera3D camera, Vector3 point, ChartRect bounds) =>
@@ -25,7 +25,7 @@ internal static class ThreeDRenderSupport
 
     public static void DrawAxisGuide(IChartCanvas canvas, ChartRect bounds, string x, string y, string z)
     {
-        var color = ChartTheme.Dark.SecondaryTextColor;
+        var color = ChartTheme.Light.SecondaryTextColor;
         var origin = new ChartPoint(bounds.Left + 44, bounds.Bottom - 42);
         var xEnd = new ChartPoint(origin.X + 55, origin.Y);
         var yEnd = new ChartPoint(origin.X, origin.Y - 42);
@@ -47,8 +47,8 @@ internal static class ThreeDRenderSupport
         var labelY = lineEnd.Y - 14;
         var rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
         canvas.DrawLine(anchor, lineEnd, new ChartPen(accent.WithAlpha(220), 1));
-        canvas.DrawRoundRect(rect, 4, new ChartBrush(ChartColor.FromHex("#1E293B")), new ChartPen(accent.WithAlpha(180), 1));
-        canvas.DrawText(text, new ChartPoint(labelX + 4, labelY + textSize.Height + 1), ChartTheme.Dark.TextColor, 10, true);
+        canvas.DrawRoundRect(rect, 4, new ChartBrush(ChartColor.White), new ChartPen(accent.WithAlpha(180), 1));
+        canvas.DrawText(text, new ChartPoint(labelX + 4, labelY + textSize.Height + 1), ChartTheme.Light.TextColor, 10, true);
     }
 }
 

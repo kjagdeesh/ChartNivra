@@ -18,7 +18,7 @@ series.Data.AddRange(new[]
     new BoxPlotPoint("Jun", 12,  22, 30, 40, 60),
 });
 
-chartView.Renderer = new BoxPlotRenderer(series, ChartTheme.Dark);
+chartView.Renderer = new BoxPlotRenderer(series, ChartTheme.Light);
 """;
 
     public BoxPlotPage() : base("Box Plot", "Five-number summary box-and-whisker chart", Code) { }
@@ -36,6 +36,6 @@ chartView.Renderer = new BoxPlotRenderer(series, ChartTheme.Dark);
             new BoxPlotPoint("Jun", 12, 22, 30, 40, 60),
         });
 
-        UseRenderer(new BoxPlotRenderer(series, ChartTheme.Dark));
+        UseRenderer(new BoxPlotRenderer(series, ChartTheme.Light));
     }
 }

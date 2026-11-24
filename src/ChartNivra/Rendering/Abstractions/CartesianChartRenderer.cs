@@ -2,6 +2,7 @@ namespace ChartNivra.Rendering.Abstractions;
 
 using ChartNivra.Core.Charts;
 using ChartNivra.Core.Primitives;
+using ChartNivra.Core.Series;
 using ChartNivra.Core.Themes;
 using ChartNivra.Core.Transforms;
 
@@ -69,10 +70,11 @@ public class CartesianChartRenderer : IChartRenderer
             var color = s.Color == ChartColor.FromHex("#3B82F6") || s.Color == ChartColor.Black
                 ? theme.DefaultPalette.GetColor(i) : s.Color;
             legend.Add((string.IsNullOrEmpty(s.Title) ? $"Series {i + 1}" : s.Title, color));
-            if (s.Points.Count == 0) continue;
+            var data = s.GetPoints();
+            if (data.Count == 0) continue;
 
-            var screen = new List<ChartPoint>(s.Points.Count);
-            foreach (var pt in s.Points) screen.Add(transform.DataToPixel(pt.X, pt.Y));
+            var screen = new List<ChartPoint>(data.Count);
+            foreach (var pt in data) screen.Add(transform.DataToPixel(pt.X, pt.Y));
             var path = s.Smooth ? ChartDrawing.Smooth(screen) : screen;
 
             if (s.ShowArea && path.Count > 1)
@@ -92,6 +94,9 @@ public class CartesianChartRenderer : IChartRenderer
                 foreach (var pt in screen)
                     canvas.DrawCircle(pt, s.MarkerRadius, fill, new ChartPen(color, 2f));
             }
+
+            if (s.ShowDataLabels)
+                DrawDataLabels(canvas, s, screen, plot, theme);
         }
 
         canvas.Restore();
@@ -99,4 +104,25 @@ public class CartesianChartRenderer : IChartRenderer
 
         if (_model.ShowLegend && legend.Count > 1) ChartDrawing.DrawLegend(canvas, legend, bounds, theme);
     }
+
+    private static void DrawDataLabels(IChartCanvas canvas, LineSeriesModel series, IReadOnlyList<ChartPoint> points, ChartRect plot, ChartTheme theme)
+    {
+        var occupied = new List<ChartRect>();
+        for (var i = 0; i < points.Count; i++)
+        {
+            var datum = series.DataPoints.Count > i ? series.DataPoints[i] : null;
+            var text = datum?.ValueLabel ?? datum?.Label ?? series.GetPoints()[i].Y.ToString(series.DataLabelFormat);
+            var size = canvas.MeasureText(text, 10, true);
+            var above = new ChartRect(points[i].X - size.Width / 2 - 4, points[i].Y - size.Height - 12, size.Width + 8, size.Height + 6);
+            var below = new ChartRect(points[i].X - size.Width / 2 - 4, points[i].Y + 7, size.Width + 8, size.Height + 6);
+            var rect = occupied.Any(existing => Intersects(existing, above)) ? below : above;
+            if (rect.Left < plot.Left || rect.Right > plot.Right || rect.Top < plot.Top || rect.Bottom > plot.Bottom) continue;
+            canvas.DrawRoundRect(rect, 4, new ChartBrush(theme.BackgroundColor.WithAlpha(235)), new ChartPen(series.Color.WithAlpha(170), 1));
+            canvas.DrawText(text, new ChartPoint(rect.Left + 4, rect.Top + size.Height + 1), theme.TextColor, 10, true);
+            occupied.Add(rect);
+        }
+    }
+
+    private static bool Intersects(ChartRect first, ChartRect second) =>
+        first.Left < second.Right && first.Right > second.Left && first.Top < second.Bottom && first.Bottom > second.Top;
 }

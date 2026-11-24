@@ -8,7 +8,7 @@ public class MultiSeriesPage : ChartPageBase
 {
     private const string Code = """
 chartView.Title = "Multi-Series Comparison";
-chartView.Theme = ChartTheme.Dark;
+chartView.Theme = ChartTheme.Light;
 
 var revenue  = new[] { 42, 58, 51, 76, 89, 95, 82, 103, 118, 97, 134, 148 };
 var expenses = new[] { 30, 42, 38, 55, 60, 65, 58,  72,  80, 68,  90, 100 };
@@ -33,7 +33,7 @@ chartView.Model.Series.Add(new LineSeriesModel { Title = "Profit", Color = Chart
     protected override void ConfigureChart()
     {
         ChartView.Title = "Multi-Series Comparison";
-        ChartView.Theme = ChartTheme.Dark;
+        ChartView.Theme = ChartTheme.Light;
 
         var months = 12;
         var rev    = new[] { 42, 58, 51, 76, 89, 95, 82, 103, 118, 97, 134, 148 };

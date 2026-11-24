@@ -18,7 +18,7 @@ public class RadialGaugeModel : IChartRenderer
     public ChartColor NeedleColor { get; set; } = ChartColor.FromHex("#EF4444");
     public ChartColor TrackColor { get; set; } = ChartColor.FromHex("#334155");
     public ChartColor ValueColor { get; set; } = ChartColor.FromHex("#3B82F6");
-    public ChartTheme Theme { get; set; } = ChartTheme.Dark;
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {

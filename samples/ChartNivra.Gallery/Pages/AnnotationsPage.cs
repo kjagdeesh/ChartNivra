@@ -13,7 +13,7 @@ public class AnnotationsPage : ChartPageBase
 {
     private const string Code = """
 // 1. Build a line chart model
-var model = new CartesianChartModel { Theme = ChartTheme.Dark };
+var model = new CartesianChartModel { Theme = ChartTheme.Light };
 model.Series.Add(new LineSeriesModel
 {
     Title  = "Sales",
@@ -41,7 +41,7 @@ chartView.Renderer = new AnnotatedCartesianRenderer(model,
     protected override void ConfigureChart()
     {
         ChartView.Title = "Sales with Target Line";
-        ChartView.Theme = ChartTheme.Dark;
+        ChartView.Theme = ChartTheme.Light;
 
         ChartView.Model.Series.Add(new LineSeriesModel
         {

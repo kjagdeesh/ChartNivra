@@ -17,10 +17,15 @@ public class HomePage : ContentPage
     private static readonly Color Muted = Color.FromArgb("#64748B");
 
     private readonly Grid _chartGrid;
-    private readonly Border[] _chartCards;
+    private readonly ChartCard[] _chartCards;
     private readonly Grid _statisticsGrid;
     private readonly Border _hero;
     private readonly VerticalStackLayout _dashboardContent;
+    private readonly SearchBar _search;
+    private readonly Picker _familyPicker;
+    private readonly Label _resultLabel;
+
+    private sealed record ChartCard(Border View, string Name, string Category, string Description, string[] Tags);
 
     public HomePage()
     {
@@ -30,6 +35,21 @@ public class HomePage : ContentPage
 
         _hero = BuildHero(out _statisticsGrid);
         (_chartGrid, _chartCards) = BuildChartGrid();
+        _search = new SearchBar
+        {
+            Placeholder = "Search charts, use cases, or features",
+            PlaceholderColor = Muted,
+            TextColor = Text,
+            BackgroundColor = Surface,
+            HeightRequest = 46,
+        };
+        _search.TextChanged += (_, _) => ApplyFilters();
+        _familyPicker = new Picker { Title = "All families", TextColor = Text, TitleColor = Muted, BackgroundColor = Surface, HeightRequest = 46 };
+        _familyPicker.Items.Add("All families");
+        foreach (var family in _chartCards.Select(card => card.Category).Distinct().OrderBy(name => name)) _familyPicker.Items.Add(family);
+        _familyPicker.SelectedIndex = 0;
+        _familyPicker.SelectedIndexChanged += (_, _) => ApplyFilters();
+        _resultLabel = new Label { FontSize = 12, TextColor = Muted, VerticalTextAlignment = TextAlignment.Center };
 
         Content = new ScrollView
         {
@@ -41,7 +61,7 @@ public class HomePage : ContentPage
                 Children =
                 {
                     _hero,
-                    new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(0, 28, 0, 14) },
+                    BuildDiscoveryHeader(),
                     _chartGrid,
                     new Label { Text = "Choose a chart type to open its interactive sample and source preview.", FontSize = 12, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(0, 0, 0, 28) },
                 }
@@ -49,6 +69,7 @@ public class HomePage : ContentPage
         };
 
         SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
+        ApplyFilters();
     }
 
     private static Border BuildHero(out Grid statisticsGrid)
@@ -101,7 +122,30 @@ public class HomePage : ContentPage
         };
     }
 
-    private static (Grid Grid, Border[] Cards) BuildChartGrid()
+    private View BuildDiscoveryHeader()
+    {
+        var filterRow = new Grid
+        {
+            ColumnSpacing = 10,
+            ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = new GridLength(170) } },
+            Margin = new Thickness(0, 28, 0, 10)
+        };
+        filterRow.Add(new Border { Padding = new Thickness(2, 0), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = _search }, 0, 0);
+        filterRow.Add(new Border { Padding = new Thickness(8, 0), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = _familyPicker }, 1, 0);
+        return new VerticalStackLayout
+        {
+            Spacing = 4,
+            Children =
+            {
+                new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text },
+                new Label { Text = "Find a chart by visual task, chart family, or capability.", FontSize = 13, TextColor = Muted },
+                filterRow,
+                _resultLabel,
+            }
+        };
+    }
+
+    private static (Grid Grid, ChartCard[] Cards) BuildChartGrid()
     {
         var grid = new Grid { Margin = new Thickness(0, 0, 0, 24), ColumnSpacing = 14, RowSpacing = 14 };
         var samples = new (string Name, string Category, string Description, string? Route, ChartThumbnailKind Kind, string[] Tags)[]
@@ -131,11 +175,11 @@ public class HomePage : ContentPage
             ("3D Scatter / Point Cloud", "3D", "XYZ points with depth and orbit controls", null, ChartThumbnailKind.Bubble, ["Point cloud", "XYZ", "Orbit"]),
         };
 
-        var cards = new Border[samples.Length];
+        var cards = new ChartCard[samples.Length];
         for (var i = 0; i < samples.Length; i++)
         {
             var (name, category, description, route, kind, tags) = samples[i];
-            cards[i] = MakeChartCard(name, category, description, route, kind, tags);
+            cards[i] = new ChartCard(MakeChartCard(name, category, description, route, kind, tags), name, category, description, tags);
         }
 
         AddChartCards(grid, cards, 2);
@@ -190,6 +234,18 @@ public class HomePage : ContentPage
         return layout;
     }
 
+    private void ApplyFilters()
+    {
+        if (_chartCards is null || _chartCards.Length == 0 || _resultLabel is null) return;
+        var search = _search.Text?.Trim() ?? string.Empty;
+        var family = _familyPicker.SelectedIndex > 0 ? _familyPicker.SelectedItem?.ToString() : null;
+        var results = _chartCards.Where(card =>
+            (string.IsNullOrWhiteSpace(family) || card.Category == family) &&
+            (string.IsNullOrWhiteSpace(search) || $"{card.Name} {card.Category} {card.Description} {string.Join(' ', card.Tags)}".Contains(search, StringComparison.OrdinalIgnoreCase))).ToArray();
+        _resultLabel.Text = results.Length == _chartCards.Length ? "23 chart samples · 8 chart families" : $"{results.Length} matching chart sample{(results.Length == 1 ? string.Empty : "s")}";
+        AddChartCards(_chartGrid, results, ResponsiveLayout.IsCompact(Width) ? 1 : Width >= 1180 ? 4 : Width >= 820 ? 3 : 2);
+    }
+
     private void UpdateLayoutForWidth(double width)
     {
         if (width <= 0) return;
@@ -198,7 +254,7 @@ public class HomePage : ContentPage
         _dashboardContent.WidthRequest = width > 1320 ? 1240 : -1;
         _hero.Padding = compact ? new Thickness(18, 18) : new Thickness(28, 24);
         AddStatistics(_statisticsGrid, compact ? 2 : 4);
-        AddChartCards(_chartGrid, _chartCards, compact ? 1 : width >= 1180 ? 4 : width >= 820 ? 3 : 2);
+        ApplyFilters();
     }
 
     private static void AddStatistics(Grid grid, int columns)
@@ -225,11 +281,12 @@ public class HomePage : ContentPage
         }
     };
 
-    private static void AddChartCards(Grid grid, Border[] cards, int columns)
+    private static void AddChartCards(Grid grid, IEnumerable<ChartCard> cards, int columns)
     {
         grid.Children.Clear();
         grid.ColumnDefinitions.Clear();
         for (var i = 0; i < columns; i++) grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-        for (var i = 0; i < cards.Length; i++) grid.Add(cards[i], i % columns, i / columns);
+        var visibleCards = cards.ToArray();
+        for (var i = 0; i < visibleCards.Length; i++) grid.Add(visibleCards[i].View, i % columns, i / columns);
     }
 }

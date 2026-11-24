@@ -24,13 +24,30 @@ public class LineSeriesModel
     /// <summary>Alpha (0-255) of the area fill.</summary>
     public byte AreaOpacity { get; set; } = 60;
 
+    /// <summary>Shows the data point's value label directly on the chart when space permits.</summary>
+    public bool ShowDataLabels { get; set; }
+
+    /// <summary>Optional numeric format used when a rich data point has no explicit <see cref="ChartDataPoint.ValueLabel"/>.</summary>
+    public string DataLabelFormat { get; set; } = "G4";
+
     public List<ChartPoint> Points { get; set; } = new();
+
+    /// <summary>
+    /// Rich data input for labels, tooltips, colors and domain metadata. When populated it takes
+    /// precedence over <see cref="Points"/>, keeping the simple X/Y API fully backwards compatible.
+    /// </summary>
+    public List<ChartDataPoint> DataPoints { get; } = new();
+
+    public IReadOnlyList<ChartPoint> GetPoints() => DataPoints.Count == 0
+        ? Points
+        : DataPoints.Select(point => point.ToChartPoint()).ToArray();
 
     public DataRange GetXRange()
     {
-        if (Points.Count == 0) return new DataRange(0, 1);
+        var points = GetPoints();
+        if (points.Count == 0) return new DataRange(0, 1);
         double min = double.MaxValue, max = double.MinValue;
-        foreach (var pt in Points)
+        foreach (var pt in points)
         {
             if (pt.X < min) min = pt.X;
             if (pt.X > max) max = pt.X;
@@ -40,9 +57,10 @@ public class LineSeriesModel
 
     public DataRange GetYRange()
     {
-        if (Points.Count == 0) return new DataRange(0, 1);
+        var points = GetPoints();
+        if (points.Count == 0) return new DataRange(0, 1);
         double min = double.MaxValue, max = double.MinValue;
-        foreach (var pt in Points)
+        foreach (var pt in points)
         {
             if (pt.Y < min) min = pt.Y;
             if (pt.Y > max) max = pt.Y;

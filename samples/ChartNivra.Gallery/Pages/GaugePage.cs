@@ -14,9 +14,9 @@ var gauge = new RadialGaugeModel
     Minimum    = 0,
     Maximum    = 100,
     Unit       = "%",
-    Theme      = ChartTheme.Dark,
+    Theme      = ChartTheme.Light,
     NeedleColor = ChartColor.FromHex("#EF4444"),
-    TrackColor  = ChartColor.FromHex("#334155"),
+    TrackColor  = ChartColor.FromHex("#E2E8F0"),
     ValueColor  = ChartColor.FromHex("#00C096"),
 };
 
@@ -34,9 +34,9 @@ chartView.Renderer = gauge;
             Minimum     = 0,
             Maximum     = 100,
             Unit        = "%",
-            Theme       = ChartTheme.Dark,
+            Theme       = ChartTheme.Light,
             NeedleColor = ChartColor.FromHex("#EF4444"),
-            TrackColor  = ChartColor.FromHex("#334155"),
+            TrackColor  = ChartColor.FromHex("#E2E8F0"),
             ValueColor  = ChartColor.FromHex("#00C096"),
         });
     }

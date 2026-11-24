@@ -16,7 +16,7 @@ public class SunburstRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Dark;
+        var theme = ChartTheme.Light;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
 
         var topMargin = 20.0;

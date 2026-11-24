@@ -20,7 +20,7 @@ public class PieSliceModel
 public class PieChartModel
 {
     public string Title { get; set; } = string.Empty;
-    public ChartTheme Theme { get; set; } = ChartTheme.Dark;
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     public List<PieSliceModel> Slices { get; } = new();
 
     /// <summary>

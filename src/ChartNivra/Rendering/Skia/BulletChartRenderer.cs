@@ -13,7 +13,7 @@ public sealed class BulletChartRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Dark;
+        var theme = ChartTheme.Light;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
         canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16, true);
         var plot = new ChartRect(bounds.Left + 32, bounds.Top + 82, bounds.Width - 64, 74);
