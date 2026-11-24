@@ -30,6 +30,7 @@ public class SunburstRenderer : IChartRenderer
         var centerY = bounds.Top + topMargin + (bounds.Height - topMargin) / 2;
         var outerRadius = Math.Min(bounds.Width, bounds.Height - topMargin) * 0.35;
 
+        if (_model.Root.ComputeTotalValue() <= 0) return;
         DrawNode(canvas, _model.Root, centerX, centerY, _model.InnerRadiusRatio * outerRadius, outerRadius, -Math.PI / 2, 2 * Math.PI, theme);
     }
 
@@ -57,7 +58,7 @@ public class SunburstRenderer : IChartRenderer
         }
         points.Add(points[0]);
 
-        canvas.DrawLines(points, new ChartPen(color, 1f));
+        canvas.DrawPolygon(points, new ChartBrush(color), new ChartPen(theme.BackgroundColor, 2f));
 
         // Draw label at middle of arc
         if (!string.IsNullOrEmpty(node.Name))

@@ -73,6 +73,16 @@ public class RadarChartRenderer : IChartRenderer
             if (series.FillOpacity > 0 && points.Count > 2)
                 canvas.DrawPolygon(points, new ChartBrush(color.WithAlpha((byte)(series.FillOpacity * 255))));
             canvas.DrawLines(points, new ChartPen(color, 2f));
+            for (var i = 0; i < _model.Axes.Count; i++)
+            {
+                canvas.DrawCircle(points[i], 3.5f, new ChartBrush(ChartColor.White), new ChartPen(color, 1.5f));
+                if (_model.Series.Count == 1)
+                {
+                    var text = (i < series.Values.Count ? series.Values[i] : 0).ToString("0");
+                    var size = canvas.MeasureText(text, 9, true);
+                    canvas.DrawText(text, new ChartPoint(points[i].X - size.Width / 2, points[i].Y - 7), color, 9, true);
+                }
+            }
         }
 
         if (_model.Series.Count > 1) ChartDrawing.DrawLegend(canvas, legend, bounds, theme);

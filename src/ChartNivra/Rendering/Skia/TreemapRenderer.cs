@@ -49,11 +49,11 @@ public class TreemapRenderer : IChartRenderer
 
             if (!string.IsNullOrEmpty(node.Name) && drawRect.Width > 40 && drawRect.Height > 20)
             {
-                var label = $"{node.Name}\n{node.Value:F0}";
-                var labelSize = canvas.MeasureText(label, 10f);
-                if (labelSize.Width < drawRect.Width - 10 && labelSize.Height < drawRect.Height - 10)
+                var labelSize = canvas.MeasureText(node.Name, 10f, true);
+                if (labelSize.Width < drawRect.Width - 10 && drawRect.Height > 32)
                 {
-                    canvas.DrawText(label, new ChartPoint(drawRect.Left + 5, drawRect.Top + 5), ChartColor.White, 10f);
+                    canvas.DrawText(node.Name, new ChartPoint(drawRect.Left + 6, drawRect.Top + 15), ChartColor.White, 10f, true);
+                    canvas.DrawText(node.Value.ToString("N0"), new ChartPoint(drawRect.Left + 6, drawRect.Top + 29), ChartColor.White.WithAlpha(220), 9f);
                 }
             }
         }

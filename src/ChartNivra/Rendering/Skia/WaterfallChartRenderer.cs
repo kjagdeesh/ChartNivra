@@ -98,6 +98,10 @@ public class WaterfallChartRenderer : IChartRenderer
             // Label
             var labelSize = canvas.MeasureText(data[i].Category, 10f);
             canvas.DrawText(data[i].Category, new ChartPoint(x - labelSize.Width / 2, plotArea.Bottom + 18), theme.SecondaryTextColor, 10f);
+            var value = data[i].Type == WaterfallType.Total ? barHeights[i] : data[i].Value;
+            var valueLabel = value.ToString("+#;−#;0");
+            var valueSize = canvas.MeasureText(valueLabel, 10f, true);
+            canvas.DrawText(valueLabel, new ChartPoint(x - valueSize.Width / 2, Math.Min(topY, bottomY) - 6), theme.SecondaryTextColor, 10f, true);
         }
 
         canvas.DrawRectangle(plotArea, null, new ChartPen(theme.AxisLineColor, 1f));

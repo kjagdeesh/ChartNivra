@@ -38,7 +38,7 @@ internal static class ThreeDRenderSupport
         canvas.DrawText(z, new ChartPoint(zEnd.X + 3, zEnd.Y - 4), color, 9, true);
     }
 
-    public static void DrawCallout(IChartCanvas canvas, ChartRect bounds, ChartPoint anchor, string text, ChartColor accent)
+    public static void DrawCallout(IChartCanvas canvas, ChartRect bounds, ChartPoint anchor, string text, ChartColor accent, ICollection<ChartRect>? occupied = null)
     {
         var toRight = anchor.X < bounds.Left + bounds.Width * .62;
         var lineEnd = new ChartPoint(anchor.X + (toRight ? 26 : -26), anchor.Y - 22);
@@ -46,10 +46,22 @@ internal static class ThreeDRenderSupport
         var labelX = toRight ? lineEnd.X + 5 : lineEnd.X - textSize.Width - 13;
         var labelY = lineEnd.Y - 14;
         var rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
+        if (occupied is not null)
+        {
+            var direction = anchor.Y < bounds.Top + bounds.Height / 2 ? 1 : -1;
+            for (var attempt = 0; attempt < 5 && occupied.Any(existing => Intersects(existing, rect)); attempt++)
+            {
+                labelY += direction * 18;
+                rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
+            }
+            occupied.Add(rect);
+        }
         canvas.DrawLine(anchor, lineEnd, new ChartPen(accent.WithAlpha(220), 1));
         canvas.DrawRoundRect(rect, 4, new ChartBrush(ChartColor.White), new ChartPen(accent.WithAlpha(180), 1));
         canvas.DrawText(text, new ChartPoint(labelX + 4, labelY + textSize.Height + 1), ChartTheme.Light.TextColor, 10, true);
     }
+
+    private static bool Intersects(ChartRect first, ChartRect second) => first.Left < second.Right && first.Right > second.Left && first.Top < second.Bottom && first.Bottom > second.Top;
 }
 
 /// <summary>Renderer for <see cref="ColumnChart3DModel"/> using depth-sorted shaded cuboid faces.</summary>
@@ -62,6 +74,7 @@ public sealed class ColumnChart3DRenderer : IChartRenderer
     {
         ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title);
         var faces = new List<(Triangle3D Triangle, float Depth)>();
+        var callouts = new List<ChartRect>();
         foreach (var point in _model.Points)
         {
             var min = new Vector3((float)(point.X - point.Width / 2), 0, (float)(point.Z - point.Depth / 2));
@@ -86,7 +99,7 @@ public sealed class ColumnChart3DRenderer : IChartRenderer
         {
             if (string.IsNullOrWhiteSpace(point.Label)) continue;
             var labelAt = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
-            ThreeDRenderSupport.DrawCallout(canvas, bounds, labelAt, $"{point.Label} · {point.Y:0.0}", point.Color ?? _model.DefaultColor);
+            ThreeDRenderSupport.DrawCallout(canvas, bounds, labelAt, $"{point.Label} · {point.Y:0.0}", point.Color ?? _model.DefaultColor, callouts);
         }
         ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
     }
@@ -138,13 +151,14 @@ public sealed class ScatterChart3DRenderer : IChartRenderer
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
         ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title);
+        var callouts = new List<ChartRect>();
         foreach (var point in _model.Points.OrderBy(p => Vector4.Transform(new Vector4((float)p.X, (float)p.Y, (float)p.Z, 1), _model.Camera.GetViewMatrix()).Z))
         {
             var screen = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
             var color = point.Color ?? _model.DefaultColor;
             canvas.DrawCircle(screen, (float)Math.Clamp(point.Size, 2, 20), new ChartBrush(color.WithAlpha(205)), new ChartPen(color, 1.5f));
             if (!string.IsNullOrWhiteSpace(point.Label))
-                ThreeDRenderSupport.DrawCallout(canvas, bounds, screen, $"{point.Label} · {point.X:0},{point.Y:0},{point.Z:0}", color);
+                ThreeDRenderSupport.DrawCallout(canvas, bounds, screen, $"{point.Label} · {point.X:0},{point.Y:0},{point.Z:0}", color, callouts);
         }
         ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
     }

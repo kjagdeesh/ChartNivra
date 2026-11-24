@@ -50,10 +50,11 @@ public class FunnelChartRenderer : IChartRenderer
             };
             points.Add(points[0]);
 
-            canvas.DrawLines(points, new ChartPen(color, 2f));
+            canvas.DrawPolygon(points, new ChartBrush(color), new ChartPen(theme.BackgroundColor, 2f));
 
-            // Label
-            var label = $"{stage.Name}: {stage.Value}";
+            // Stage and conversion labels are centered on the filled segment for immediate scanning.
+            var conversion = i == 0 ? 100 : stage.Value / stages[i - 1].Value * 100;
+            var label = $"{stage.Name}  {stage.Value:N0} · {conversion:0}%";
             var labelSize = canvas.MeasureText(label, 11f);
             canvas.DrawText(label, new ChartPoint(centerX - labelSize.Width / 2, top + height / 2 + 4), theme.TextColor, 11f);
         }

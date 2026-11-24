@@ -60,7 +60,11 @@ public class BoxPlotRenderer : IChartRenderer
             // Box with rounded corners
             canvas.DrawRoundRect(new ChartRect(x - halfW, q3Y, boxWidth, q1Y - q3Y), 2f, new ChartBrush(color.WithAlpha(80)), new ChartPen(color, 1.5f));
             // Median line
-            canvas.DrawLine(new ChartPoint(x - halfW, medY), new ChartPoint(x + halfW, medY), new ChartPen(ChartColor.White, 2f));
+            canvas.DrawLine(new ChartPoint(x - halfW, medY), new ChartPoint(x + halfW, medY), new ChartPen(_theme.TextColor, 2f));
+
+            var medianLabel = p.Median.ToString("0.0");
+            var medianSize = canvas.MeasureText(medianLabel, 9, true);
+            canvas.DrawText(medianLabel, new ChartPoint(x - medianSize.Width / 2, medY - 5), _theme.TextColor, 9, true);
 
             // Category label
             var labelSize = canvas.MeasureText(p.Category, 10f);

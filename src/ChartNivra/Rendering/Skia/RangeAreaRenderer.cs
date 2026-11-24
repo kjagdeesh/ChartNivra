@@ -58,11 +58,27 @@ public class RangeAreaRenderer : IChartRenderer
             lowerPoints.Add(new ChartPoint(x, lowY));
         }
 
-        // Draw filled area (simplified - draw upper and lower lines)
-        canvas.DrawLines(upperPoints, new ChartPen(_model.Color, 2f));
+        for (var grid = 0; grid <= 4; grid++)
+        {
+            var y = plotArea.Top + grid * plotArea.Height / 4;
+            canvas.DrawLine(new ChartPoint(plotArea.Left, y), new ChartPoint(plotArea.Right, y), new ChartPen(theme.GridLineColor, 1));
+        }
+
+        var band = new List<ChartPoint>(upperPoints);
         var reversedLower = new List<ChartPoint>(lowerPoints);
         reversedLower.Reverse();
-        canvas.DrawLines(reversedLower, new ChartPen(_model.Color, 2f));
+        band.AddRange(reversedLower);
+        canvas.DrawPolygon(band, new ChartBrush(_model.Color.WithAlpha(70)));
+        canvas.DrawLines(upperPoints, new ChartPen(_model.Color, 2f));
+        canvas.DrawLines(lowerPoints, new ChartPen(_model.Color.WithAlpha(180), 2f));
+        for (var i = 0; i < data.Count; i++)
+        {
+            canvas.DrawCircle(upperPoints[i], 3, new ChartBrush(ChartColor.White), new ChartPen(_model.Color, 1.5f));
+            canvas.DrawCircle(lowerPoints[i], 3, new ChartBrush(ChartColor.White), new ChartPen(_model.Color, 1.5f));
+            var label = $"{data[i].Low:0}–{data[i].High:0}";
+            var size = canvas.MeasureText(label, 9);
+            canvas.DrawText(label, new ChartPoint(upperPoints[i].X - size.Width / 2, upperPoints[i].Y - 7), theme.SecondaryTextColor, 9);
+        }
 
         canvas.DrawRectangle(plotArea, null, new ChartPen(theme.AxisLineColor, 1f));
     }

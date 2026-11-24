@@ -130,7 +130,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
                 root.Children.AddRange([product, service]);
                 chart.Renderer = new SunburstRenderer(new SunburstModel(_name, root)); break;
             case ChartThumbnailKind.Area:
-                chart.Model.Series.Add(new LineSeriesModel { Title = _name, Color = ChartColor.FromHex("#818CF8"), Smooth = _kind == ChartThumbnailKind.Area, ShowArea = _kind == ChartThumbnailKind.Area, AreaOpacity = 90, Points = [new(0, 20), new(1, 44), new(2, 36), new(3, 68), new(4, 56), new(5, 82)] }); break;
+                chart.Model.Series.Add(new LineSeriesModel { Title = _name, Color = ChartColor.FromHex("#818CF8"), Smooth = _kind == ChartThumbnailKind.Area, ShowArea = _kind == ChartThumbnailKind.Area, AreaOpacity = 90, ShowDataLabels = true, Points = [new(0, 20), new(1, 44), new(2, 36), new(3, 68), new(4, 56), new(5, 82)] }); break;
             case ChartThumbnailKind.Step:
                 var step = new StepLineSeriesModel(_name, ChartColor.FromHex("#F97316")) { Mode = StepMode.After, Points = [new(0, 24), new(1, 48), new(2, 42), new(3, 68), new(4, 60), new(5, 84)] };
                 chart.Renderer = new StepLineRenderer(step); break;

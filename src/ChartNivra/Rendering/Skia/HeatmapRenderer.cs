@@ -20,9 +20,15 @@ public class HeatmapRenderer : IChartRenderer
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
         var top = ChartDrawing.DrawTitle(canvas, _model.Title, bounds, theme);
 
-        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + top, bounds.Width - 80, bounds.Height - top - 40);
-
         if (_model.Rows <= 0 || _model.Columns <= 0) return;
+
+        if (_model.Mode == HeatmapMode.Calendar)
+        {
+            DrawCalendar(canvas, bounds, top, theme);
+            return;
+        }
+
+        var plotArea = new ChartRect(bounds.Left + 60, bounds.Top + top, bounds.Width - 80, bounds.Height - top - 40);
 
         var cellWidth = plotArea.Width / _model.Columns;
         var cellHeight = plotArea.Height / _model.Rows;
@@ -40,6 +46,48 @@ public class HeatmapRenderer : IChartRenderer
 
             canvas.DrawRectangle(new ChartRect(x, y, cellWidth - 1, cellHeight - 1), new ChartBrush(color));
         }
+    }
+
+    private void DrawCalendar(IChartCanvas canvas, ChartRect bounds, double top, ChartTheme theme)
+    {
+        var left = bounds.Left + 44;
+        var availableWidth = bounds.Width - 62;
+        var availableHeight = bounds.Height - top - 52;
+        var cell = Math.Min(availableHeight / _model.Rows, availableWidth / _model.Columns);
+        cell = Math.Max(5, cell);
+        var gridWidth = cell * _model.Columns;
+        var gridTop = bounds.Top + top + 14;
+        var gridLeft = left + Math.Max(0, (availableWidth - gridWidth) / 2);
+        var values = _model.Cells.ToDictionary(cell => (cell.Row, cell.Column), cell => cell);
+
+        for (var row = 0; row < _model.Rows; row++)
+        {
+            if (_model.RowLabels.Count > row && (row == 1 || row == 3 || row == 5))
+                canvas.DrawText(_model.RowLabels[row], new ChartPoint(gridLeft - 34, gridTop + row * cell + cell - 2), theme.SecondaryTextColor, 9);
+            for (var column = 0; column < _model.Columns; column++)
+            {
+                var value = values.TryGetValue((row, column), out var datum) ? datum.Value : 0;
+                var t = Math.Clamp((value - _model.MinValue) / Math.Max(.0001, _model.MaxValue - _model.MinValue), 0, 1);
+                var color = value <= _model.MinValue ? ChartColor.FromHex("#EBEDF0") : LerpColor(_model.MinColor, _model.MaxColor, (float)t);
+                var rect = new ChartRect(gridLeft + column * cell + 1, gridTop + row * cell + 1, Math.Max(2, cell - 3), Math.Max(2, cell - 3));
+                canvas.DrawRoundRect(rect, 2, new ChartBrush(color));
+            }
+        }
+
+        for (var column = 0; column < _model.ColumnLabels.Count && column < _model.Columns; column++)
+        {
+            if (string.IsNullOrWhiteSpace(_model.ColumnLabels[column])) continue;
+            canvas.DrawText(_model.ColumnLabels[column], new ChartPoint(gridLeft + column * cell, gridTop - 5), theme.SecondaryTextColor, 9);
+        }
+
+        var legendY = gridTop + _model.Rows * cell + 20;
+        canvas.DrawText("Less", new ChartPoint(gridLeft, legendY + 8), theme.SecondaryTextColor, 9);
+        for (var i = 0; i < 5; i++)
+        {
+            var color = i == 0 ? ChartColor.FromHex("#EBEDF0") : LerpColor(_model.MinColor, _model.MaxColor, i / 4f);
+            canvas.DrawRoundRect(new ChartRect(gridLeft + 27 + i * 14, legendY, 11, 11), 2, new ChartBrush(color));
+        }
+        canvas.DrawText("More", new ChartPoint(gridLeft + 101, legendY + 8), theme.SecondaryTextColor, 9);
     }
 
     private static ChartColor LerpColor(ChartColor a, ChartColor b, float t)

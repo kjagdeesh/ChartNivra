@@ -10,18 +10,19 @@ public class HeatmapPage : ChartPageBase
     private const string Code = """
 var model = new HeatmapModel
 {
-    Title    = "Activity Heatmap",
+    Title    = "Contribution activity",
+    Mode     = HeatmapMode.Calendar,
     Rows     = 7,
-    Columns  = 12,
-    MinColor = ChartColor.FromHex("#E0F2FE"),
-    MaxColor = ChartColor.FromHex("#0284C7"),
+    Columns  = 26,
+    MinColor = ChartColor.FromHex("#9BE9A8"),
+    MaxColor = ChartColor.FromHex("#216E39"),
     MinValue = 0,
     MaxValue = 100,
 };
 
 var rng = new Random(42);
 for (int r = 0; r < 7; r++)
-    for (int c = 0; c < 12; c++)
+    for (int c = 0; c < 26; c++)
         model.Cells.Add(new HeatmapCell(r, c, rng.Next(0, 100)));
 
 chartView.Renderer = new HeatmapRenderer(model);
@@ -33,18 +34,21 @@ chartView.Renderer = new HeatmapRenderer(model);
     {
         var model = new HeatmapModel
         {
-            Title    = "Activity Heatmap",
+            Title    = "Contribution activity",
+            Mode     = HeatmapMode.Calendar,
             Rows     = 7,
-            Columns  = 12,
-            MinColor = ChartColor.FromHex("#E0F2FE"),
-            MaxColor = ChartColor.FromHex("#0284C7"),
+            Columns  = 26,
+            MinColor = ChartColor.FromHex("#9BE9A8"),
+            MaxColor = ChartColor.FromHex("#216E39"),
             MinValue = 0,
             MaxValue = 100,
         };
 
         var rng = new System.Random(42);
+        model.RowLabels.AddRange(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+        model.ColumnLabels.AddRange(["Jan", "", "", "", "Mar", "", "", "", "May", "", "", "", "Jul", "", "", "", "Sep", "", "", "", "Nov"]);
         for (int r = 0; r < 7; r++)
-            for (int c = 0; c < 12; c++)
+            for (int c = 0; c < 26; c++)
                 model.Cells.Add(new HeatmapCell(r, c, rng.Next(0, 100)));
 
         UseRenderer(new HeatmapRenderer(model));

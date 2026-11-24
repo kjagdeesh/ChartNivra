@@ -164,7 +164,7 @@ public class HomePage : ContentPage
             ("Heatmap", "Statistical", "Calendar and matrix intensity maps", "heatmap", ChartThumbnailKind.Heatmap, ["Calendar", "Matrix", "Color scale"]),
             ("Treemap", "Hierarchical", "Proportional area hierarchy", null, ChartThumbnailKind.Treemap, ["Hierarchical", "Proportional"]),
             ("Candlestick / OHLC", "Financial", "Open, high, low and close values", "candlestick", ChartThumbnailKind.Candlestick, ["OHLC", "Volume", "Indicators"]),
-            ("Technical Indicators", "Financial", "Bands, moving averages and oscillators", null, ChartThumbnailKind.Indicator, ["Bollinger", "RSI", "MACD"]),
+            ("Technical Indicators", "Financial", "OHLCV with live moving-average overlays", null, ChartThumbnailKind.Indicator, ["SMA 5", "SMA 10", "Volume"]),
             ("Histogram", "Statistical", "Frequency distribution by bins", null, ChartThumbnailKind.Histogram, ["Frequency", "Distribution", "Bins"]),
             ("Box Plot", "Statistical", "Quartiles, outliers and variation", "boxplot", ChartThumbnailKind.BoxPlot, ["Quartile", "Outliers", "Violin"]),
             ("Radial Gauge", "Gauges", "Progress and target performance", "gauge", ChartThumbnailKind.Gauge, ["Needle", "Zones", "Speed"]),
