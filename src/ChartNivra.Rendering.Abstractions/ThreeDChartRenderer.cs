@@ -45,7 +45,7 @@ public class ThreeDChartRenderer : IChartRenderer
             var edgePen = new ChartPen(shadedColor.WithAlpha(180), 1f);
 
             var poly = new List<ChartPoint> { p0, p1, p2, p0 };
-            canvas.DrawLines(poly, edgePen);
+            canvas.DrawPolygon(poly, brush, edgePen);
         }
     }
 }

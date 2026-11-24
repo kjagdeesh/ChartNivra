@@ -17,14 +17,23 @@ var model = new FinancialChartModel
     ShowVolume    = true,
 };
 
-// Add OHLCV candles
-var base_dt = new DateTime(2024, 11, 1);
-model.Candlesticks.Data.Add(new FinancialPoint(base_dt,       480, 495, 475, 490, 1_200_000));
-model.Candlesticks.Data.Add(new FinancialPoint(base_dt.AddDays(1), 490, 510, 485, 505, 980_000));
-// ... more candles
+// Exact deterministic OHLCV data generator used by this sample
+var rng = new Random(7);
+var date = new DateTime(2024, 11, 1);
+double price = 480;
+for (var i = 0; i < 30; i++)
+{
+    var open = price;
+    var close = open + (rng.NextDouble() * 20 - 10);
+    var high = Math.Max(open, close) + rng.NextDouble() * 8;
+    var low = Math.Min(open, close) - rng.NextDouble() * 8;
+    var volume = 800_000 + rng.Next(0, 600_000);
+    model.Candlesticks.Data.Add(new FinancialPoint(date.AddDays(i), open, high, low, close, volume));
+    price = close;
+}
 
-// Add SMA overlay
 model.AddSmaOverlay(5, ChartColor.FromHex("#F59E0B"));
+model.AddSmaOverlay(10, ChartColor.FromHex("#06B6D4"));
 
 chartView.Renderer = new FinancialChartRenderer(model);
 """;

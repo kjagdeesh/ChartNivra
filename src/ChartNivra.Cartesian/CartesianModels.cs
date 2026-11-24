@@ -86,6 +86,18 @@ public class StepLineSeriesModel : SeriesModelBase
     }
 }
 
+/// <summary>Single-value KPI displayed against qualitative bands and a target marker.</summary>
+public class BulletChartModel
+{
+    public string Title { get; set; } = "Performance";
+    public double Value { get; set; }
+    public double Target { get; set; }
+    public double Maximum { get; set; } = 100;
+    public List<double> QualitativeRanges { get; set; } = new() { 45, 70, 100 };
+    public ChartColor ValueColor { get; set; } = ChartColor.FromHex("#38BDF8");
+    public ChartColor TargetColor { get; set; } = ChartColor.FromHex("#F97316");
+}
+
 /// <summary>
 /// Column series model (vertical bars).
 /// </summary>

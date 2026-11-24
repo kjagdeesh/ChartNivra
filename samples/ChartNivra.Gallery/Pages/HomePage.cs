@@ -20,6 +20,7 @@ public class HomePage : ContentPage
     private readonly Border[] _chartCards;
     private readonly Grid _statisticsGrid;
     private readonly Border _hero;
+    private readonly VerticalStackLayout _dashboardContent;
 
     public HomePage()
     {
@@ -32,15 +33,17 @@ public class HomePage : ContentPage
 
         Content = new ScrollView
         {
-            Content = new VerticalStackLayout
+            Content = _dashboardContent = new VerticalStackLayout
             {
                 Spacing = 0,
+                Padding = new Thickness(24, 20, 24, 0),
+                HorizontalOptions = LayoutOptions.Center,
                 Children =
                 {
                     _hero,
-                    new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(24, 4, 24, 14) },
+                    new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(0, 28, 0, 14) },
                     _chartGrid,
-                    new Label { Text = "Choose a chart type to open its interactive sample and source preview.", FontSize = 12, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(24, 0, 24, 28) },
+                    new Label { Text = "Choose a chart type to open its interactive sample and source preview.", FontSize = 12, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(0, 0, 0, 28) },
                 }
             }
         };
@@ -55,19 +58,43 @@ public class HomePage : ContentPage
 
         return new Border
         {
-            Margin = new Thickness(24, 28, 24, 22),
-            Padding = new Thickness(28),
-            BackgroundColor = AccentSoft,
-            Stroke = Color.FromArgb("#C7D2FE"),
+            Padding = new Thickness(28, 24),
+            BackgroundColor = Color.FromArgb("#0F172A"),
+            Stroke = Color.FromArgb("#1E293B"),
             StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 16 },
             Content = new VerticalStackLayout
             {
-                Spacing = 14,
+                Spacing = 18,
                 Children =
                 {
-                    new Label { Text = "ChartNivra", FontSize = 30, FontAttributes = FontAttributes.Bold, TextColor = Text },
-                    new Label { Text = "A focused gallery of native, interactive .NET MAUI chart samples.", FontSize = 15, TextColor = Muted, LineBreakMode = LineBreakMode.WordWrap },
+                    new Grid
+                    {
+                        ColumnDefinitions = new ColumnDefinitionCollection
+                        {
+                            new ColumnDefinition { Width = GridLength.Star },
+                            new ColumnDefinition { Width = GridLength.Auto },
+                        },
+                        Children =
+                        {
+                            new VerticalStackLayout
+                            {
+                                Spacing = 6,
+                                Children =
+                                {
+                                    new Label { Text = "CHARTNIVRA  /  GALLERY", FontSize = 11, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#A5B4FC") },
+                                    new Label { Text = "Explore data, beautifully.", FontSize = 28, FontAttributes = FontAttributes.Bold, TextColor = Colors.White },
+                                    new Label { Text = "A practical collection of native .NET MAUI chart samples, organized by visual task.", FontSize = 14, TextColor = Color.FromArgb("#CBD5E1"), LineBreakMode = LineBreakMode.WordWrap },
+                                }
+                            },
+                            new Border
+                            {
+                                Padding = new Thickness(12, 7), BackgroundColor = Color.FromArgb("#1E293B"), Stroke = Color.FromArgb("#334155"), StrokeThickness = 1,
+                                StrokeShape = new RoundRectangle { CornerRadius = 14 }, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Start,
+                                Content = new Label { Text = "23 TYPES", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = .8, TextColor = Color.FromArgb("#C7D2FE") },
+                            }
+                        }
+                    },
                     statisticsGrid,
                 }
             }
@@ -76,7 +103,7 @@ public class HomePage : ContentPage
 
     private static (Grid Grid, Border[] Cards) BuildChartGrid()
     {
-        var grid = new Grid { Margin = new Thickness(24, 0, 24, 24), ColumnSpacing = 14, RowSpacing = 14 };
+        var grid = new Grid { Margin = new Thickness(0, 0, 0, 24), ColumnSpacing = 14, RowSpacing = 14 };
         var samples = new (string Name, string Category, string Description, string? Route, ChartThumbnailKind Kind, string[] Tags)[]
         {
             ("Line Chart", "Cartesian", "Smooth line series and multiple data sets", "line", ChartThumbnailKind.Line, ["Spline", "Area", "Multi-series"]),
@@ -167,8 +194,9 @@ public class HomePage : ContentPage
     {
         if (width <= 0) return;
         var compact = ResponsiveLayout.IsCompact(width);
-        _hero.Margin = compact ? new Thickness(12, 16, 12, 18) : new Thickness(24, 28, 24, 22);
-        _hero.Padding = compact ? new Thickness(20) : new Thickness(28);
+        _dashboardContent.Padding = compact ? new Thickness(12, 12, 12, 0) : new Thickness(24, 20, 24, 0);
+        _dashboardContent.WidthRequest = width > 1320 ? 1240 : -1;
+        _hero.Padding = compact ? new Thickness(18, 18) : new Thickness(28, 24);
         AddStatistics(_statisticsGrid, compact ? 2 : 4);
         AddChartCards(_chartGrid, _chartCards, compact ? 1 : width >= 1180 ? 4 : width >= 820 ? 3 : 2);
     }
@@ -184,15 +212,15 @@ public class HomePage : ContentPage
 
     private static Border MakeStat(string value, string label) => new()
     {
-        Padding = new Thickness(12, 10), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1,
+        Padding = new Thickness(12, 10), BackgroundColor = Color.FromArgb("#1E293B"), Stroke = Color.FromArgb("#334155"), StrokeThickness = 1,
         StrokeShape = new RoundRectangle { CornerRadius = 8 },
         Content = new VerticalStackLayout
         {
             Spacing = 1,
             Children =
             {
-                new Label { Text = value, FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Text, HorizontalTextAlignment = TextAlignment.Center },
-                new Label { Text = label, FontSize = 10, TextColor = Muted, HorizontalTextAlignment = TextAlignment.Center },
+                new Label { Text = value, FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, HorizontalTextAlignment = TextAlignment.Center },
+                new Label { Text = label.ToUpperInvariant(), FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = .5, TextColor = Color.FromArgb("#94A3B8"), HorizontalTextAlignment = TextAlignment.Center },
             }
         }
     };

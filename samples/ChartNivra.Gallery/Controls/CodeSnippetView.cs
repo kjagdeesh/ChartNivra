@@ -1,6 +1,9 @@
 namespace ChartNivra.Gallery.Controls;
 
 using Microsoft.Maui.Controls;
+using System.Text.RegularExpressions;
+
+public enum CodeLanguage { CSharp, Xaml }
 
 /// <summary>
 /// Reusable code-snippet viewer with syntax-styled monospace display and a Copy button.
@@ -8,6 +11,7 @@ using Microsoft.Maui.Controls;
 public class CodeSnippetView : ContentView
 {
     private readonly Label _codeLabel;
+    private readonly Label _languageLabel;
     private string _code = string.Empty;
 
     private static readonly Color BgCode    = Color.FromArgb("#0D1117");
@@ -21,10 +25,20 @@ public class CodeSnippetView : ContentView
         BindableProperty.Create(nameof(Code), typeof(string), typeof(CodeSnippetView), string.Empty,
             propertyChanged: (b, _, n) => ((CodeSnippetView)b).OnCodeChanged((string)n));
 
+    public static readonly BindableProperty LanguageProperty =
+        BindableProperty.Create(nameof(Language), typeof(CodeLanguage), typeof(CodeSnippetView), CodeLanguage.CSharp,
+            propertyChanged: (b, _, _) => ((CodeSnippetView)b).OnLanguageChanged());
+
     public string Code
     {
         get => (string)GetValue(CodeProperty);
         set => SetValue(CodeProperty, value);
+    }
+
+    public CodeLanguage Language
+    {
+        get => (CodeLanguage)GetValue(LanguageProperty);
+        set => SetValue(LanguageProperty, value);
     }
 
     public CodeSnippetView()
@@ -33,7 +47,6 @@ public class CodeSnippetView : ContentView
         {
             FontFamily        = "Courier New",
             FontSize          = 12,
-            TextColor         = TextCode,
             LineBreakMode     = LineBreakMode.NoWrap,
         };
 
@@ -61,8 +74,8 @@ public class CodeSnippetView : ContentView
                 new ColumnDefinition { Width = GridLength.Auto },
             },
         };
-        var langLabel = new Label { Text = "C#", FontSize = 12, TextColor = TextMuted, VerticalOptions = LayoutOptions.Center };
-        header.Add(langLabel, 0, 0);
+        _languageLabel = new Label { Text = "C#", FontSize = 12, TextColor = TextMuted, VerticalOptions = LayoutOptions.Center };
+        header.Add(_languageLabel, 0, 0);
         header.Add(copyBtn, 1, 0);
 
         Content = new Frame
@@ -72,31 +85,59 @@ public class CodeSnippetView : ContentView
             HasShadow       = false,
             BorderColor     = BorderCol,
             BackgroundColor = BgCode,
-            Content = new VerticalStackLayout
+            Content = new Grid
             {
-                Spacing = 0,
-                Children =
+                RowDefinitions = new RowDefinitionCollection
                 {
-                    header,
-                    new BoxView { HeightRequest = 1, BackgroundColor = BorderCol },
-                    new ScrollView
-                    {
-                        Orientation = ScrollOrientation.Both,
-                        Content     = new VerticalStackLayout
-                        {
-                            Padding  = new Thickness(16, 12),
-                            Children = { _codeLabel }
-                        }
-                    }
+                    new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Star },
                 }
             }
         };
+        var contentGrid = (Grid)((Frame)Content).Content;
+        contentGrid.Add(header, 0, 0);
+        contentGrid.Add(new BoxView { HeightRequest = 1, BackgroundColor = BorderCol }, 0, 1);
+        contentGrid.Add(new ScrollView
+        {
+            Orientation = ScrollOrientation.Both,
+            Content = new VerticalStackLayout
+            {
+                Padding = new Thickness(16, 12),
+                Children = { _codeLabel }
+            }
+        }, 0, 2);
     }
 
     private void OnCodeChanged(string newCode)
     {
         _code = newCode ?? string.Empty;
-        _codeLabel.Text = _code;
+        ApplySyntaxHighlighting();
+    }
+
+    private void OnLanguageChanged()
+    {
+        _languageLabel.Text = Language == CodeLanguage.Xaml ? "XAML" : "C#";
+        ApplySyntaxHighlighting();
+    }
+
+    private void ApplySyntaxHighlighting()
+    {
+        var formatted = new FormattedString();
+        var pattern = Language == CodeLanguage.Xaml
+            ? "(<!--.*?-->)|(<[^>]+>)|(\"[^\"]*\")"
+            : "(//.*$)|(\"[^\"]*\")|\\b(var|new|class|public|private|protected|return|using|namespace|true|false|null|void)\\b";
+        var matches = Regex.Matches(_code, pattern, RegexOptions.Multiline);
+        var position = 0;
+        foreach (Match match in matches)
+        {
+            if (match.Index > position) formatted.Spans.Add(new Span { Text = _code[position..match.Index], TextColor = TextCode });
+            var color = Language == CodeLanguage.Xaml
+                ? (match.Value.StartsWith("<") ? Color.FromArgb("#7DD3FC") : Color.FromArgb("#A5B4FC"))
+                : (match.Value.StartsWith("//") ? TextMuted : match.Value.StartsWith("\"") ? Color.FromArgb("#A7F3D0") : Color.FromArgb("#C4B5FD"));
+            formatted.Spans.Add(new Span { Text = match.Value, TextColor = color });
+            position = match.Index + match.Length;
+        }
+        if (position < _code.Length) formatted.Spans.Add(new Span { Text = _code[position..], TextColor = TextCode });
+        _codeLabel.FormattedText = formatted;
     }
 
     private async void OnCopyClicked(object? sender, EventArgs e)

@@ -4,227 +4,143 @@ using ChartNivra.Gallery.Controls;
 using ChartNivra.Maui.Controls;
 using ChartNivra.Rendering.Abstractions;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 
-/// <summary>
-/// Base class for all chart demo pages. Provides the standard two-panel layout:
-/// top = live chart, bottom = tabbed "Preview / Code" toggle.
-/// </summary>
+/// <summary>Responsive chart-and-code workspace shared by all interactive demos.</summary>
 public abstract class ChartPageBase : ContentPage
 {
-    // ── Design tokens ────────────────────────────────────────────────────────
-    protected static readonly Color PageBg       = Color.FromArgb("#F1F5F9");
-    protected static readonly Color CardBg       = Colors.White;
-    protected static readonly Color CardBorder   = Color.FromArgb("#E2E8F0");
-    protected static readonly Color AccentIndigo = Color.FromArgb("#6366F1");
-    protected static readonly Color TextDark     = Color.FromArgb("#0F172A");
-    protected static readonly Color TextMuted    = Color.FromArgb("#64748B");
+    protected static readonly Color PageBg = Color.FromArgb("#F8FAFC");
+    protected static readonly Color CardBg = Colors.White;
+    protected static readonly Color CardBorder = Color.FromArgb("#E2E8F0");
+    protected static readonly Color AccentIndigo = Color.FromArgb("#4F46E5");
+    protected static readonly Color TextDark = Color.FromArgb("#0F172A");
+    protected static readonly Color TextMuted = Color.FromArgb("#64748B");
 
     protected readonly ChartView ChartView;
-    private   readonly CodeSnippetView _snippet;
-    private   readonly Label           _previewTab;
-    private   readonly Label           _codeTab;
-    private   readonly ContentView     _tabContent;
-    private   readonly Frame           _chartCard;
-    private   readonly Frame           _tabSection;
-    private   readonly VerticalStackLayout _headerSection;
-    private   bool _showingCode = false;
+    private readonly CodeSnippetView _csharpSnippet;
+    private readonly CodeSnippetView _xamlSnippet;
+    private readonly Label _csharpTab;
+    private readonly Label _xamlTab;
+    private readonly ContentView _codeContent;
+    private readonly Border _chartPanel;
+    private readonly Border _codePanel;
+    private readonly Grid _workspace;
+    private readonly VerticalStackLayout _pageContent;
 
-    protected ChartPageBase(string title, string subtitle, string codeSnippet)
+    protected ChartPageBase(string title, string subtitle, string csharpCode)
     {
-        BackgroundColor = PageBg;
         Title = title;
+        BackgroundColor = PageBg;
         Shell.SetNavBarIsVisible(this, true);
 
-        ChartView = new ChartView
+        ChartView = new ChartView { HeightRequest = 430, BackgroundColor = Colors.Transparent };
+        _csharpSnippet = new CodeSnippetView { Code = csharpCode, Language = CodeLanguage.CSharp };
+        _xamlSnippet = new CodeSnippetView { Code = CreateXamlSnippet(title), Language = CodeLanguage.Xaml };
+        _csharpTab = MakeTab("C#", true);
+        _xamlTab = MakeTab("XAML", false);
+        _csharpTab.GestureRecognizers.Add(TapGesture(() => SelectCode(false)));
+        _xamlTab.GestureRecognizers.Add(TapGesture(() => SelectCode(true)));
+        _codeContent = new ContentView { Content = _csharpSnippet };
+
+        _chartPanel = new Border
         {
-            HeightRequest   = 320,
-            BackgroundColor = Colors.Transparent,
+            Padding = new Thickness(12), BackgroundColor = CardBg, Stroke = CardBorder, StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = ChartView,
         };
-
-        _snippet = new CodeSnippetView
+        var tabBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Star } } };
+        tabBar.Add(_csharpTab, 0, 0); tabBar.Add(_xamlTab, 1, 0);
+        _codePanel = new Border
         {
-            Code            = codeSnippet,
-            HeightRequest   = 260,
-        };
-
-        _previewTab = MakeTab("Preview", true);
-        _codeTab    = MakeTab("Code",    false);
-
-        _previewTab.GestureRecognizers.Add(TapGesture(() => SwitchTab(false)));
-        _codeTab.GestureRecognizers.Add(TapGesture(() => SwitchTab(true)));
-
-        _tabContent = new ContentView { Content = new BoxView() };
-
-        var tabBar = new Grid
-        {
-            ColumnSpacing   = 0,
-            BackgroundColor = CardBg,
-            ColumnDefinitions = new ColumnDefinitionCollection
-            {
-                new ColumnDefinition { Width = GridLength.Star },
-                new ColumnDefinition { Width = GridLength.Star },
-            },
-        };
-        tabBar.Add(_previewTab, 0, 0);
-        tabBar.Add(_codeTab,    1, 0);
-
-        // Page header
-        _headerSection = new VerticalStackLayout
-        {
-            Spacing         = 4,
-            Padding         = new Thickness(20, 20, 20, 0),
-            BackgroundColor = CardBg,
-            Children =
-            {
-                new Label
-                {
-                    Text           = title,
-                    FontSize       = 22,
-                    FontAttributes = FontAttributes.Bold,
-                    TextColor      = TextDark,
-                },
-                new Label
-                {
-                    Text      = subtitle,
-                    FontSize  = 13,
-                    TextColor = TextMuted,
-                },
-                new BoxView
-                {
-                    HeightRequest   = 1,
-                    BackgroundColor = CardBorder,
-                    Margin          = new Thickness(0, 12, 0, 0),
-                }
-            }
-        };
-
-        // Chart card
-        _chartCard = new Frame
-        {
-            Margin          = new Thickness(16, 12),
-            Padding         = new Thickness(4),
-            CornerRadius    = 14,
-            HasShadow       = false,
-            BorderColor     = CardBorder,
-            BackgroundColor = CardBg,
-            Content         = ChartView,
-        };
-
-        // Code/Preview tabs section
-        _tabSection = new Frame
-        {
-            Margin          = new Thickness(16, 0, 16, 16),
-            Padding         = new Thickness(0),
-            CornerRadius    = 14,
-            HasShadow       = false,
-            BorderColor     = CardBorder,
-            BackgroundColor = CardBg,
+            Padding = 0, BackgroundColor = CardBg, Stroke = CardBorder, StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 14 },
             Content = new VerticalStackLayout
             {
-                Spacing  = 0,
+                Spacing = 0,
                 Children =
                 {
+                    new Label { Text = "IMPLEMENTATION · LIVE SAMPLE DATA", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = TextMuted, Padding = new Thickness(16, 14, 16, 4) },
                     tabBar,
                     new BoxView { HeightRequest = 1, BackgroundColor = CardBorder },
-                    new ContentView
-                    {
-                        Padding = new Thickness(12),
-                        Content = _tabContent,
-                    }
+                    _codeContent,
                 }
             }
         };
 
-        Content = new ScrollView
+        _workspace = new Grid { ColumnSpacing = 16, RowSpacing = 16 };
+        _pageContent = new VerticalStackLayout
         {
-            Content = new VerticalStackLayout
+            Spacing = 0, Padding = new Thickness(24, 20, 24, 28),
+            Children =
             {
-                Spacing  = 0,
-                Children =
-                {
-                    _headerSection,
-                    _chartCard,
-                    _tabSection,
-                }
+                new Label { Text = title, FontSize = 25, FontAttributes = FontAttributes.Bold, TextColor = TextDark },
+                new Label { Text = subtitle, FontSize = 14, TextColor = TextMuted, Margin = new Thickness(0, 4, 0, 20) },
+                _workspace,
             }
         };
-
-        // Show preview by default
-        SwitchTab(false);
-        // Allow derived classes to configure ChartView
+        Content = new ScrollView { Content = _pageContent };
         ConfigureChart();
-        SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
+        SizeChanged += (_, _) => UpdateLayout(Width);
     }
 
-    /// <summary>Derived classes configure the ChartView / Renderer here.</summary>
     protected abstract void ConfigureChart();
+    protected void UseRenderer(IChartRenderer renderer) => ChartView.Renderer = renderer;
 
-    private void UpdateLayoutForWidth(double width)
+    private void UpdateLayout(double width)
     {
         if (width <= 0) return;
-
         var compact = ResponsiveLayout.IsCompact(width);
-        var horizontalMargin = compact ? 12 : 16;
-        _headerSection.Padding = compact
-            ? new Thickness(16, 16, 16, 0)
-            : new Thickness(20, 20, 20, 0);
-        _chartCard.Margin = new Thickness(horizontalMargin, compact ? 10 : 12);
-        _tabSection.Margin = new Thickness(horizontalMargin, 0, horizontalMargin, compact ? 12 : 16);
-        ChartView.HeightRequest = compact ? 240 : 320;
-        _snippet.HeightRequest = compact ? 220 : 260;
-    }
-
-    private void SwitchTab(bool showCode)
-    {
-        _showingCode = showCode;
-
-        // Update tab styles
-        UpdateTabStyle(_previewTab, !showCode);
-        UpdateTabStyle(_codeTab,    showCode);
-
-        _tabContent.Content = showCode
-            ? _snippet
-            : BuildPreviewPlaceholder();
-    }
-
-    private static View BuildPreviewPlaceholder()
-    {
-        return new Label
+        _pageContent.Padding = compact ? new Thickness(12, 16, 12, 20) : new Thickness(24, 20, 24, 28);
+        _pageContent.WidthRequest = width > 1460 ? 1360 : -1;
+        _workspace.Children.Clear(); _workspace.ColumnDefinitions.Clear(); _workspace.RowDefinitions.Clear();
+        if (compact)
         {
-            Text              = "Chart is rendered above ↑",
-            FontSize          = 13,
-            TextColor         = Color.FromArgb("#94A3B8"),
-            HorizontalOptions = LayoutOptions.Center,
-            Margin            = new Thickness(0, 24),
-        };
-    }
-
-    private static Label MakeTab(string text, bool isActive)
-    {
-        var lbl = new Label
+            ChartView.HeightRequest = 250; _codePanel.HeightRequest = 410;
+            _csharpSnippet.HeightRequest = _xamlSnippet.HeightRequest = 330;
+            _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            _workspace.Add(_chartPanel, 0, 0); _workspace.Add(_codePanel, 0, 1);
+        }
+        else
         {
-            Text              = text,
-            FontSize          = 13,
-            FontAttributes    = FontAttributes.Bold,
-            HorizontalOptions = LayoutOptions.Center,
-            Padding           = new Thickness(0, 12),
-        };
-        UpdateTabStyle(lbl, isActive);
-        return lbl;
+            ChartView.HeightRequest = 480; _codePanel.HeightRequest = 506;
+            _csharpSnippet.HeightRequest = _xamlSnippet.HeightRequest = 426;
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            _workspace.Add(_chartPanel, 0, 0); _workspace.Add(_codePanel, 1, 0);
+        }
     }
 
-    private static void UpdateTabStyle(Label lbl, bool isActive)
+    private void SelectCode(bool xaml)
     {
-        lbl.TextColor = isActive ? Color.FromArgb("#6366F1") : Color.FromArgb("#64748B");
+        _codeContent.Content = xaml ? _xamlSnippet : _csharpSnippet;
+        UpdateTab(_csharpTab, !xaml); UpdateTab(_xamlTab, xaml);
+    }
+
+    private static Label MakeTab(string text, bool active)
+    {
+        var tab = new Label { Text = text, FontSize = 13, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.Center, Padding = new Thickness(0, 10) };
+        UpdateTab(tab, active); return tab;
+    }
+
+    private static void UpdateTab(Label tab, bool active)
+    {
+        tab.TextColor = active ? AccentIndigo : TextMuted;
+        tab.BackgroundColor = active ? Color.FromArgb("#EEF2FF") : Colors.Transparent;
     }
 
     private static TapGestureRecognizer TapGesture(Action action)
     {
-        var tgr = new TapGestureRecognizer();
-        tgr.Tapped += (_, _) => action();
-        return tgr;
+        var gesture = new TapGestureRecognizer(); gesture.Tapped += (_, _) => action(); return gesture;
     }
 
-    // Helper to quickly create an IChartRenderer wrapper
-    protected void UseRenderer(IChartRenderer renderer) => ChartView.Renderer = renderer;
+    private static string CreateXamlSnippet(string title) => $$"""
+<!-- XAML host for {{title}}. The C# tab is the exact runtime data and renderer setup. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:chartnivra="clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra.Maui">
+    <chartnivra:ChartView x:Name="chartView"
+                           Title="{{title}}"
+                           HeightRequest="320"
+                           Theme="Light" />
+</ContentPage>
+""";
 }

@@ -7,40 +7,25 @@ using ChartNivra.Core.Themes;
 public class MultiSeriesPage : ChartPageBase
 {
     private const string Code = """
-var model = new CartesianChartModel
-{
-    Title = "Multi-Series Comparison",
-    Theme = ChartTheme.Dark,
-};
+chartView.Title = "Multi-Series Comparison";
+chartView.Theme = ChartTheme.Dark;
 
-// Series 1 — Revenue
-model.Series.Add(new LineSeriesModel
-{
-    Title       = "Revenue",
-    Color       = ChartColor.FromHex("#00C096"),
-    StrokeWidth = 2.5f,
-    ShowMarkers = true,
-    Points      = RevenuePoints(),
-});
+var revenue  = new[] { 42, 58, 51, 76, 89, 95, 82, 103, 118, 97, 134, 148 };
+var expenses = new[] { 30, 42, 38, 55, 60, 65, 58,  72,  80, 68,  90, 100 };
+var revenuePoints = new List<ChartPoint>();
+var expensePoints = new List<ChartPoint>();
+var profitPoints  = new List<ChartPoint>();
 
-// Series 2 — Expenses
-model.Series.Add(new LineSeriesModel
+for (var i = 0; i < revenue.Length; i++)
 {
-    Title       = "Expenses",
-    Color       = ChartColor.FromHex("#EF4444"),
-    StrokeWidth = 2f,
-    ShowMarkers = true,
-    Points      = ExpensePoints(),
-});
+    revenuePoints.Add(new ChartPoint(i, revenue[i]));
+    expensePoints.Add(new ChartPoint(i, expenses[i]));
+    profitPoints.Add(new ChartPoint(i, revenue[i] - expenses[i]));
+}
 
-// Series 3 — Profit (line)
-model.Series.Add(new LineSeriesModel
-{
-    Title       = "Profit",
-    Color       = ChartColor.FromHex("#6366F1"),
-    StrokeWidth = 2f,
-    Points      = ProfitPoints(),
-});
+chartView.Model.Series.Add(new LineSeriesModel { Title = "Revenue", Color = ChartColor.FromHex("#00C096"), StrokeWidth = 2.5f, ShowMarkers = true, Points = revenuePoints });
+chartView.Model.Series.Add(new LineSeriesModel { Title = "Expenses", Color = ChartColor.FromHex("#EF4444"), StrokeWidth = 2f, ShowMarkers = true, Points = expensePoints });
+chartView.Model.Series.Add(new LineSeriesModel { Title = "Profit", Color = ChartColor.FromHex("#6366F1"), StrokeWidth = 2f, Points = profitPoints });
 """;
 
     public MultiSeriesPage() : base("Multi-Series", "Multiple line series on a single chart", Code) { }
