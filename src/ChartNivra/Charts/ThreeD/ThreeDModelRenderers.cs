@@ -22,6 +22,34 @@ internal static class ThreeDRenderSupport
         (byte)(low.R + (high.R - low.R) * amount),
         (byte)(low.G + (high.G - low.G) * amount),
         (byte)(low.B + (high.B - low.B) * amount));
+
+    public static void DrawAxisGuide(IChartCanvas canvas, ChartRect bounds, string x, string y, string z)
+    {
+        var color = ChartTheme.Dark.SecondaryTextColor;
+        var origin = new ChartPoint(bounds.Left + 44, bounds.Bottom - 42);
+        var xEnd = new ChartPoint(origin.X + 55, origin.Y);
+        var yEnd = new ChartPoint(origin.X, origin.Y - 42);
+        var zEnd = new ChartPoint(origin.X + 30, origin.Y - 24);
+        canvas.DrawLine(origin, xEnd, new ChartPen(ChartColor.FromHex("#38BDF8"), 1.5f));
+        canvas.DrawLine(origin, yEnd, new ChartPen(ChartColor.FromHex("#A78BFA"), 1.5f));
+        canvas.DrawLine(origin, zEnd, new ChartPen(ChartColor.FromHex("#34D399"), 1.5f));
+        canvas.DrawText(x, new ChartPoint(xEnd.X + 4, xEnd.Y + 4), color, 9, true);
+        canvas.DrawText(y, new ChartPoint(yEnd.X - 4, yEnd.Y - 5), color, 9, true);
+        canvas.DrawText(z, new ChartPoint(zEnd.X + 3, zEnd.Y - 4), color, 9, true);
+    }
+
+    public static void DrawCallout(IChartCanvas canvas, ChartRect bounds, ChartPoint anchor, string text, ChartColor accent)
+    {
+        var toRight = anchor.X < bounds.Left + bounds.Width * .62;
+        var lineEnd = new ChartPoint(anchor.X + (toRight ? 26 : -26), anchor.Y - 22);
+        var textSize = canvas.MeasureText(text, 10, true);
+        var labelX = toRight ? lineEnd.X + 5 : lineEnd.X - textSize.Width - 13;
+        var labelY = lineEnd.Y - 14;
+        var rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
+        canvas.DrawLine(anchor, lineEnd, new ChartPen(accent.WithAlpha(220), 1));
+        canvas.DrawRoundRect(rect, 4, new ChartBrush(ChartColor.FromHex("#1E293B")), new ChartPen(accent.WithAlpha(180), 1));
+        canvas.DrawText(text, new ChartPoint(labelX + 4, labelY + textSize.Height + 1), ChartTheme.Dark.TextColor, 10, true);
+    }
 }
 
 /// <summary>Renderer for <see cref="ColumnChart3DModel"/> using depth-sorted shaded cuboid faces.</summary>
@@ -54,6 +82,13 @@ public sealed class ColumnChart3DRenderer : IChartRenderer
             };
             canvas.DrawPolygon(polygon, new ChartBrush(color), _model.ShowWireframe ? new ChartPen(color.WithAlpha(190), 1) : null);
         }
+        foreach (var point in _model.Points)
+        {
+            if (string.IsNullOrWhiteSpace(point.Label)) continue;
+            var labelAt = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
+            ThreeDRenderSupport.DrawCallout(canvas, bounds, labelAt, $"{point.Label} · {point.Y:0.0}", point.Color ?? _model.DefaultColor);
+        }
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
     }
 }
 
@@ -88,6 +123,9 @@ public sealed class SurfaceChart3DRenderer : IChartRenderer
             var color = ThreeDRenderSupport.Blend(_model.LowColor, _model.HighColor, amount);
             canvas.DrawPolygon(new[] { ThreeDRenderSupport.Project(_model.Camera, face.A, bounds), ThreeDRenderSupport.Project(_model.Camera, face.B, bounds), ThreeDRenderSupport.Project(_model.Camera, face.C, bounds) }, new ChartBrush(color), new ChartPen(color.WithAlpha(200), 0.7f));
         }
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.ValueTitle, _model.YAxisTitle);
+        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MinX, (float)min, (float)_model.MinY), bounds), $"Low · {min:0.0}", _model.LowColor);
+        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MaxX, (float)max, (float)_model.MaxY), bounds), $"High · {max:0.0}", _model.HighColor);
     }
 }
 
@@ -105,6 +143,9 @@ public sealed class ScatterChart3DRenderer : IChartRenderer
             var screen = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
             var color = point.Color ?? _model.DefaultColor;
             canvas.DrawCircle(screen, (float)Math.Clamp(point.Size, 2, 20), new ChartBrush(color.WithAlpha(205)), new ChartPen(color, 1.5f));
+            if (!string.IsNullOrWhiteSpace(point.Label))
+                ThreeDRenderSupport.DrawCallout(canvas, bounds, screen, $"{point.Label} · {point.X:0},{point.Y:0},{point.Z:0}", color);
         }
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
     }
 }

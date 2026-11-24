@@ -29,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Maui\ChartNivra.Maui.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 </Project>

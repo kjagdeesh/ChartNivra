@@ -11,9 +11,6 @@
     <PackageReference Include="SkiaSharp" Version="2.88.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Export\ChartNivra.Export.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 </Project>

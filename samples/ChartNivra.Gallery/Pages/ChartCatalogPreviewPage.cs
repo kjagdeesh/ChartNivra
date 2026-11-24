@@ -47,14 +47,23 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     private void BuildWorkspace()
     {
         _content.Children.Clear();
-        _content.Add(new Label { Text = _name, FontSize = 25, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") });
-        _content.Add(new Label { Text = "Chart preview and implementation reference", FontSize = 14, TextColor = Color.FromArgb("#64748B"), Margin = new Thickness(0, 4, 0, 20) });
+        _content.Add(new Label { Text = "CHART SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#4F46E5") });
+        _content.Add(new Label { Text = _name, FontSize = 28, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A"), Margin = new Thickness(0, 3, 0, 0) });
+        _content.Add(new Label { Text = "Interactive preview · complete implementation", FontSize = 14, TextColor = Color.FromArgb("#64748B"), Margin = new Thickness(0, 4, 0, 20) });
         _content.Add(_workspace);
         _preview = new Border
         {
-            Padding = new Thickness(20), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1,
+            Padding = new Thickness(16), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 14 },
-            Content = BuildChart()
+            Content = new VerticalStackLayout
+            {
+                Spacing = 8,
+                Children =
+                {
+                    new Label { Text = "LIVE PREVIEW", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#64748B") },
+                    BuildChart()
+                }
+            }
         };
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
         var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Dark\" />" };
@@ -85,7 +94,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
                 if (_name.StartsWith("3D Scatter", StringComparison.Ordinal))
                 {
                     var scatter = new ScatterChart3DModel { Title = _name };
-                    scatter.Points.AddRange([new(-3, 1, -2, 7, ChartColor.FromHex("#38BDF8")), new(-1, 3, 1, 9, ChartColor.FromHex("#818CF8")), new(1, 2, -1, 8, ChartColor.FromHex("#22C55E")), new(3, 4, 2, 10, ChartColor.FromHex("#F97316")), new(0, 5, 0, 7, ChartColor.FromHex("#EC4899"))]);
+                    scatter.Points.AddRange([new(-3, 1, -2, 7, ChartColor.FromHex("#38BDF8"), "North"), new(-1, 3, 1, 9, ChartColor.FromHex("#818CF8"), "East"), new(1, 2, -1, 8, ChartColor.FromHex("#22C55E"), "Core"), new(3, 4, 2, 10, ChartColor.FromHex("#F97316"), "West"), new(0, 5, 0, 7, ChartColor.FromHex("#EC4899"), "Peak")]);
                     chart.Renderer = new ScatterChart3DRenderer(scatter);
                 }
                 else
@@ -138,8 +147,8 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
                 }
                 else
                 {
-                    var columns = new ColumnChart3DModel { Title = _name };
-                    columns.AddPoint(-2.5, 3.5, -1.5, ChartColor.FromHex("#38BDF8")); columns.AddPoint(-0.8, 5.5, 0, ChartColor.FromHex("#818CF8")); columns.AddPoint(0.9, 4.2, -0.5, ChartColor.FromHex("#22C55E")); columns.AddPoint(2.6, 6.7, 1.2, ChartColor.FromHex("#F97316"));
+                    var columns = new ColumnChart3DModel { Title = _name, XAxisTitle = "Quarter", YAxisTitle = "Revenue (M)", ZAxisTitle = "Region" };
+                    columns.AddPoint(-2.5, 3.5, -1.5, ChartColor.FromHex("#38BDF8"), "Q1"); columns.AddPoint(-0.8, 5.5, 0, ChartColor.FromHex("#818CF8"), "Q2"); columns.AddPoint(0.9, 4.2, -0.5, ChartColor.FromHex("#22C55E"), "Q3"); columns.AddPoint(2.6, 6.7, 1.2, ChartColor.FromHex("#F97316"), "Q4");
                     chart.Renderer = new ColumnChart3DRenderer(columns);
                 }
                 break;
@@ -169,7 +178,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     {
         if (_kind == ChartThumbnailKind.Bar) return "var model = new BarChartModel { Title = \"Quarterly Revenue\", Theme = ChartTheme.Dark, ShowValueLabels = true };\nmodel.Categories.AddRange([\"Q1\", \"Q2\", \"Q3\", \"Q4\"]);\nmodel.Series.Add(new BarSeriesModel { Title = \"Revenue\", Color = ChartColor.FromHex(\"#38BDF8\"), Points = [new(0, 42), new(1, 68), new(2, 57), new(3, 84)] });\nchartView.Renderer = new BarChartRenderer(model);";
         if (_kind == ChartThumbnailKind.Bubble) return _name.StartsWith("3D Scatter", StringComparison.Ordinal)
-            ? "var model = new ScatterChart3DModel { Title = \"Point cloud\" };\nmodel.Points.AddRange([new(-3, 1, -2, 7), new(-1, 3, 1, 9), new(1, 2, -1, 8), new(3, 4, 2, 10), new(0, 5, 0, 7)]);\nchartView.Renderer = new ScatterChart3DRenderer(model);"
+            ? "var model = new ScatterChart3DModel { Title = \"Point cloud\", XAxisTitle = \"X\", YAxisTitle = \"Y\", ZAxisTitle = \"Z\" };\nmodel.Points.AddRange([new(-3, 1, -2, 7, null, \"North\"), new(-1, 3, 1, 9, null, \"East\"), new(1, 2, -1, 8, null, \"Core\"), new(3, 4, 2, 10, null, \"West\"), new(0, 5, 0, 7, null, \"Peak\")]);\nchartView.Renderer = new ScatterChart3DRenderer(model);"
             : "var model = new BubbleSeriesModel(\"Market\", ChartColor.FromHex(\"#38BDF8\"));\nmodel.Points.AddRange([new(10, 40, 12, \"A\"), new(24, 65, 22, \"B\"), new(42, 52, 16, \"C\"), new(58, 82, 28, \"D\")]);\nchartView.Renderer = new BubbleChartRenderer(model);";
         if (_kind == ChartThumbnailKind.Histogram) return "var model = new HistogramModel { Title = \"Distribution\", BinCount = 8 };\nmodel.Data.AddRange([12d, 18, 21, 25, 28, 29, 32, 35, 37, 39, 42, 48, 52, 56, 61, 64, 69, 72]);\nchartView.Renderer = new HistogramRenderer(model);";
         if (_kind == ChartThumbnailKind.Area) return "chartView.Model.Series.Add(new LineSeriesModel\n{\n    Title = \"Area\", Color = ChartColor.FromHex(\"#818CF8\"), Smooth = true, ShowArea = true, AreaOpacity = 90,\n    Points = [new(0, 20), new(1, 44), new(2, 36), new(3, 68), new(4, 56), new(5, 82)]\n});";
@@ -184,8 +193,8 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         if (_kind is ChartThumbnailKind.ThreeD or ChartThumbnailKind.Surface) return (_kind == ChartThumbnailKind.Surface || _name.StartsWith("3D Surface", StringComparison.Ordinal))
             ? "var model = new SurfaceChart3DModel { Title = \"Surface mesh\", ResolutionX = 18, ResolutionY = 18, MinX = -4, MaxX = 4, MinY = -4, MaxY = 4, HeightFunction = (x, y) => Math.Sin(x) * Math.Cos(y) * 2.4 };\nchartView.Renderer = new SurfaceChart3DRenderer(model);"
             : _name.StartsWith("3D Scatter", StringComparison.Ordinal)
-                ? "var model = new ScatterChart3DModel { Title = \"Point cloud\" };\nmodel.Points.AddRange([new(-3, 1, -2, 7), new(-1, 3, 1, 9), new(1, 2, -1, 8), new(3, 4, 2, 10), new(0, 5, 0, 7)]);\nchartView.Renderer = new ScatterChart3DRenderer(model);"
-                : "var model = new ColumnChart3DModel { Title = \"3D revenue\" };\nmodel.AddPoint(-2.5, 3.5, -1.5, ChartColor.FromHex(\"#38BDF8\")); model.AddPoint(-0.8, 5.5, 0, ChartColor.FromHex(\"#818CF8\"));\nmodel.AddPoint(0.9, 4.2, -0.5, ChartColor.FromHex(\"#22C55E\")); model.AddPoint(2.6, 6.7, 1.2, ChartColor.FromHex(\"#F97316\"));\nchartView.Renderer = new ColumnChart3DRenderer(model);";
+                ? "var model = new ScatterChart3DModel { Title = \"Point cloud\", XAxisTitle = \"X\", YAxisTitle = \"Y\", ZAxisTitle = \"Z\" };\nmodel.Points.AddRange([new(-3, 1, -2, 7, null, \"North\"), new(-1, 3, 1, 9, null, \"East\"), new(1, 2, -1, 8, null, \"Core\"), new(3, 4, 2, 10, null, \"West\"), new(0, 5, 0, 7, null, \"Peak\")]);\nchartView.Renderer = new ScatterChart3DRenderer(model);"
+                : "var model = new ColumnChart3DModel { Title = \"3D revenue\", XAxisTitle = \"Quarter\", YAxisTitle = \"Revenue (M)\", ZAxisTitle = \"Region\" };\nmodel.AddPoint(-2.5, 3.5, -1.5, ChartColor.FromHex(\"#38BDF8\"), \"Q1\"); model.AddPoint(-0.8, 5.5, 0, ChartColor.FromHex(\"#818CF8\"), \"Q2\");\nmodel.AddPoint(0.9, 4.2, -0.5, ChartColor.FromHex(\"#22C55E\"), \"Q3\"); model.AddPoint(2.6, 6.7, 1.2, ChartColor.FromHex(\"#F97316\"), \"Q4\");\nchartView.Renderer = new ColumnChart3DRenderer(model);";
         return "chartView.Model.Series.Add(new LineSeriesModel { Title = \"Sample\", Color = ChartColor.FromHex(\"#38BDF8\"), Points = [new(0, 22), new(1, 48), new(2, 37), new(3, 71), new(4, 60), new(5, 88)] });";
     }
 

@@ -10,10 +10,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Data\ChartNivra.Data.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Cartesian\ChartNivra.Cartesian.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Financial\ChartNivra.Financial.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Themes\ChartNivra.Themes.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 </Project>

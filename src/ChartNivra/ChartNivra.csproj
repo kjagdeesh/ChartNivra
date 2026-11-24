@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+    <UseMaui Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != ''">true</UseMaui>
+    <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>ChartNivra</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>ChartNivra</Authors>
+    <Description>Cross-platform .NET charting library with Cartesian, financial, statistical, polar, gauge, 3D, export, and MAUI controls.</Description>
+    <PackageTags>charts;dotnet;maui;skia;visualization;financial;3d</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/chartnivra/chartnivra</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Remove="Maui\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
+  </ItemGroup>
+</Project>

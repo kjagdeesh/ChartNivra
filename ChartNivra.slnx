@@ -11,22 +11,7 @@
     <Project Path="samples/ChartNivra.ThreeDDemo/ChartNivra.ThreeDDemo.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/ChartNivra.Core/ChartNivra.Core.csproj" />
-    <Project Path="src/ChartNivra.Data/ChartNivra.Data.csproj" />
-    <Project Path="src/ChartNivra.Rendering.Abstractions/ChartNivra.Rendering.Abstractions.csproj" />
-    <Project Path="src/ChartNivra.Rendering.Skia/ChartNivra.Rendering.Skia.csproj" />
-    <Project Path="src/ChartNivra.Rendering.3D.Abstractions/ChartNivra.Rendering.3D.Abstractions.csproj" />
-    <Project Path="src/ChartNivra.Rendering.3D.Backend/ChartNivra.Rendering.3D.Backend.csproj" />
-    <Project Path="src/ChartNivra.Maui/ChartNivra.Maui.csproj" />
-    <Project Path="src/ChartNivra.Cartesian/ChartNivra.Cartesian.csproj" />
-    <Project Path="src/ChartNivra.Pie/ChartNivra.Pie.csproj" />
-    <Project Path="src/ChartNivra.Gauges/ChartNivra.Gauges.csproj" />
-    <Project Path="src/ChartNivra.Financial/ChartNivra.Financial.csproj" />
-    <Project Path="src/ChartNivra.Statistical/ChartNivra.Statistical.csproj" />
-    <Project Path="src/ChartNivra.ThreeD/ChartNivra.ThreeD.csproj" />
-    <Project Path="src/ChartNivra.Annotations/ChartNivra.Annotations.csproj" />
-    <Project Path="src/ChartNivra.Themes/ChartNivra.Themes.csproj" />
-    <Project Path="src/ChartNivra.Export/ChartNivra.Export.csproj" />
+    <Project Path="src/ChartNivra/ChartNivra.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj" />

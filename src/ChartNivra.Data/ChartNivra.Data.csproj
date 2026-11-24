@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Description>High-performance streaming data pipelines, ring buffers, and batch queues for ChartNivra.</Description>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChartNivra.Core\ChartNivra.Core.csproj" />
-  </ItemGroup>
-</Project>

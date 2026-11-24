@@ -27,13 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Maui\ChartNivra.Maui.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.ThreeD\ChartNivra.ThreeD.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.3D.Abstractions\ChartNivra.Rendering.3D.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.3D.Backend\ChartNivra.Rendering.3D.Backend.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Themes\ChartNivra.Themes.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 </Project>

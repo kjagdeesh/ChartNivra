@@ -29,18 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChartNivra.Core\ChartNivra.Core.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Abstractions\ChartNivra.Rendering.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Rendering.Skia\ChartNivra.Rendering.Skia.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Maui\ChartNivra.Maui.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Pie\ChartNivra.Pie.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Gauges\ChartNivra.Gauges.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Financial\ChartNivra.Financial.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Statistical\ChartNivra.Statistical.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Annotations\ChartNivra.Annotations.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.ThreeD\ChartNivra.ThreeD.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Themes\ChartNivra.Themes.csproj" />
-    <ProjectReference Include="..\..\src\ChartNivra.Cartesian\ChartNivra.Cartesian.csproj" />
+    <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 <ItemGroup>
     <MauiIcon Include="Resources\AppIcon\appicon.svg" />

@@ -74,7 +74,7 @@ public class CodeSnippetView : ContentView
                 new ColumnDefinition { Width = GridLength.Auto },
             },
         };
-        _languageLabel = new Label { Text = "C#", FontSize = 12, TextColor = TextMuted, VerticalOptions = LayoutOptions.Center };
+        _languageLabel = new Label { Text = "C#  ·  SOURCE", FontSize = 11, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#7DD3FC"), VerticalOptions = LayoutOptions.Center };
         header.Add(_languageLabel, 0, 0);
         header.Add(copyBtn, 1, 0);
 
@@ -115,7 +115,7 @@ public class CodeSnippetView : ContentView
 
     private void OnLanguageChanged()
     {
-        _languageLabel.Text = Language == CodeLanguage.Xaml ? "XAML" : "C#";
+        _languageLabel.Text = Language == CodeLanguage.Xaml ? "XAML  ·  MARKUP" : "C#  ·  SOURCE";
         ApplySyntaxHighlighting();
     }
 
@@ -123,7 +123,7 @@ public class CodeSnippetView : ContentView
     {
         var formatted = new FormattedString();
         var pattern = Language == CodeLanguage.Xaml
-            ? "(<!--.*?-->)|(<[^>]+>)|(\"[^\"]*\")"
+            ? "(<!--.*?-->)|(\"[^\"]*\"|'[^']*')|(</?[A-Za-z_][\\w:.-]*)|([A-Za-z_][\\w:.-]*(?=\\s*=))|(/?>)"
             : "(//.*$)|(\"[^\"]*\")|\\b(var|new|class|public|private|protected|return|using|namespace|true|false|null|void)\\b";
         var matches = Regex.Matches(_code, pattern, RegexOptions.Multiline);
         var position = 0;
@@ -131,7 +131,10 @@ public class CodeSnippetView : ContentView
         {
             if (match.Index > position) formatted.Spans.Add(new Span { Text = _code[position..match.Index], TextColor = TextCode });
             var color = Language == CodeLanguage.Xaml
-                ? (match.Value.StartsWith("<") ? Color.FromArgb("#7DD3FC") : Color.FromArgb("#A5B4FC"))
+                ? match.Value.StartsWith("<!--") ? TextMuted
+                    : match.Value.StartsWith("\"") || match.Value.StartsWith("'") ? Color.FromArgb("#A7F3D0")
+                    : match.Value.StartsWith("<") || match.Value is ">" or "/>" ? Color.FromArgb("#7DD3FC")
+                    : Color.FromArgb("#C4B5FD")
                 : (match.Value.StartsWith("//") ? TextMuted : match.Value.StartsWith("\"") ? Color.FromArgb("#A7F3D0") : Color.FromArgb("#C4B5FD"));
             formatted.Spans.Add(new Span { Text = match.Value, TextColor = color });
             position = match.Index + match.Length;
