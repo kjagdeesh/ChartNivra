@@ -24,11 +24,5 @@ jobs:
     - name: Build Solution
       run: dotnet build ChartNivra.slnx --no-restore -c Release
 
-    - name: Run Test Suites
-      run: |
-        dotnet test tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj --no-build -c Release
-        dotnet test tests/ChartNivra.RenderingTests/ChartNivra.RenderingTests.csproj --no-build -c Release
-        dotnet test tests/ChartNivra.IntegrationTests/ChartNivra.IntegrationTests.csproj --no-build -c Release
-        dotnet test tests/ChartNivra.PerformanceTests/ChartNivra.PerformanceTests.csproj --no-build -c Release
-        dotnet test tests/ChartNivra.VisualTests/ChartNivra.VisualTests.csproj --no-build -c Release
-        dotnet test tests/ChartNivra.CrossPlatformTests/ChartNivra.CrossPlatformTests.csproj --no-build -c Release
+    - name: Run Tests
+      run: dotnet test tests/ChartNivra.Tests/ChartNivra.Tests.csproj --no-build -c Release

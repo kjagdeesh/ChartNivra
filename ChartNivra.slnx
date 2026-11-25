@@ -9,11 +9,6 @@
     <Project Path="src/ChartNivra/ChartNivra.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/ChartNivra.UnitTests/ChartNivra.UnitTests.csproj" />
-    <Project Path="tests/ChartNivra.RenderingTests/ChartNivra.RenderingTests.csproj" />
-    <Project Path="tests/ChartNivra.VisualTests/ChartNivra.VisualTests.csproj" />
-    <Project Path="tests/ChartNivra.IntegrationTests/ChartNivra.IntegrationTests.csproj" />
-    <Project Path="tests/ChartNivra.PerformanceTests/ChartNivra.PerformanceTests.csproj" />
-    <Project Path="tests/ChartNivra.CrossPlatformTests/ChartNivra.CrossPlatformTests.csproj" />
+    <Project Path="tests/ChartNivra.Tests/ChartNivra.Tests.csproj" />
   </Folder>
 </Solution>

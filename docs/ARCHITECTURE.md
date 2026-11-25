@@ -7,7 +7,7 @@ ChartNivra is an enterprise-grade, high-performance .NET MAUI charting framework
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                 Application & Demo Layer                    │
-│   ChartNivra.Demo, DashboardDemo, RealTimeDemo, Financial   │
+│                    ChartNivra.Gallery                      │
 ├─────────────────────────────────────────────────────────────┤
 │                    UI & Control Layer                       │
 │    ChartNivra.Maui (SKCanvasView, Handlers, Visual States)  │

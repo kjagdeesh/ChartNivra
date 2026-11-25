@@ -31,17 +31,8 @@ The master specification outlines the full target architecture below. Here is th
 
 | Target Project / Folder | Status | Current Implementation Notes |
 |---|---|---|
-| **`tests/ChartNivra.UnitTests/`** | 🟢 Implemented | 9 passing unit tests (Math, Decimation, Transforms, 3D Camera Projection, Technical Indicators, Ring Buffer, 3D Cuboid & Shading). |
-| **`tests/ChartNivra.RenderingTests/`** | ⏳ Planned | Deterministic visual screenshot/golden comparison tests. |
-| **`tests/ChartNivra.VisualTests/`** | ⏳ Planned | End-to-end MAUI UI visual tests. |
-| **`tests/ChartNivra.IntegrationTests/`** | ⏳ Planned | Integration testing between handlers and controls. |
-| **`tests/ChartNivra.PerformanceTests/`** | ⏳ Planned | BenchmarkDotNet throughput and memory tests. |
-| **`tests/ChartNivra.CrossPlatformTests/`** | ⏳ Planned | Device testing matrix. |
-| **`samples/ChartNivra.Demo/`** | 🟢 Implemented | .NET MAUI interactive gallery showcasing multi-series charting with dark theme. |
-| **`samples/ChartNivra.DashboardDemo/`** | ⏳ Planned | Multi-chart executive KPI dashboard. |
-| **`samples/ChartNivra.RealTimeDemo/`** | ⏳ Planned | 60 FPS streaming sensor/market data demo. |
-| **`samples/ChartNivra.FinancialDemo/`** | ⏳ Planned | Candlestick + SMA/EMA indicator demo. |
-| **`samples/ChartNivra.ThreeDDemo/`** | ⏳ Planned | Interactive 3D orbit camera and 3D column/mesh demo. |
+| **`tests/ChartNivra.Tests/`** | 🟡 In progress | One xUnit project organized into Unit, Rendering, Visual, Integration, Performance, and CrossPlatform folders. Device and end-to-end visual coverage remain planned. |
+| **`samples/ChartNivra.Gallery/`** | 🟢 Implemented | .NET MAUI gallery containing chart, streaming, and 3D samples. |
 | **`benchmarks/`** | ⏳ Planned | Large datasets benchmark suite (10k to 1M points). |
 | **`docs/`** | 🟢 Started | Architecture & README created. |
 | **`.github/`** | ⏳ Planned | CI/CD build workflows for .NET 10 MAUI. |
@@ -53,5 +44,5 @@ The master specification outlines the full target architecture below. Here is th
 To reach the full modular target architecture:
 1. **Module Extraction**: Extract specialized assemblies from Core (`ChartNivra.Cartesian`, `ChartNivra.Pie`, `ChartNivra.Financial`, `ChartNivra.ThreeD`, `ChartNivra.Data`).
 2. **Additional Chart Families**: Implement Gauges, Statistical (Histogram, BoxPlot), and Annotations.
-3. **Dedicated Demos**: Create `ChartNivra.FinancialDemo`, `ChartNivra.RealTimeDemo`, and `ChartNivra.ThreeDDemo`.
+3. **Gallery Samples**: Expand financial, real-time, and 3D examples within `ChartNivra.Gallery`.
 4. **CI/CD Pipeline**: Add GitHub Actions workflow for automated builds and testing on every pull request.

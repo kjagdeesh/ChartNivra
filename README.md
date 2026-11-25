@@ -36,12 +36,13 @@ ChartNivra/
 │   ├── ChartNivra.ThreeD/                # 3D Cartesian, 3D Surface/Wireframe, 3D Scatter
 │   └── ChartNivra.Export/                # Raster (PNG/JPEG) and Vector (SVG/PDF) export engine
 ├── tests/
-│   ├── ChartNivra.UnitTests/             # Axis calculation, tick layout, decimation, transform tests
-│   └── ChartNivra.RenderingTests/        # Deterministic visual snapshot & golden tests
+│   └── ChartNivra.Tests/                 # Unit, rendering, visual, integration, performance and cross-platform tests
 ├── samples/
-│   └── ChartNivra.Demo/                  # Multi-platform .NET MAUI showcase app
+│   └── ChartNivra.Gallery/               # Multi-platform .NET MAUI showcase app
 └── docs/                                 # Architecture specs, guides, API documentation
 ```
+
+Run the consolidated test suite with `dotnet test tests/ChartNivra.Tests/ChartNivra.Tests.csproj`.
 
 ---
 

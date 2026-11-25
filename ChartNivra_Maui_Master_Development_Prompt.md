@@ -411,18 +411,9 @@ ChartNivra/
 │   ├── ChartNivra.Themes/
 │   └── ChartNivra.Export/
 ├── tests/
-│   ├── ChartNivra.UnitTests/
-│   ├── ChartNivra.RenderingTests/
-│   ├── ChartNivra.VisualTests/
-│   ├── ChartNivra.IntegrationTests/
-│   ├── ChartNivra.PerformanceTests/
-│   └── ChartNivra.CrossPlatformTests/
+│   └── ChartNivra.Tests/                 # Unit, Rendering, Visual, Integration, Performance, CrossPlatform folders
 ├── samples/
-│   ├── ChartNivra.Demo/
-│   ├── ChartNivra.DashboardDemo/
-│   ├── ChartNivra.RealTimeDemo/
-│   ├── ChartNivra.FinancialDemo/
-│   └── ChartNivra.ThreeDDemo/
+│   └── ChartNivra.Gallery/              # All sample pages and demos
 ├── benchmarks/
 ├── docs/
 ├── .github/
