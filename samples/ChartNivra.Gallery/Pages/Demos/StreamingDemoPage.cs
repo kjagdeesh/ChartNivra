@@ -6,6 +6,7 @@ using ChartNivra.Core.Series;
 using ChartNivra.Core.Themes;
 using ChartNivra.Data;
 using ChartNivra.Maui.Controls;
+using ChartNivra.Gallery.Controls;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
@@ -51,7 +52,7 @@ public class MainPage : ContentPage
             Children =
             {
                 new Label { Text = "Real-Time Telemetry Stream", FontSize = 22, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
-                new Label { Text = "60 FPS rendering pipeline with zero-allocation ring buffer", FontSize = 13, TextColor = Color.FromArgb("#64748B") }
+                new Label { Text = "Generated sensor data with a rolling window", FontSize = 13, TextColor = Color.FromArgb("#64748B") }
             }
         };
         header.Add(titleBlock, 0, 0);
@@ -71,12 +72,13 @@ public class MainPage : ContentPage
         layout.Children.Add(header);
 
         // Telemetry Counters
-        var statsRow = new HorizontalStackLayout
+        var statsRow = new FlexLayout
         {
-            Spacing = 16,
+            Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+            Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap,
             Children =
             {
-                CreateMetricPill("Render Frame Rate", (_fpsLabel = new Label { Text = "60 FPS", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#00C096") })),
+                CreateMetricPill("Update interval", (_fpsLabel = new Label { Text = "16 ms", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#00C096") })),
                 CreateMetricPill("Ring Buffer Window", new Label { Text = "500 pts", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#3B82F6") }),
                 CreateMetricPill("Total Ingested", (_pointsLabel = new Label { Text = "0 pts", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#8B5CF6") }))
             }
@@ -111,6 +113,7 @@ public class MainPage : ContentPage
         layout.Children.Add(card);
 
         Content = new ScrollView { Content = layout };
+        DemoPageChrome.Attach(this, layout, "Streaming Studio", "Watch generated sensor data update in real time.");
 
         // Pipeline callback
         _pipeline.DataFlushed += points =>
@@ -130,6 +133,7 @@ public class MainPage : ContentPage
             StrokeShape = new RoundRectangle { CornerRadius = 12 },
             BackgroundColor = Colors.White,
             Padding = new Thickness(16, 10),
+            Margin = new Thickness(0, 0, 12, 12),
             Content = new VerticalStackLayout
             {
                 Spacing = 2,
@@ -179,5 +183,17 @@ public class MainPage : ContentPage
             _toggleButton.Text = "Resume Stream";
             _toggleButton.BackgroundColor = Color.FromArgb("#10B981");
         }
+    }
+
+    protected override void OnDisappearing()
+    {
+        _timer?.Stop();
+        base.OnDisappearing();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (_isRunning) _timer?.Start();
     }
 }

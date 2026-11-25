@@ -28,7 +28,7 @@ public class HomePage : ContentPage
     private bool _listView;
     private readonly List<Button> _familyButtons = new();
 
-    private sealed record ChartCard(Border View, string Name, string Category, string Description, string[] Tags);
+    private sealed record ChartCard(Border View, Border ListView, string Name, string Category, string Description, string[] Tags);
 
     public HomePage()
     {
@@ -177,8 +177,10 @@ public class HomePage : ContentPage
             Margin = new Thickness(0, 18, 0, 12)
         };
         filterRow.Add(new Border { Padding = new Thickness(2, 0), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = _search }, 0, 0);
-        var gridButton = new Button { Text = "▦", FontSize = 18, WidthRequest = 42, HeightRequest = 46, Padding = 0, BackgroundColor = AccentSoft, TextColor = Accent, CornerRadius = 8 };
-        var listButton = new Button { Text = "☰", FontSize = 18, WidthRequest = 42, HeightRequest = 46, Padding = 0, BackgroundColor = Surface, TextColor = Muted, CornerRadius = 8 };
+        var gridButton = new ImageButton { Source = "view_grid.png", WidthRequest = 42, HeightRequest = 46, Padding = new Thickness(11), BackgroundColor = AccentSoft, CornerRadius = 8, BorderColor = Border, BorderWidth = 1 };
+        var listButton = new ImageButton { Source = "view_list.png", WidthRequest = 42, HeightRequest = 46, Padding = new Thickness(11), BackgroundColor = Surface, CornerRadius = 8, BorderColor = Border, BorderWidth = 1 };
+        SemanticProperties.SetDescription(gridButton, "Grid view");
+        SemanticProperties.SetDescription(listButton, "List view");
         gridButton.Clicked += (_, _) => { _listView = false; gridButton.BackgroundColor = AccentSoft; listButton.BackgroundColor = Surface; ApplyFilters(); };
         listButton.Clicked += (_, _) => { _listView = true; listButton.BackgroundColor = AccentSoft; gridButton.BackgroundColor = Surface; ApplyFilters(); };
         filterRow.Add(gridButton, 1, 0); filterRow.Add(listButton, 2, 0);
@@ -241,13 +243,9 @@ public class HomePage : ContentPage
             ("3D Column / Bar", "3D", "Perspective columns with camera controls", null, ChartThumbnailKind.ThreeD, ["3D", "Perspective", "Orbit"]),
             ("3D Surface / Mesh", "3D", "Parametric surfaces and wireframes", null, ChartThumbnailKind.Surface, ["Mesh", "Wireframe", "Lighting"]),
             ("3D Scatter / Point Cloud", "3D", "XYZ points with depth and orbit controls", null, ChartThumbnailKind.Bubble, ["Point cloud", "XYZ", "Orbit"]),
-            ("Chart Gallery Demo", "Demos", "Explore the original chart examples together", "demo-basic", ChartThumbnailKind.Line, ["Examples"]),
-            ("Dashboard Studio", "Demos", "A composed dashboard with multiple chart types", "demo-dashboard", ChartThumbnailKind.Bar, ["Dashboard"]),
-            ("Financial Studio", "Demos", "Explore financial charts and indicators", "demo-financial", ChartThumbnailKind.Candlestick, ["OHLC"]),
             ("Streaming Studio", "Demos", "High-frequency data and real-time updates", "demo-streaming", ChartThumbnailKind.Line, ["Real-time"]),
             ("3D Visualization Studio", "Demos", "Explore 3D charts with camera controls", "demo-3d", ChartThumbnailKind.ThreeD, ["Camera"]),
             ("Annotations", "Demos", "Reference lines and chart markers", "annotations", ChartThumbnailKind.Line, ["Annotations"]),
-            ("Chart Themes", "Demos", "Explore chart palettes and themes", "themes", ChartThumbnailKind.Pie, ["Themes"]),
             ("Real-Time Chart", "Demos", "A live updating line chart", "realtime", ChartThumbnailKind.Line, ["Live"]),
             ("Multiple Series", "Demos", "Compare multiple data series", "multiseries", ChartThumbnailKind.Line, ["Comparison"]),
         };
@@ -256,11 +254,41 @@ public class HomePage : ContentPage
         for (var i = 0; i < samples.Length; i++)
         {
             var (name, category, description, route, kind, tags) = samples[i];
-            cards[i] = new ChartCard(MakeChartCard(name, category, description, route, kind, tags), name, category, description, tags);
+            cards[i] = new ChartCard(MakeChartCard(name, category, description, route, kind, tags), MakeListCard(name, category, description, route, kind), name, category, description, tags);
         }
 
         AddChartCards(grid, cards, 2);
         return (grid, cards);
+    }
+
+    private static Border MakeListCard(string name, string category, string description, string? route, ChartThumbnailKind kind)
+    {
+        var preview = new Border
+        {
+            WidthRequest = 96, HeightRequest = 96, Padding = 6, BackgroundColor = Color.FromArgb("#F2F5FF"),
+            StrokeThickness = 0, StrokeShape = new RoundRectangle { CornerRadius = 10 },
+            Content = new ChartThumbnailView(kind) { WidthRequest = 84, HeightRequest = 84 }
+        };
+        var title = ThemedLabel(name, 16, true);
+        var detail = ThemedLabel(description, 13, false);
+        detail.LineBreakMode = LineBreakMode.WordWrap;
+        var info = new VerticalStackLayout
+        {
+            Spacing = 5, VerticalOptions = LayoutOptions.Center,
+            Children = { new Label { Text = category.ToUpperInvariant(), FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Accent }, title, detail }
+        };
+        var row = new Grid { ColumnSpacing = 18, ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Auto }, new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
+        row.Add(preview, 0, 0); row.Add(info, 1, 0);
+        row.Add(new Label { Text = "→", FontSize = 20, TextColor = Accent, VerticalOptions = LayoutOptions.Center }, 2, 0);
+        var card = new Border { Padding = new Thickness(14), Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = row };
+        card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#172338"));
+        var destination = route ?? $"catalog?name={Uri.EscapeDataString(name)}&kind={kind}";
+        var tap = new TapGestureRecognizer();
+        var navigating = false;
+        tap.Tapped += async (_, _) => { if (navigating) return; navigating = true; try { await Shell.Current.GoToAsync(destination); } finally { navigating = false; } };
+        card.GestureRecognizers.Add(tap);
+        SemanticProperties.SetDescription(card, $"Open {name}");
+        return card;
     }
 
     private static Border MakeChartCard(string name, string category, string description, string? route, ChartThumbnailKind kind, string[] tags)
@@ -341,7 +369,7 @@ public class HomePage : ContentPage
             (string.IsNullOrWhiteSpace(family) || card.Category == family) &&
             (string.IsNullOrWhiteSpace(search) || $"{card.Name} {card.Category} {card.Description} {string.Join(' ', card.Tags)}".Contains(search, StringComparison.OrdinalIgnoreCase))).ToArray();
         _resultLabel.Text = $"{results.Length} sample{(results.Length == 1 ? string.Empty : "s")}";
-        AddChartCards(_chartGrid, results, _listView || ResponsiveLayout.IsCompact(Width) ? 1 : Width >= 1180 ? 4 : Width >= 820 ? 3 : 2);
+        AddChartCards(_chartGrid, results, _listView || ResponsiveLayout.IsCompact(Width) ? 1 : Width >= 1180 ? 4 : Width >= 820 ? 3 : 2, _listView);
     }
 
     private void UpdateLayoutForWidth(double width)
@@ -389,12 +417,12 @@ public class HomePage : ContentPage
         }
     };
 
-    private static void AddChartCards(Grid grid, IEnumerable<ChartCard> cards, int columns)
+    private static void AddChartCards(Grid grid, IEnumerable<ChartCard> cards, int columns, bool listView = false)
     {
         grid.Children.Clear();
         grid.ColumnDefinitions.Clear();
         for (var i = 0; i < columns; i++) grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
         var visibleCards = cards.ToArray();
-        for (var i = 0; i < visibleCards.Length; i++) grid.Add(visibleCards[i].View, i % columns, i / columns);
+        for (var i = 0; i < visibleCards.Length; i++) grid.Add(listView ? visibleCards[i].ListView : visibleCards[i].View, i % columns, i / columns);
     }
 }

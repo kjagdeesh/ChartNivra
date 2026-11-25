@@ -65,9 +65,6 @@ public class AppShellWithSideMenu : Shell
             ("annotations", "Annotations", new Command(async () => await GoToAsync("annotations")))
         );
 
-        _sideMenu.AddMenuSection("APPEARANCE",
-            ("theme", "Themes", new Command(async () => await GoToAsync("themes")))
-        );
     }
 
     private void BuildShellRoutes()
@@ -84,7 +81,6 @@ public class AppShellWithSideMenu : Shell
         Routing.RegisterRoute("heatmap", typeof(HeatmapPage));
         Routing.RegisterRoute("realtime", typeof(RealTimePage));
         Routing.RegisterRoute("annotations", typeof(AnnotationsPage));
-        Routing.RegisterRoute("themes", typeof(ThemesPage));
     }
 
     protected override void OnAppearing()

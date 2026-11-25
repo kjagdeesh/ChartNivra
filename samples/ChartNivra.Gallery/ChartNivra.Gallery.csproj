@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\src\ChartNivra\ChartNivra.csproj" />
   </ItemGroup>
 <ItemGroup>
+    <MauiImage Include="Resources\Images\*.svg" />
     <MauiIcon Include="Resources\AppIcon\appicon.svg" />
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0F172A" />
   </ItemGroup>

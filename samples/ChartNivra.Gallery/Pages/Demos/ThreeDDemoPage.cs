@@ -17,111 +17,140 @@ public class MainPage : ContentPage
     private double _azimuthDegrees = 45.0;
     private double _elevationDegrees = 30.0;
     private double _distance = 25.0;
+    private readonly Grid _workspace;
+    private readonly Border _chartCard;
+    private readonly Border _controlsCard;
+    private readonly VerticalStackLayout _layout;
+    private bool? _compact;
 
     public MainPage()
     {
         Title = "3D Visualization Studio";
         BackgroundColor = Color.FromArgb("#F8FAFC");
+        Shell.SetNavBarIsVisible(this, false);
 
-        var layout = new VerticalStackLayout
+        _layout = new VerticalStackLayout
         {
-            Padding = new Thickness(24),
-            Spacing = 16
+            Padding = new Thickness(24, 20, 24, 32), Spacing = 20, MaximumWidthRequest = 1440, HorizontalOptions = LayoutOptions.Center
         };
-
-        // Header
+        var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
+        topBar.Add(new Label { Text = "◈  chartnivra", FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4338CA"), VerticalOptions = LayoutOptions.Center }, 0, 0);
+        var back = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 9, HeightRequest = 42, Padding = new Thickness(14, 0) };
+        back.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        topBar.Add(back, 1, 0);
+        _layout.Add(topBar);
+        _layout.Add(new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") });
         var header = new VerticalStackLayout
         {
-            Spacing = 4,
+            Spacing = 6,
             Children =
             {
-                new Label { Text = "3D Spatial Bar & Surface Engine", FontSize = 22, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
-                new Label { Text = "Full 3D perspective projection, Lambertian lighting, and Painter's depth sorting", FontSize = 13, TextColor = Color.FromArgb("#64748B") }
+                new Label { Text = "CHARTNIVRA  /  3D STUDIO", FontSize = 10, CharacterSpacing = 1.2, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4338CA") },
+                new Label { Text = "3D Visualization Studio", FontSize = 30, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
+                new Label { Text = "Explore the data from every angle.", FontSize = 14, TextColor = Color.FromArgb("#64748B") }
             }
         };
-        layout.Children.Add(header);
+        _layout.Add(header);
+
+        _renderer.Theme = ChartTheme.CleanLight;
+        _chartView = new ChartView { HeightRequest = 420, Theme = ChartTheme.CleanLight, Renderer = _renderer };
 
         // Interactive Camera Controls
-        var controlsCard = new Border
+        var azimuth = CreateSliderRow("Orbit", 0, 360, 45, "°", val => { _azimuthDegrees = val; UpdateCamera(); }, out var azimuthSlider);
+        var elevation = CreateSliderRow("Elevation", 10, 80, 30, "°", val => { _elevationDegrees = val; UpdateCamera(); }, out var elevationSlider);
+        var distance = CreateSliderRow("Distance", 10, 50, 25, "", val => { _distance = val; UpdateCamera(); }, out var distanceSlider);
+        var reset = new Button { Text = "Reset view", FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4338CA"), BackgroundColor = Color.FromArgb("#EEF2FF"), CornerRadius = 9, HeightRequest = 42 };
+        reset.Clicked += (_, _) => { azimuthSlider.Value = 45; elevationSlider.Value = 30; distanceSlider.Value = 25; };
+        _controlsCard = new Border
         {
             Stroke = Color.FromArgb("#E2E8F0"),
             StrokeShape = new RoundRectangle { CornerRadius = 14 },
             BackgroundColor = Colors.White,
-            Padding = new Thickness(16),
+            Padding = new Thickness(24),
             Content = new VerticalStackLayout
             {
-                Spacing = 12,
+                Spacing = 20,
                 Children =
                 {
-                    new Label { Text = "Camera Orbit Controls", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
-                    CreateSliderRow("Orbit Azimuth (°)", 0, 360, 45, val => { _azimuthDegrees = val; UpdateCamera(); }),
-                    CreateSliderRow("Camera Elevation (°)", 10, 80, 30, val => { _elevationDegrees = val; UpdateCamera(); }),
-                    CreateSliderRow("Zoom Distance", 10, 50, 25, val => { _distance = val; UpdateCamera(); })
+                    new VerticalStackLayout { Spacing = 4, Children = { new Label { Text = "CAMERA", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#4338CA") }, new Label { Text = "Adjust your view", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") }, new Label { Text = "Move the sliders to explore the chart.", FontSize = 13, TextColor = Color.FromArgb("#64748B") } } },
+                    azimuth, elevation, distance, reset
                 }
             }
         };
-        layout.Children.Add(controlsCard);
-
-        // 3D Chart Canvas
-        _renderer.Theme = ChartTheme.CleanLight;
-        _chartView = new ChartView
-        {
-            HeightRequest = 420,
-            Title = "3D Column Matrix",
-            Theme = ChartTheme.CleanLight,
-            Renderer = _renderer
-        };
-
-        var chartCard = new Border
+        _chartCard = new Border
         {
             Stroke = Color.FromArgb("#E2E8F0"),
             StrokeShape = new RoundRectangle { CornerRadius = 16 },
             BackgroundColor = Colors.White,
-            Padding = new Thickness(16),
-            Content = _chartView
+            Padding = new Thickness(24),
+            Content = new VerticalStackLayout { Spacing = 16, Children = { new Label { Text = "LIVE PREVIEW", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#4338CA") }, new Label { Text = "3D column matrix", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") }, _chartView, new Label { Text = "25 columns · height represents the generated value", FontSize = 12, TextColor = Color.FromArgb("#64748B") } } }
         };
-        layout.Children.Add(chartCard);
-
-        Content = new ScrollView { Content = layout };
+        _workspace = new Grid { ColumnSpacing = 20, RowSpacing = 16 };
+        _workspace.Add(_chartCard);
+        _workspace.Add(_controlsCard);
+        _layout.Add(_workspace);
+        Content = new ScrollView { Content = _layout };
+        SizeChanged += (_, _) => UpdateLayout(Width);
 
         Populate3DColumns();
         UpdateCamera();
     }
 
-    private static Grid CreateSliderRow(string title, double min, double max, double initial, Action<double> onChanged)
+    private void UpdateLayout(double width)
+    {
+        if (width <= 0) return;
+        var compact = width < 800;
+        _layout.Padding = compact ? new Thickness(16, 16, 16, 24) : new Thickness(24, 20, 24, 32);
+        _layout.WidthRequest = width > 1440 ? 1400 : -1;
+        if (_compact == compact) return;
+        _compact = compact;
+        _chartView.HeightRequest = compact ? 280 : 440;
+        _workspace.ColumnDefinitions.Clear(); _workspace.RowDefinitions.Clear();
+        if (compact)
+        {
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid.SetRow(_chartCard, 0); Grid.SetColumn(_chartCard, 0); Grid.SetRow(_controlsCard, 1); Grid.SetColumn(_controlsCard, 0);
+        }
+        else
+        {
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(7, GridUnitType.Star) }); _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
+            Grid.SetRow(_chartCard, 0); Grid.SetColumn(_chartCard, 0); Grid.SetRow(_controlsCard, 0); Grid.SetColumn(_controlsCard, 1);
+        }
+    }
+
+    private static View CreateSliderRow(string title, double min, double max, double initial, string unit, Action<double> onChanged, out Slider slider)
     {
         var grid = new Grid
         {
             ColumnDefinitions =
             {
-                new ColumnDefinition { Width = new GridLength(160) },
                 new ColumnDefinition { Width = GridLength.Star },
-                new ColumnDefinition { Width = new GridLength(60) }
+                new ColumnDefinition { Width = GridLength.Auto }
             }
         };
 
         var label = new Label { Text = title, TextColor = Color.FromArgb("#64748B"), FontSize = 13, VerticalOptions = LayoutOptions.Center };
-        var valueLabel = new Label { Text = $"{initial:F0}", TextColor = Color.FromArgb("#0F172A"), FontAttributes = FontAttributes.Bold, FontSize = 13, VerticalOptions = LayoutOptions.Center };
+        var valueLabel = new Label { Text = $"{initial:F0}{unit}", TextColor = Color.FromArgb("#4338CA"), FontAttributes = FontAttributes.Bold, FontSize = 13, VerticalOptions = LayoutOptions.Center };
 
-        var slider = new Slider
+        slider = new Slider
         {
             Minimum = min,
             Maximum = max,
             Value = initial,
-            MinimumTrackColor = Color.FromArgb("#00C096"),
-            ThumbColor = Color.FromArgb("#00C096")
+            MinimumTrackColor = Color.FromArgb("#6366F1"),
+            ThumbColor = Color.FromArgb("#6366F1")
         };
         slider.ValueChanged += (s, e) =>
         {
-            valueLabel.Text = $"{e.NewValue:F0}";
+            valueLabel.Text = $"{e.NewValue:F0}{unit}";
             onChanged(e.NewValue);
         };
 
         grid.Add(label, 0, 0);
-        grid.Add(slider, 1, 0);
-        grid.Add(valueLabel, 2, 0);
+        grid.Add(valueLabel, 1, 0);
 
-        return grid;
+        return new VerticalStackLayout { Spacing = 5, Children = { grid, slider } };
     }
 
     private void Populate3DColumns()

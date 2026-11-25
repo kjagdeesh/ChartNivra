@@ -29,11 +29,7 @@ public class AppShell : Shell
         Routing.RegisterRoute("heatmap", typeof(HeatmapPage));
         Routing.RegisterRoute("realtime", typeof(RealTimePage));
         Routing.RegisterRoute("annotations", typeof(AnnotationsPage));
-        Routing.RegisterRoute("themes", typeof(ThemesPage));
         Routing.RegisterRoute("catalog", typeof(ChartCatalogPreviewPage));
-        Routing.RegisterRoute("demo-basic", typeof(ChartNivra.Demo.MainPage));
-        Routing.RegisterRoute("demo-dashboard", typeof(ChartNivra.DashboardDemo.MainPage));
-        Routing.RegisterRoute("demo-financial", typeof(ChartNivra.FinancialDemo.MainPage));
         Routing.RegisterRoute("demo-streaming", typeof(ChartNivra.RealTimeDemo.MainPage));
         Routing.RegisterRoute("demo-3d", typeof(ChartNivra.ThreeDDemo.MainPage));
     }
