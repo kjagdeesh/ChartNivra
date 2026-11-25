@@ -113,9 +113,12 @@ public class CartesianChartRenderer : IChartRenderer
             var datum = series.DataPoints.Count > i ? series.DataPoints[i] : null;
             var text = datum?.ValueLabel ?? datum?.Label ?? series.GetPoints()[i].Y.ToString(series.DataLabelFormat);
             var size = canvas.MeasureText(text, 10, true);
-            var above = new ChartRect(points[i].X - size.Width / 2 - 4, points[i].Y - size.Height - 12, size.Width + 8, size.Height + 6);
-            var below = new ChartRect(points[i].X - size.Width / 2 - 4, points[i].Y + 7, size.Width + 8, size.Height + 6);
+            var labelWidth = size.Width + 8;
+            var labelX = Math.Clamp(points[i].X - labelWidth / 2, plot.Left, Math.Max(plot.Left, plot.Right - labelWidth));
+            var above = new ChartRect(labelX, points[i].Y - size.Height - 12, labelWidth, size.Height + 6);
+            var below = new ChartRect(labelX, points[i].Y + 7, labelWidth, size.Height + 6);
             var rect = occupied.Any(existing => Intersects(existing, above)) ? below : above;
+            if (rect.Top < plot.Top) rect = below;
             if (rect.Left < plot.Left || rect.Right > plot.Right || rect.Top < plot.Top || rect.Bottom > plot.Bottom) continue;
             canvas.DrawRoundRect(rect, 4, new ChartBrush(theme.BackgroundColor.WithAlpha(235)), new ChartPen(series.Color.WithAlpha(170), 1));
             canvas.DrawText(text, new ChartPoint(rect.Left + 4, rect.Top + size.Height + 1), theme.TextColor, 10, true);

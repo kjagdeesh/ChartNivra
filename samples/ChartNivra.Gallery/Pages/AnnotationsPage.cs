@@ -13,12 +13,18 @@ public class AnnotationsPage : ChartPageBase
 {
     private const string Code = """
 // 1. Build a line chart model
-var model = new CartesianChartModel { Theme = ChartTheme.Light };
-model.Series.Add(new LineSeriesModel
+chartView.Title = "Sales with Target Line";
+chartView.Theme = ChartTheme.Light;
+chartView.Model.Series.Add(new LineSeriesModel
 {
-    Title  = "Sales",
-    Color  = ChartColor.FromHex("#00C096"),
-    Points = ...,
+    Title = "Sales",
+    Color = ChartColor.FromHex("#00C096"),
+    StrokeWidth = 2.5f,
+    ShowMarkers = true,
+    MarkerRadius = 5,
+    ShowDataLabels = true,
+    Points = [new(0, 42), new(1, 65), new(2, 55), new(3, 88), new(4, 74),
+              new(5, 95), new(6, 82), new(7, 110), new(8, 98), new(9, 120)],
 });
 
 // 2. Add a horizontal reference line annotation
@@ -32,7 +38,7 @@ var annotation = new ReferenceLineAnnotation
 };
 
 // 3. Use the AnnotatedChartRenderer which wraps the base renderer
-chartView.Renderer = new AnnotatedCartesianRenderer(model,
+chartView.Renderer = new AnnotatedCartesianRenderer(chartView.Model,
     new List<AnnotationBase> { annotation });
 """;
 
@@ -49,6 +55,8 @@ chartView.Renderer = new AnnotatedCartesianRenderer(model,
             Color       = ChartColor.FromHex("#00C096"),
             StrokeWidth = 2.5f,
             ShowMarkers = true,
+            MarkerRadius = 5,
+            ShowDataLabels = true,
             Points      = new System.Collections.Generic.List<ChartPoint>
             {
                 new(0,42), new(1,65), new(2,55), new(3,88), new(4,74),

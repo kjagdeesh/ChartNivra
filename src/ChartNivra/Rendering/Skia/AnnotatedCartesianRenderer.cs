@@ -25,12 +25,7 @@ namespace ChartNivra.Rendering.Skia
 
             // Compute transform for annotations
             var (xRange, yRange, niceMinY, niceMaxY, stepY) = _model.ComputeRanges();
-            var topMargin = string.IsNullOrEmpty(_model.Title) ? 20.0 : 50.0;
-            var plotArea = new ChartRect(
-                bounds.Left + 50,
-                bounds.Top + topMargin,
-                Math.Max(10, bounds.Width - 75),
-                Math.Max(10, bounds.Height - topMargin - 40));
+            var plotArea = baseRenderer.GetPlotArea(bounds);
 
             var transform = new CartesianTransform(xRange, yRange, plotArea);
 
