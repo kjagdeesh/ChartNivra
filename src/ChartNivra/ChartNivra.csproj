@@ -11,7 +11,7 @@
     <Description>Cross-platform .NET charting library with Cartesian, financial, statistical, polar, gauge, 3D, export, and MAUI controls.</Description>
     <PackageTags>charts;dotnet;maui;skia;visualization;financial;3d</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/chartnivra/chartnivra</RepositoryUrl>
+    <RepositoryUrl>https://github.com/kjagdeesh/ChartNivra</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
