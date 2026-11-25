@@ -24,6 +24,9 @@ public class HomePage : ContentPage
     private readonly SearchBar _search;
     private readonly Picker _familyPicker;
     private readonly Label _resultLabel;
+    private bool _entrancePlayed;
+    private bool _listView;
+    private readonly List<Button> _familyButtons = new();
 
     private sealed record ChartCard(Border View, string Name, string Category, string Description, string[] Tags);
 
@@ -65,7 +68,7 @@ public class HomePage : ContentPage
             app.UserAppTheme = choice switch { "Light" => AppTheme.Light, "Dark" => AppTheme.Dark, "System default" => AppTheme.Unspecified, _ => app.UserAppTheme };
         };
 
-        var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 30) };
+        var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 24) };
         var brand = new Label { Text = "◈  chartnivra", FontSize = 19, FontAttributes = FontAttributes.Bold, TextColor = Text, VerticalOptions = LayoutOptions.Center };
         brand.SetAppThemeColor(Label.TextColorProperty, Text, Color.FromArgb("#F1F5F9"));
         topBar.Add(brand, 0, 0); topBar.Add(themeButton, 1, 0);
@@ -98,9 +101,10 @@ public class HomePage : ContentPage
 
         var hero = new Border
         {
-            Padding = new Thickness(0, 12, 0, 16),
-            BackgroundColor = Colors.Transparent,
+            Padding = new Thickness(32, 28),
+            BackgroundColor = Color.FromArgb("#EEF2FF"),
             StrokeThickness = 0,
+            StrokeShape = new RoundRectangle { CornerRadius = 22 },
             Content = new VerticalStackLayout
             {
                 Spacing = 18,
@@ -137,16 +141,30 @@ public class HomePage : ContentPage
             }
         };
         var content = (VerticalStackLayout)hero.Content;
+        hero.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#EEF2FF"), Color.FromArgb("#1C2944"));
         var heroGrid = (Grid)content.Children[0];
         var textStack = (VerticalStackLayout)heroGrid.Children[0];
-        ((Label)textStack.Children[0]).Text = "THE CHART LIBRARY";
+        ((Label)textStack.Children[0]).Text = "EXPLORE  ·  BUILD  ·  VISUALIZE";
+        ((Label)textStack.Children[0]).TextColor = Color.FromArgb("#6366F1");
         var title = (Label)textStack.Children[1];
-        title.Text = "Find the right chart."; title.FontSize = 34;
+        title.Text = "Your data, in a new light."; title.FontSize = 34;
         title.SetAppThemeColor(Label.TextColorProperty, Text, Color.FromArgb("#F1F5F9"));
         var description = (Label)textStack.Children[2];
         description.Text = "Explore practical examples, inspect the data, and take the code with you.";
         description.SetAppThemeColor(Label.TextColorProperty, Muted, Color.FromArgb("#AAB9CE"));
         heroGrid.Children.RemoveAt(1);
+        var featured = new Border
+        {
+            WidthRequest = 240, Padding = new Thickness(16), BackgroundColor = Colors.White,
+            Stroke = Color.FromArgb("#C7C4D7"), StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 10 },
+            Content = new VerticalStackLayout { Spacing = 4, Children = { new Label { Text = "FEATURED SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, TextColor = Accent }, new Label { Text = "Bar / Column   ↗", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Text }, new Label { Text = "Quarterly revenue · C# & XAML", FontSize = 11, TextColor = Muted } } }
+        };
+        var openFeatured = new TapGestureRecognizer();
+        openFeatured.Tapped += async (_, _) => await Shell.Current.GoToAsync($"catalog?name={Uri.EscapeDataString("Bar / Column")}&kind={ChartThumbnailKind.Bar}");
+        featured.GestureRecognizers.Add(openFeatured);
+        heroGrid.Add(featured, 1, 0);
+        heroGrid.SizeChanged += (_, _) => featured.IsVisible = heroGrid.Width >= 640;
         return hero;
     }
 
@@ -155,22 +173,44 @@ public class HomePage : ContentPage
         var filterRow = new Grid
         {
             ColumnSpacing = 10,
-            ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = new GridLength(170) } },
-            Margin = new Thickness(0, 28, 0, 10)
+            ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } },
+            Margin = new Thickness(0, 18, 0, 12)
         };
         filterRow.Add(new Border { Padding = new Thickness(2, 0), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = _search }, 0, 0);
-        filterRow.Add(new Border { Padding = new Thickness(8, 0), BackgroundColor = Surface, Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = _familyPicker }, 1, 0);
+        var gridButton = new Button { Text = "▦", FontSize = 18, WidthRequest = 42, HeightRequest = 46, Padding = 0, BackgroundColor = AccentSoft, TextColor = Accent, CornerRadius = 8 };
+        var listButton = new Button { Text = "☰", FontSize = 18, WidthRequest = 42, HeightRequest = 46, Padding = 0, BackgroundColor = Surface, TextColor = Muted, CornerRadius = 8 };
+        gridButton.Clicked += (_, _) => { _listView = false; gridButton.BackgroundColor = AccentSoft; listButton.BackgroundColor = Surface; ApplyFilters(); };
+        listButton.Clicked += (_, _) => { _listView = true; listButton.BackgroundColor = AccentSoft; gridButton.BackgroundColor = Surface; ApplyFilters(); };
+        filterRow.Add(gridButton, 1, 0); filterRow.Add(listButton, 2, 0);
+        var familyRow = new FlexLayout { Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap, Margin = new Thickness(0, 0, 0, 6) };
+        for (var i = 0; i < _familyPicker.Items.Count; i++)
+        {
+            var index = i;
+            var family = _familyPicker.Items[i];
+            var count = index == 0 ? _chartCards.Length : _chartCards.Count(card => card.Category == family);
+            var button = new Button { Text = $"{family}  {count}", FontSize = 12, Padding = new Thickness(14, 0), HeightRequest = 36, CornerRadius = 18, Margin = new Thickness(0, 0, 8, 8), BackgroundColor = index == 0 ? Accent : Surface, TextColor = index == 0 ? Colors.White : Muted, BorderColor = Border, BorderWidth = 1 };
+            button.Clicked += (_, _) => { _familyPicker.SelectedIndex = index; foreach (var chip in _familyButtons) { chip.BackgroundColor = chip == button ? Accent : Surface; chip.TextColor = chip == button ? Colors.White : Muted; } };
+            _familyButtons.Add(button); familyRow.Add(button);
+        }
         return new VerticalStackLayout
         {
-            Spacing = 4,
+            Spacing = 5, Margin = new Thickness(0, 28, 0, 14),
             Children =
             {
-                new Label { Text = "Explore chart samples", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Text },
-                new Label { Text = "Find a chart by visual task, chart family, or capability.", FontSize = 13, TextColor = Muted },
+                ThemedLabel("Explore the collection", 22, true),
+                ThemedLabel("Find a starting point for your next visualization.", 13, false),
                 filterRow,
+                familyRow,
                 _resultLabel,
             }
         };
+    }
+
+    private static Label ThemedLabel(string text, double size, bool heading)
+    {
+        var label = new Label { Text = text, FontSize = size, FontAttributes = heading ? FontAttributes.Bold : FontAttributes.None };
+        label.SetAppThemeColor(Label.TextColorProperty, heading ? Text : Muted, Color.FromArgb(heading ? "#F1F5F9" : "#AAB9CE"));
+        return label;
     }
 
     private static (Grid Grid, ChartCard[] Cards) BuildChartGrid()
@@ -201,6 +241,15 @@ public class HomePage : ContentPage
             ("3D Column / Bar", "3D", "Perspective columns with camera controls", null, ChartThumbnailKind.ThreeD, ["3D", "Perspective", "Orbit"]),
             ("3D Surface / Mesh", "3D", "Parametric surfaces and wireframes", null, ChartThumbnailKind.Surface, ["Mesh", "Wireframe", "Lighting"]),
             ("3D Scatter / Point Cloud", "3D", "XYZ points with depth and orbit controls", null, ChartThumbnailKind.Bubble, ["Point cloud", "XYZ", "Orbit"]),
+            ("Chart Gallery Demo", "Demos", "Explore the original chart examples together", "demo-basic", ChartThumbnailKind.Line, ["Examples"]),
+            ("Dashboard Studio", "Demos", "A composed dashboard with multiple chart types", "demo-dashboard", ChartThumbnailKind.Bar, ["Dashboard"]),
+            ("Financial Studio", "Demos", "Explore financial charts and indicators", "demo-financial", ChartThumbnailKind.Candlestick, ["OHLC"]),
+            ("Streaming Studio", "Demos", "High-frequency data and real-time updates", "demo-streaming", ChartThumbnailKind.Line, ["Real-time"]),
+            ("3D Visualization Studio", "Demos", "Explore 3D charts with camera controls", "demo-3d", ChartThumbnailKind.ThreeD, ["Camera"]),
+            ("Annotations", "Demos", "Reference lines and chart markers", "annotations", ChartThumbnailKind.Line, ["Annotations"]),
+            ("Chart Themes", "Demos", "Explore chart palettes and themes", "themes", ChartThumbnailKind.Pie, ["Themes"]),
+            ("Real-Time Chart", "Demos", "A live updating line chart", "realtime", ChartThumbnailKind.Line, ["Live"]),
+            ("Multiple Series", "Demos", "Compare multiple data series", "multiseries", ChartThumbnailKind.Line, ["Comparison"]),
         };
 
         var cards = new ChartCard[samples.Length];
@@ -223,13 +272,13 @@ public class HomePage : ContentPage
             Stroke = Border,
             StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 16 },
-            MinimumHeightRequest = 280,
+            MinimumHeightRequest = 288,
             Content = new VerticalStackLayout
             {
                 Spacing = 0,
                 Children =
                 {
-                    new ChartThumbnailView(kind) { Margin = new Thickness(0, 0, 0, 10) },
+                    new Border { BackgroundColor = Color.FromArgb("#F8FAFF"), StrokeThickness = 0, StrokeShape = new RoundRectangle { CornerRadius = 12 }, Padding = new Thickness(8), Margin = new Thickness(0, 0, 0, 16), Content = new ChartThumbnailView(kind) { HeightRequest = 110 } },
                     new BoxView { HeightRequest = 1, BackgroundColor = Border, Margin = new Thickness(-18, 0, -18, 14) },
                     new Label { Text = category.ToUpperInvariant(), FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Accent, Margin = new Thickness(0, 0, 0, 7) },
                     new Label { Text = name, FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Text, Margin = new Thickness(0, 0, 0, 6) },
@@ -250,7 +299,19 @@ public class HomePage : ContentPage
         }
         var tap = new TapGestureRecognizer();
         var destination = route ?? $"catalog?name={Uri.EscapeDataString(name)}&kind={kind}";
-        tap.Tapped += async (_, _) => await Shell.Current.GoToAsync(destination);
+        var navigating = false;
+        tap.Tapped += async (_, _) =>
+        {
+            if (navigating) return;
+            navigating = true;
+            try
+            {
+                await card.ScaleTo(.98, 90, Easing.CubicOut);
+                await card.ScaleTo(1, 120, Easing.CubicOut);
+                await Shell.Current.GoToAsync(destination);
+            }
+            finally { card.Scale = 1; navigating = false; }
+        };
         card.GestureRecognizers.Add(tap);
         return card;
     }
@@ -279,8 +340,8 @@ public class HomePage : ContentPage
         var results = _chartCards.Where(card =>
             (string.IsNullOrWhiteSpace(family) || card.Category == family) &&
             (string.IsNullOrWhiteSpace(search) || $"{card.Name} {card.Category} {card.Description} {string.Join(' ', card.Tags)}".Contains(search, StringComparison.OrdinalIgnoreCase))).ToArray();
-        _resultLabel.Text = results.Length == _chartCards.Length ? "23 chart samples · 8 chart families" : $"{results.Length} matching chart sample{(results.Length == 1 ? string.Empty : "s")}";
-        AddChartCards(_chartGrid, results, ResponsiveLayout.IsCompact(Width) ? 1 : Width >= 1180 ? 4 : Width >= 820 ? 3 : 2);
+        _resultLabel.Text = $"{results.Length} sample{(results.Length == 1 ? string.Empty : "s")}";
+        AddChartCards(_chartGrid, results, _listView || ResponsiveLayout.IsCompact(Width) ? 1 : Width >= 1180 ? 4 : Width >= 820 ? 3 : 2);
     }
 
     private void UpdateLayoutForWidth(double width)
@@ -289,8 +350,19 @@ public class HomePage : ContentPage
         var compact = ResponsiveLayout.IsCompact(width);
         _dashboardContent.Padding = compact ? new Thickness(12, 12, 12, 0) : new Thickness(24, 20, 24, 0);
         _dashboardContent.WidthRequest = width > 1320 ? 1240 : -1;
-        _hero.Padding = compact ? new Thickness(0, 4, 0, 16) : new Thickness(0, 12, 0, 16);
+        _hero.Padding = compact ? new Thickness(20, 22) : new Thickness(32, 28);
         ApplyFilters();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (_entrancePlayed) return;
+        _entrancePlayed = true;
+        _hero.Opacity = 0;
+        _hero.TranslationY = 12;
+        _chartGrid.Opacity = 0;
+        _ = Task.WhenAll(_hero.FadeTo(1, 300, Easing.CubicOut), _hero.TranslateTo(0, 0, 300, Easing.CubicOut), _chartGrid.FadeTo(1, 400, Easing.CubicOut));
     }
 
     private static void AddStatistics(Grid grid, int columns)

@@ -12,14 +12,18 @@ public class CodeSnippetView : ContentView
 {
     private readonly Label _codeLabel;
     private readonly Label _languageLabel;
+    private readonly Label _lineNumbers;
     private string _code = string.Empty;
 
-    private static readonly Color BgCode    = Color.FromArgb("#0D1117");
-    private static readonly Color BgHeader  = Color.FromArgb("#161B22");
-    private static readonly Color BorderCol = Color.FromArgb("#30363D");
-    private static readonly Color TextCode  = Color.FromArgb("#E6EDF3");
-    private static readonly Color TextMuted = Color.FromArgb("#8B949E");
+    private static readonly Color BgCode    = Color.FromArgb("#212430");
+    private static readonly Color BgHeader  = Color.FromArgb("#30333F");
+    private static readonly Color BorderCol = Color.FromArgb("#414654");
+    private static readonly Color TextCode  = Color.FromArgb("#F1F2F5");
+    private static readonly Color TextMuted = Color.FromArgb("#93A2B3");
     private static readonly Color AccentGreen = Color.FromArgb("#10B981");
+    private static readonly string EditorFont = DeviceInfo.Platform == DevicePlatform.WinUI ? "Consolas"
+        : DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst ? "Menlo"
+        : "monospace";
 
     public static readonly BindableProperty CodeProperty =
         BindableProperty.Create(nameof(Code), typeof(string), typeof(CodeSnippetView), string.Empty,
@@ -45,77 +49,81 @@ public class CodeSnippetView : ContentView
     {
         _codeLabel = new Label
         {
-            FontFamily        = "Courier New",
-            FontSize          = 12,
+            FontFamily        = EditorFont,
+            FontSize          = 14,
+            LineHeight        = 1.4,
             LineBreakMode     = LineBreakMode.NoWrap,
         };
+        _lineNumbers = new Label { FontFamily = EditorFont, FontSize = 14, LineHeight = 1.4, TextColor = Color.FromArgb("#758895"), HorizontalTextAlignment = TextAlignment.End, LineBreakMode = LineBreakMode.NoWrap, InputTransparent = true };
 
         var copyBtn = new Button
         {
-            Text              = "⎘  Copy",
-            FontSize          = 12,
-            TextColor         = TextMuted,
-            BackgroundColor   = Colors.Transparent,
-            BorderColor       = BorderCol,
+            Text              = "⧉  Copy code",
+            FontSize          = 13,
+            FontAttributes    = FontAttributes.Bold,
+            TextColor         = Color.FromArgb("#E2E8F0"),
+            BackgroundColor   = Color.FromArgb("#414654"),
+            BorderColor       = Color.FromArgb("#596171"),
             BorderWidth       = 1,
-            CornerRadius      = 6,
-            Padding           = new Thickness(10, 4),
-            HeightRequest     = 32,
+            CornerRadius      = 8,
+            Padding           = new Thickness(14, 0),
+            HeightRequest     = 36,
         };
         copyBtn.Clicked += OnCopyClicked;
 
         var header = new Grid
         {
-            Padding         = new Thickness(16, 10),
+            Padding         = new Thickness(18, 12),
             BackgroundColor = BgHeader,
             ColumnDefinitions = new ColumnDefinitionCollection
             {
+                new ColumnDefinition { Width = GridLength.Auto },
                 new ColumnDefinition { Width = GridLength.Star },
                 new ColumnDefinition { Width = GridLength.Auto },
             },
         };
-        _languageLabel = new Label { Text = "C#  ·  SOURCE", FontSize = 11, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#7DD3FC"), VerticalOptions = LayoutOptions.Center };
-        header.Add(_languageLabel, 0, 0);
-        header.Add(copyBtn, 1, 0);
+        var dots = new HorizontalStackLayout { Spacing = 6, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 14, 0) };
+        foreach (var color in new[] { "#FF605C", "#FFBD44", "#00CA4E" })
+            dots.Add(new BoxView { WidthRequest = 9, HeightRequest = 9, CornerRadius = 5, Color = Color.FromArgb(color) });
+        _languageLabel = new Label { Text = "Sample.cs", FontFamily = EditorFont, FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#E2E8F0"), VerticalOptions = LayoutOptions.Center };
+        header.Add(dots, 0, 0);
+        header.Add(_languageLabel, 1, 0);
+        header.Add(copyBtn, 2, 0);
 
-        Content = new Frame
+        var contentGrid = new Grid
         {
-            CornerRadius    = 10,
-            Padding         = new Thickness(0),
-            HasShadow       = false,
-            BorderColor     = BorderCol,
-            BackgroundColor = BgCode,
-            Content = new Grid
+            RowDefinitions = new RowDefinitionCollection
             {
-                RowDefinitions = new RowDefinitionCollection
-                {
-                    new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Star },
-                }
+                new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Star },
             }
         };
-        var contentGrid = (Grid)((Frame)Content).Content;
+        Content = new Border { StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 12 }, Stroke = BorderCol, StrokeThickness = 1, BackgroundColor = BgCode, Content = contentGrid };
         contentGrid.Add(header, 0, 0);
         contentGrid.Add(new BoxView { HeightRequest = 1, BackgroundColor = BorderCol }, 0, 1);
         contentGrid.Add(new ScrollView
         {
             Orientation = ScrollOrientation.Both,
-            Content = new VerticalStackLayout
+            Content = new Grid
             {
-                Padding = new Thickness(16, 12),
-                Children = { _codeLabel }
+                Padding = new Thickness(24, 22, 28, 24),
+                ColumnSpacing = 24,
+                ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } },
+                Children = { _lineNumbers, _codeLabel }
             }
         }, 0, 2);
+        Grid.SetColumn(_codeLabel, 1);
     }
 
     private void OnCodeChanged(string newCode)
     {
         _code = newCode ?? string.Empty;
+        _lineNumbers.Text = string.Join("\n", Enumerable.Range(1, _code.Count(c => c == '\n') + 1).Select(number => number.ToString("00")));
         ApplySyntaxHighlighting();
     }
 
     private void OnLanguageChanged()
     {
-        _languageLabel.Text = Language == CodeLanguage.Xaml ? "XAML  ·  MARKUP" : "C#  ·  SOURCE";
+        _languageLabel.Text = Language == CodeLanguage.Xaml ? "Sample.xaml" : "Sample.cs";
         ApplySyntaxHighlighting();
     }
 
@@ -132,10 +140,10 @@ public class CodeSnippetView : ContentView
             if (match.Index > position) formatted.Spans.Add(new Span { Text = _code[position..match.Index], TextColor = TextCode });
             var color = Language == CodeLanguage.Xaml
                 ? match.Value.StartsWith("<!--") ? TextMuted
-                    : match.Value.StartsWith("\"") || match.Value.StartsWith("'") ? Color.FromArgb("#A7F3D0")
-                    : match.Value.StartsWith("<") || match.Value is ">" or "/>" ? Color.FromArgb("#7DD3FC")
-                    : Color.FromArgb("#C4B5FD")
-                : (match.Value.StartsWith("//") ? TextMuted : match.Value.StartsWith("\"") ? Color.FromArgb("#A7F3D0") : Color.FromArgb("#C4B5FD"));
+                    : match.Value.StartsWith("\"") || match.Value.StartsWith("'") ? Color.FromArgb("#E6E990")
+                    : match.Value.StartsWith("<") || match.Value is ">" or "/>" ? Color.FromArgb("#F48ACB")
+                    : Color.FromArgb("#70E7A0")
+                : (match.Value.StartsWith("//") ? TextMuted : match.Value.StartsWith("\"") ? Color.FromArgb("#E6E990") : Color.FromArgb("#C4B5FD"));
             formatted.Spans.Add(new Span { Text = match.Value, TextColor = color });
             position = match.Index + match.Length;
         }
@@ -153,7 +161,7 @@ public class CodeSnippetView : ContentView
             btn.TextColor = AccentGreen;
             await Task.Delay(1800);
             btn.Text      = original;
-            btn.TextColor = Color.FromArgb("#8B949E");
+            btn.TextColor = Color.FromArgb("#E2E8F0");
         }
     }
 }

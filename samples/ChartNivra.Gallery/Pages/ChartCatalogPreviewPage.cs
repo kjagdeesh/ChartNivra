@@ -25,6 +25,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     private Border? _codePanel;
     private string _name = "Chart";
     private ChartThumbnailKind _kind;
+    private bool? _compactLayout;
 
     public ChartCatalogPreviewPage()
     {
@@ -42,6 +43,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         _kind = query.TryGetValue("kind", out var kind) && Enum.TryParse(kind?.ToString(), out ChartThumbnailKind parsed) ? parsed : ChartThumbnailKind.Line;
         Title = _name;
         BuildWorkspace();
+        _compactLayout = null;
         UpdateLayout(Width);
     }
 
@@ -50,41 +52,51 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         _content.Children.Clear();
         var backButton = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 10, HeightRequest = 42, Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start };
         backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
-        var header = new Grid { RowSpacing = 18, RowDefinitions = new RowDefinitionCollection { new() { Height = GridLength.Auto }, new() { Height = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 12) };
-        header.Add(backButton, 0, 0);
+        var header = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 10) };
+        header.Add(new Label { Text = "◈  chartnivra", FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4F46E5"), VerticalOptions = LayoutOptions.Center }, 0, 0);
+        header.Add(backButton, 1, 0);
+        var copyButton = new Button { Text = "Copy C#", FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, BackgroundColor = Color.FromArgb("#4338CA"), CornerRadius = 8, HeightRequest = 42, Padding = new Thickness(16, 0), Margin = new Thickness(10, 0, 0, 0) };
+        copyButton.Clicked += async (_, _) => { await Clipboard.Default.SetTextAsync(CreateCsharpSource()); copyButton.Text = "Copied"; await Task.Delay(1600); copyButton.Text = "Copy C#"; };
+        header.Add(copyButton, 2, 0);
         var heading = new Label { Text = _name, FontSize = 26, FontAttributes = FontAttributes.Bold };
         heading.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#0F172A"), Color.FromArgb("#F1F5F9"));
-        header.Add(new VerticalStackLayout { Spacing = 3, Children = { new Label { Text = "CHARTNIVRA / SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#818CF8") }, heading } }, 0, 1);
         _content.Add(header);
+        _content.Add(new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") });
+        _content.Add(new VerticalStackLayout { Spacing = 5, Margin = new Thickness(0, 12, 0, 0), Children = { new Label { Text = "SAMPLE LIBRARY  /  CHART", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#818CF8") }, heading } });
         _content.Add(new Label { Text = "Explore the chart and its implementation.", FontSize = 14, TextColor = Color.FromArgb("#64748B"), Margin = new Thickness(0, 0, 0, 24) });
         _content.Add(_workspace);
         _preview = new Border
         {
-            Padding = new Thickness(24), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1,
-            StrokeShape = new RoundRectangle { CornerRadius = 18 },
+            Padding = new Thickness(24), BackgroundColor = Color.FromArgb("#F0F3FA"), StrokeThickness = 0,
+            StrokeShape = new RoundRectangle { CornerRadius = 20 },
             Content = new VerticalStackLayout
             {
                 Spacing = 16,
                 Children =
                 {
-                    new Label { Text = "Preview", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
-                    BuildChart()
+                    new Label { Text = "LIVE EXAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#4F46E5") },
+                    new Label { Text = "See it in action", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
+                    new Border { Padding = new Thickness(14), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E7ECF4"), StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = BuildChart() },
+                    new Label { Text = "A closer look at the sample data.", FontSize = 12, TextColor = Color.FromArgb("#64748B") }
                 }
             }
         };
-        _preview.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Color.FromArgb("#182235"));
+        _preview.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#F0F3FA"), Color.FromArgb("#182235"));
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
         var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Light\" />" };
         var active = new ContentView { Content = csharp };
         var csTab = MakeTab("C#", true); var xamlTab = MakeTab("XAML", false);
-        csTab.GestureRecognizers.Add(Tap(() => { active.Content = csharp; SetTab(csTab, true); SetTab(xamlTab, false); }));
-        xamlTab.GestureRecognizers.Add(Tap(() => { active.Content = xaml; SetTab(csTab, false); SetTab(xamlTab, true); }));
-        var tabs = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Star } } };
+        csTab.Clicked += (_, _) => { active.Content = csharp; SetTab(csTab, true); SetTab(xamlTab, false); };
+        xamlTab.Clicked += (_, _) => { active.Content = xaml; SetTab(csTab, false); SetTab(xamlTab, true); };
+        var tabs = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = new GridLength(62) }, new() { Width = new GridLength(62) } }, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Start, ColumnSpacing = 2, Padding = 3, BackgroundColor = Color.FromArgb("#EFF4FF"), HeightRequest = 40 };
         tabs.Add(csTab, 0, 0); tabs.Add(xamlTab, 1, 0);
+        var inspectorHeader = new Grid { Padding = new Thickness(24, 22, 24, 16), ColumnSpacing = 12, ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
+        inspectorHeader.Add(new VerticalStackLayout { Spacing = 4, Children = { new Label { Text = "MAKE IT YOURS", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#4338CA") }, new Label { Text = "Explore the code", FontSize = 20, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0B1C30") }, new Label { Text = "Switch languages and copy the sample.", FontSize = 12, TextColor = Color.FromArgb("#64748B") } } }, 0, 0);
+        inspectorHeader.Add(new Border { StrokeThickness = 0, BackgroundColor = Color.FromArgb("#EFF4FF"), StrokeShape = new RoundRectangle { CornerRadius = 10 }, Content = tabs, VerticalOptions = LayoutOptions.Start }, 1, 0);
         _codePanel = new Border
         {
             BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 },
-            Content = new VerticalStackLayout { Spacing = 0, Children = { new Label { Text = "Source code", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A"), Padding = new Thickness(18, 18, 18, 6) }, tabs, new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") }, active } }
+            Content = new VerticalStackLayout { Spacing = 0, Children = { inspectorHeader, new ContentView { Padding = new Thickness(20, 0, 20, 20), Content = active } } }
         };
         _codePanel.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Color.FromArgb("#182235"));
     }
@@ -213,12 +225,14 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         if (width <= 0 || _preview is null || _codePanel is null) return;
         var compact = ResponsiveLayout.IsCompact(width);
         _content.Padding = compact ? new Thickness(12, 16, 12, 20) : new Thickness(24, 20, 24, 28);
+        if (_compactLayout == compact) return;
+        _compactLayout = compact;
         _workspace.Children.Clear(); _workspace.ColumnDefinitions.Clear(); _workspace.RowDefinitions.Clear();
         if (compact) { _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 0, 1); }
-        else { _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.15, GridUnitType.Star) }); _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(.85, GridUnitType.Star) }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 1, 0); }
+        else { _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(7, GridUnitType.Star) }); _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(5, GridUnitType.Star) }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 1, 0); }
     }
 
-    private static Label MakeTab(string text, bool active) { var tab = new Label { Text = text, FontSize = 13, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.Center, Padding = new Thickness(0, 10) }; SetTab(tab, active); return tab; }
-    private static void SetTab(Label tab, bool active) { tab.TextColor = active ? Color.FromArgb("#4F46E5") : Color.FromArgb("#64748B"); tab.BackgroundColor = active ? Color.FromArgb("#EEF2FF") : Colors.Transparent; }
+    private static Button MakeTab(string text, bool active) { var tab = new Button { Text = text, FontSize = 12, FontAttributes = FontAttributes.Bold, Padding = 0, HeightRequest = 34, CornerRadius = 7, BorderWidth = 0 }; SetTab(tab, active); return tab; }
+    private static void SetTab(Button tab, bool active) { tab.TextColor = active ? Color.FromArgb("#4F46E5") : Color.FromArgb("#64748B"); tab.BackgroundColor = active ? Colors.White : Colors.Transparent; }
     private static TapGestureRecognizer Tap(Action action) { var gesture = new TapGestureRecognizer(); gesture.Tapped += (_, _) => action(); return gesture; }
 }

@@ -3,12 +3,7 @@
     <Project Path="benchmarks/ChartNivra.Benchmarks/ChartNivra.Benchmarks.csproj" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples/ChartNivra.Demo/ChartNivra.Demo.csproj" />
-    <Project Path="samples/ChartNivra.DashboardDemo/ChartNivra.DashboardDemo.csproj" />
-    <Project Path="samples/ChartNivra.FinancialDemo/ChartNivra.FinancialDemo.csproj" />
     <Project Path="samples/ChartNivra.Gallery/ChartNivra.Gallery.csproj" />
-    <Project Path="samples/ChartNivra.RealTimeDemo/ChartNivra.RealTimeDemo.csproj" />
-    <Project Path="samples/ChartNivra.ThreeDDemo/ChartNivra.ThreeDDemo.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/ChartNivra/ChartNivra.csproj" />

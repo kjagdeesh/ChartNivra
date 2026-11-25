@@ -1,255 +1,103 @@
 namespace ChartNivra.Gallery.Pages;
 
-using ChartNivra.Core.Charts;
 using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Series;
-using ChartNivra.Core.Themes;
 using Microsoft.Maui.Controls;
 
-public class RealTimePage : ContentPage
+/// <summary>Live chart sample using the shared responsive chart and source workspace.</summary>
+public class RealTimePage : ChartPageBase
 {
-    private static readonly Color PageBg     = Color.FromArgb("#F1F5F9");
-    private static readonly Color CardBg     = Colors.White;
-    private static readonly Color CardBorder = Color.FromArgb("#E2E8F0");
-    private static readonly Color TextDark   = Color.FromArgb("#0F172A");
-    private static readonly Color TextMuted  = Color.FromArgb("#64748B");
-
-    private readonly ChartNivra.Maui.Controls.ChartView _chart;
-    private readonly LineSeriesModel _series;
+    private LineSeriesModel _series = null!;
+    private Label _status = null!;
+    private Button _toggle = null!;
     private IDispatcherTimer? _timer;
-    private int _tick = 0;
-    private double _lastY = 50;
-    private readonly System.Random _rng = new(1);
-    private readonly Label _statusLabel;
-    private readonly Frame _chartCard;
-    private readonly Frame _controlCard;
-    private readonly Button _startButton;
-    private bool _running = false;
+    private Random _random = null!;
+    private int _tick;
+    private double _lastValue;
+    private bool _running;
 
     private const string Code = """
-// Seed the series
+var random = new Random(1);
+var tick = 0;
+var value = 50d;
 var series = new LineSeriesModel
 {
-    Title       = "Live Feed",
-    Color       = ChartColor.FromHex("#00C096"),
+    Title = "Live Feed",
+    Color = ChartColor.FromHex("#00C096"),
     StrokeWidth = 2f,
-    ShowMarkers = false,
+    ShowMarkers = false
 };
+for (var i = 0; i < 40; i++)
+{
+    value = Math.Clamp(value + random.NextDouble() * 10 - 5, 10, 90);
+    series.Points.Add(new ChartPoint(tick++, value));
+}
+chartView.Title = "Live Data Stream";
 chartView.Model.Series.Add(series);
 
-// Update on a timer
 var timer = Dispatcher.CreateTimer();
 timer.Interval = TimeSpan.FromMilliseconds(300);
 timer.Tick += (_, _) =>
 {
-    // Slide window — keep last 60 points
-    if (series.Points.Count >= 60)
-        series.Points.RemoveAt(0);
-
-    // Add new data point
-    series.Points.Add(new ChartPoint(tick++, NextValue()));
+    if (series.Points.Count >= 60) series.Points.RemoveAt(0);
+    value = Math.Clamp(value + random.NextDouble() * 10 - 5, 10, 90);
+    series.Points.Add(new ChartPoint(tick++, value));
     chartView.Invalidate();
 };
 timer.Start();
+// Pause or resume with timer.Stop() and timer.Start().
 """;
 
-    public RealTimePage()
+    public RealTimePage() : base("Real-Time Chart", "Live streaming data with a sliding window", Code) { }
+
+    protected override void ConfigureChart()
     {
-        BackgroundColor = PageBg;
-        Shell.SetNavBarIsVisible(this, true);
-        Title = "Real-Time";
+        _random = new Random(1);
+        _lastValue = 50;
+        _series = new LineSeriesModel { Title = "Live Feed", Color = ChartColor.FromHex("#00C096"), StrokeWidth = 2f, ShowMarkers = false };
+        for (var i = 0; i < 40; i++) AddPoint();
+        ChartView.Title = "Live Data Stream";
+        ChartView.Model.Series.Add(_series);
 
-        _series = new LineSeriesModel
-        {
-            Title       = "Live Feed",
-            Color       = ChartColor.FromHex("#00C096"),
-            StrokeWidth = 2f,
-            ShowMarkers = false,
-        };
-
-        // Seed with initial data
-        for (int i = 0; i < 40; i++)
-        {
-            _lastY = System.Math.Clamp(_lastY + (_rng.NextDouble() * 10 - 5), 10, 90);
-            _series.Points.Add(new ChartPoint(_tick++, _lastY));
-        }
-
-        _chart = new ChartNivra.Maui.Controls.ChartView
-        {
-            HeightRequest   = 320,
-            BackgroundColor = Colors.Transparent,
-            Title           = "Live Data Stream",
-            Theme           = ChartTheme.Light,
-        };
-        _chart.Model.Series.Add(_series);
-
-        _statusLabel = new Label
-        {
-            Text              = "▶  Running",
-            FontSize          = 12,
-            TextColor         = Color.FromArgb("#10B981"),
-            HorizontalOptions = LayoutOptions.End,
-        };
-
-        _startButton = new Button
-        {
-            Text            = "⏸  Pause",
-            BackgroundColor = Color.FromArgb("#6366F1"),
-            TextColor       = Colors.White,
-            CornerRadius    = 10,
-            Padding         = new Thickness(20, 10),
-            FontSize        = 14,
-        };
-        _startButton.Clicked += (_, _) =>
+        _status = new Label { Text = "●  Streaming", FontSize = 13, TextColor = Color.FromArgb("#059669"), VerticalOptions = LayoutOptions.Center };
+        _toggle = new Button { Text = "Pause stream", FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, BackgroundColor = Color.FromArgb("#4338CA"), CornerRadius = 9, Padding = new Thickness(16, 0), HeightRequest = 42 };
+        _toggle.Clicked += (_, _) =>
         {
             _running = !_running;
-            if (_running) { _timer?.Start(); _startButton.Text = "⏸  Pause";  _statusLabel.Text = "▶  Running";  _statusLabel.TextColor = Color.FromArgb("#10B981"); }
-            else          { _timer?.Stop();  _startButton.Text = "▶  Resume"; _statusLabel.Text = "⏸  Paused";   _statusLabel.TextColor = Color.FromArgb("#F59E0B"); }
+            if (_running) _timer?.Start(); else _timer?.Stop();
+            _toggle.Text = _running ? "Pause stream" : "Resume stream";
+            _status.Text = _running ? "●  Streaming" : "●  Paused";
+            _status.TextColor = Color.FromArgb(_running ? "#059669" : "#B45309");
         };
-
-        var snippet = new Controls.CodeSnippetView { Code = Code, HeightRequest = 240 };
-
-        _chartCard = new Frame
-        {
-            Margin          = new Thickness(16, 12),
-            Padding         = new Thickness(4),
-            CornerRadius    = 14,
-            HasShadow       = false,
-            BorderColor     = CardBorder,
-            BackgroundColor = CardBg,
-            Content         = _chart,
-        };
-
-        _controlCard = new Frame
-        {
-            Margin          = new Thickness(16, 0, 16, 10),
-            Padding         = new Thickness(16, 12),
-            CornerRadius    = 14,
-            HasShadow       = false,
-            BorderColor     = CardBorder,
-            BackgroundColor = CardBg,
-            Content = new Grid
-            {
-                ColumnDefinitions = new ColumnDefinitionCollection
-                {
-                    new ColumnDefinition { Width = GridLength.Star },
-                    new ColumnDefinition { Width = GridLength.Auto },
-                },
-                Children = { _statusLabel, _startButton }
-            }
-        };
-        Grid.SetColumn(_startButton, 1);
-
-        Content = new ScrollView
-        {
-            Content = new VerticalStackLayout
-            {
-                Spacing  = 0,
-                Children =
-                {
-                    new VerticalStackLayout
-                    {
-                        Spacing = 4, Padding = new Thickness(20, 20, 20, 0),
-                        BackgroundColor = CardBg,
-                        Children =
-                        {
-                            new Label { Text = "Real-Time Chart", FontSize = 22, FontAttributes = FontAttributes.Bold, TextColor = TextDark },
-                            new Label { Text = "Live streaming data with sliding window", FontSize = 13, TextColor = TextMuted },
-                            new BoxView { HeightRequest = 1, BackgroundColor = CardBorder, Margin = new Thickness(0,12,0,0) },
-                        }
-                    },
-                    _chartCard,
-                    _controlCard,
-                    new Frame
-                    {
-                        Margin = new Thickness(16, 0, 16, 16), Padding = new Thickness(0),
-                        CornerRadius = 14, HasShadow = false, BorderColor = CardBorder, BackgroundColor = CardBg,
-                        Content = new VerticalStackLayout
-                        {
-                            Children =
-                            {
-                                new Grid
-                                {
-                                    Padding = new Thickness(16, 10),
-                                    BackgroundColor = Color.FromArgb("#161B22"),
-                                    Children =
-                                    {
-                                        new Label { Text = "C#", FontSize = 12, TextColor = Color.FromArgb("#8B949E") }
-                                    }
-                                },
-                                new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#30363D") },
-                                snippet,
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        StartTimer();
+        var controls = new Grid { ColumnSpacing = 12, ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
+        controls.Add(_status, 0, 0);
+        controls.Add(_toggle, 1, 0);
+        AddPreviewControl(controls);
         _running = true;
-        SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
     }
 
-    private void StartTimer()
+    private void AddPoint()
     {
-        _timer = Dispatcher.CreateTimer();
-        _timer.Interval = System.TimeSpan.FromMilliseconds(300);
-        _timer.Tick += (_, _) =>
-        {
-            if (_series.Points.Count >= 60)
-                _series.Points.RemoveAt(0);
-
-            _lastY = System.Math.Clamp(_lastY + (_rng.NextDouble() * 10 - 5), 10, 90);
-            _series.Points.Add(new ChartPoint(_tick++, _lastY));
-            _chart.Invalidate();
-        };
-        _timer.Start();
-    }
-
-    private void UpdateLayoutForWidth(double width)
-    {
-        if (width <= 0) return;
-        var compact = Controls.ResponsiveLayout.IsCompact(width);
-        var margin = compact ? 12 : 16;
-        _chart.HeightRequest = compact ? 240 : 320;
-        _chartCard.Margin = new Thickness(margin, compact ? 10 : 12);
-        _controlCard.Margin = new Thickness(margin, 0, margin, 10);
-        if (compact)
-        {
-            _controlCard.Content = new VerticalStackLayout
-            {
-                Spacing = 10,
-                Children = { _statusLabel, _startButton }
-            };
-            _startButton.HorizontalOptions = LayoutOptions.Fill;
-        }
-        else
-        {
-            var grid = new Grid
-            {
-                ColumnDefinitions = new ColumnDefinitionCollection
-                {
-                    new ColumnDefinition { Width = GridLength.Star },
-                    new ColumnDefinition { Width = GridLength.Auto },
-                }
-            };
-            grid.Add(_statusLabel, 0, 0);
-            grid.Add(_startButton, 1, 0);
-            _controlCard.Content = grid;
-            _startButton.HorizontalOptions = LayoutOptions.End;
-        }
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        _timer?.Stop();
+        if (_series.Points.Count >= 60) _series.Points.RemoveAt(0);
+        _lastValue = Math.Clamp(_lastValue + _random.NextDouble() * 10 - 5, 10, 90);
+        _series.Points.Add(new ChartPoint(_tick++, _lastValue));
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        if (_running) _timer?.Start();
+        if (_timer is null)
+        {
+            _timer = Dispatcher.CreateTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(300);
+            _timer.Tick += (_, _) => { AddPoint(); ChartView.Invalidate(); };
+        }
+        if (_running) _timer.Start();
+    }
+
+    protected override void OnDisappearing()
+    {
+        _timer?.Stop();
+        base.OnDisappearing();
     }
 }
