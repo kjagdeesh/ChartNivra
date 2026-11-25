@@ -10,5 +10,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ChartNivra.Tests/ChartNivra.Tests.csproj" />
+    <Project Path="tests/ChartNivra.PackageSmoke/ChartNivra.PackageSmoke.csproj" />
   </Folder>
 </Solution>
