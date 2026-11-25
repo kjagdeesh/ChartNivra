@@ -81,12 +81,12 @@ public record ChartTheme(
 
     public static readonly ChartTheme Dark = new(
         "Dark",
-        BackgroundColor: ChartColor.FromHex("#0F172A"),
-        PlotAreaColor: ChartColor.FromHex("#1E293B"),
+        BackgroundColor: ChartColor.FromHex("#19191B"),
+        PlotAreaColor: ChartColor.FromHex("#19191B"),
         TextColor: ChartColor.FromHex("#F8FAFC"),
         SecondaryTextColor: ChartColor.FromHex("#94A3B8"),
-        GridLineColor: ChartColor.FromHex("#334155"),
-        AxisLineColor: ChartColor.FromHex("#475569"),
+        GridLineColor: ChartColor.FromHex("#333337"),
+        AxisLineColor: ChartColor.FromHex("#52525B"),
         DefaultPalette: ChartPalette.Clean
     );
 }

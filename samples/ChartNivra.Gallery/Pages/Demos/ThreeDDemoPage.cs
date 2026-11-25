@@ -36,8 +36,7 @@ public class MainPage : ContentPage
         };
         var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
         topBar.Add(new BrandView(), 0, 0);
-        var back = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 9, HeightRequest = 42, Padding = new Thickness(14, 0) };
-        back.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        var back = GalleryTheme.BackButton();
         topBar.Add(back, 1, 0);
         _layout.Add(topBar);
         _layout.Add(new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") });
@@ -91,6 +90,8 @@ public class MainPage : ContentPage
         _workspace.Add(_controlsCard);
         _layout.Add(_workspace);
         Content = new ScrollView { Content = _layout };
+        this.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F8FAFC"), Color.FromArgb("#0B0B0C"));
+        GalleryTheme.Apply(_layout);
         SizeChanged += (_, _) => UpdateLayout(Width);
 
         Populate3DColumns();

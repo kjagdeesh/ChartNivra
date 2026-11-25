@@ -9,6 +9,7 @@ using ChartNivra.Rendering.Abstractions;
 public class BarChartRenderer : IChartRenderer
 {
     private readonly BarChartModel _model;
+        public ChartTheme Theme { get => _model.Theme; set => _model.Theme = value; }
 
     public BarChartRenderer(BarChartModel model) => _model = model ?? throw new ArgumentNullException(nameof(model));
 

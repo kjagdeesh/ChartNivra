@@ -76,13 +76,7 @@ public abstract class ChartPageBase : ContentPage
         };
 
         _workspace = new Grid { ColumnSpacing = 20, RowSpacing = 20 };
-        var backButton = new Button
-        {
-            Text = "←  All charts", FontSize = 13, TextColor = TextDark, BackgroundColor = Colors.White,
-            BorderColor = CardBorder, BorderWidth = 1, CornerRadius = 10, HeightRequest = 42,
-            Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start,
-        };
-        backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        var backButton = GalleryTheme.BackButton();
         var header = new Grid
         {
             RowSpacing = 18,
@@ -132,9 +126,10 @@ public abstract class ChartPageBase : ContentPage
         Content = new ScrollView { Content = _pageContent };
         ConfigureChart();
         ChartView.SetAppTheme(ChartView.ThemeProperty, ChartNivra.Core.Themes.ChartTheme.Light, ChartNivra.Core.Themes.ChartTheme.Dark);
-        this.SetAppThemeColor(BackgroundColorProperty, PageBg, Color.FromArgb("#0B1220"));
-        _chartPanel.SetAppThemeColor(Border.BackgroundColorProperty, Color.FromArgb("#EFF4FF"), Color.FromArgb("#182235"));
-        _codePanel.SetAppThemeColor(Border.BackgroundColorProperty, CardBg, Color.FromArgb("#182235"));
+        this.SetAppThemeColor(BackgroundColorProperty, PageBg, Color.FromArgb("#0B0B0C"));
+        GalleryTheme.Apply(_pageContent);
+        GalleryTheme.Apply(_chartPanel);
+        GalleryTheme.Apply(_codePanel);
         SizeChanged += (_, _) => UpdateLayout(Width);
     }
 
@@ -183,8 +178,7 @@ public abstract class ChartPageBase : ContentPage
 
     private static void UpdateTab(Button tab, bool active)
     {
-        tab.TextColor = active ? AccentIndigo : TextMuted;
-        tab.BackgroundColor = active ? Colors.White : Colors.Transparent;
+        GalleryTheme.SetCodeTab(tab, active);
     }
 
     private static TapGestureRecognizer TapGesture(Action action)

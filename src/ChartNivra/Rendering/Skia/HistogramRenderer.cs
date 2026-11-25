@@ -8,6 +8,7 @@ namespace ChartNivra.Rendering.Skia
     public class HistogramRenderer : IChartRenderer
     {
         private readonly HistogramModel _model;
+        public ChartTheme Theme { get; set; } = ChartTheme.Light;
 
         public HistogramRenderer(HistogramModel model)
         {
@@ -16,7 +17,7 @@ namespace ChartNivra.Rendering.Skia
 
         public void Render(IChartCanvas canvas, ChartRect bounds)
         {
-            var theme = ChartTheme.Light;
+            var theme = Theme;
             canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
 
             var topMargin = 20.0;

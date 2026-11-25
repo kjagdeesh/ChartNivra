@@ -34,7 +34,7 @@ public class HomePage : ContentPage
     {
         Title = "ChartNivra";
         BackgroundColor = PageBackground;
-        this.SetAppThemeColor(BackgroundColorProperty, PageBackground, Color.FromArgb("#0B1220"));
+        this.SetAppThemeColor(BackgroundColorProperty, PageBackground, Color.FromArgb("#0B0B0C"));
         Shell.SetNavBarIsVisible(this, false);
 
         _hero = BuildHero(out _statisticsGrid);
@@ -55,9 +55,9 @@ public class HomePage : ContentPage
         _familyPicker.SelectedIndexChanged += (_, _) => ApplyFilters();
         _resultLabel = new Label { FontSize = 12, TextColor = Muted, VerticalTextAlignment = TextAlignment.Center };
         _resultLabel.SetAppThemeColor(Label.TextColorProperty, Muted, Color.FromArgb("#AAB9CE"));
-        _search.SetAppThemeColor(SearchBar.BackgroundColorProperty, Surface, Color.FromArgb("#202F45"));
+        _search.SetAppThemeColor(SearchBar.BackgroundColorProperty, Surface, Color.FromArgb("#19191B"));
         _search.SetAppThemeColor(SearchBar.TextColorProperty, Text, Color.FromArgb("#F1F5F9"));
-        _familyPicker.SetAppThemeColor(Picker.BackgroundColorProperty, Surface, Color.FromArgb("#202F45"));
+        _familyPicker.SetAppThemeColor(Picker.BackgroundColorProperty, Surface, Color.FromArgb("#19191B"));
         _familyPicker.SetAppThemeColor(Picker.TextColorProperty, Text, Color.FromArgb("#F1F5F9"));
 
         var themeButton = new Button { Text = "◐  Appearance", FontSize = 13, TextColor = Text, BackgroundColor = Surface, BorderColor = Border, BorderWidth = 1, CornerRadius = 10, HorizontalOptions = LayoutOptions.End };
@@ -89,6 +89,9 @@ public class HomePage : ContentPage
                 }
             }
         };
+
+        GalleryTheme.Apply(_dashboardContent);
+        foreach (var card in _chartCards) { GalleryTheme.Apply(card.View); GalleryTheme.Apply(card.ListView); }
 
         SizeChanged += (_, _) => UpdateLayoutForWidth(Width);
         ApplyFilters();
@@ -141,7 +144,7 @@ public class HomePage : ContentPage
             }
         };
         var content = (VerticalStackLayout)hero.Content;
-        hero.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#EEF2FF"), Color.FromArgb("#1C2944"));
+        hero.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#EEF2FF"), Color.FromArgb("#19191B"));
         var heroGrid = (Grid)content.Children[0];
         var textStack = (VerticalStackLayout)heroGrid.Children[0];
         ((Label)textStack.Children[0]).Text = "EXPLORE  ·  BUILD  ·  VISUALIZE";
@@ -181,8 +184,11 @@ public class HomePage : ContentPage
         var listButton = new ImageButton { Source = "view_list.png", WidthRequest = 42, HeightRequest = 46, Padding = new Thickness(11), BackgroundColor = Surface, CornerRadius = 8, BorderColor = Border, BorderWidth = 1 };
         SemanticProperties.SetDescription(gridButton, "Grid view");
         SemanticProperties.SetDescription(listButton, "List view");
-        gridButton.Clicked += (_, _) => { _listView = false; gridButton.BackgroundColor = AccentSoft; listButton.BackgroundColor = Surface; ApplyFilters(); };
-        listButton.Clicked += (_, _) => { _listView = true; listButton.BackgroundColor = AccentSoft; gridButton.BackgroundColor = Surface; ApplyFilters(); };
+        gridButton.SetAppTheme(ImageButton.SourceProperty, ImageSource.FromFile("view_grid.png"), ImageSource.FromFile("view_grid_dark.png"));
+        listButton.SetAppTheme(ImageButton.SourceProperty, ImageSource.FromFile("view_list.png"), ImageSource.FromFile("view_list_dark.png"));
+        GalleryTheme.SetViewSelection(gridButton, true); GalleryTheme.SetViewSelection(listButton, false);
+        gridButton.Clicked += (_, _) => { _listView = false; GalleryTheme.SetViewSelection(gridButton, true); GalleryTheme.SetViewSelection(listButton, false); ApplyFilters(); };
+        listButton.Clicked += (_, _) => { _listView = true; GalleryTheme.SetViewSelection(gridButton, false); GalleryTheme.SetViewSelection(listButton, true); ApplyFilters(); };
         filterRow.Add(gridButton, 1, 0); filterRow.Add(listButton, 2, 0);
         var familyRow = new FlexLayout { Direction = FlexDirection.Row, Wrap = FlexWrap.Wrap, Margin = new Thickness(0, 0, 0, 6) };
         for (var i = 0; i < _familyPicker.Items.Count; i++)
@@ -191,7 +197,7 @@ public class HomePage : ContentPage
             var family = _familyPicker.Items[i];
             var count = index == 0 ? _chartCards.Length : _chartCards.Count(card => card.Category == family);
             var button = new Button { Text = $"{family}  {count}", FontSize = 12, Padding = new Thickness(14, 0), HeightRequest = 36, CornerRadius = 18, Margin = new Thickness(0, 0, 8, 8), BackgroundColor = index == 0 ? Accent : Surface, TextColor = index == 0 ? Colors.White : Muted, BorderColor = Border, BorderWidth = 1 };
-            button.Clicked += (_, _) => { _familyPicker.SelectedIndex = index; foreach (var chip in _familyButtons) { chip.BackgroundColor = chip == button ? Accent : Surface; chip.TextColor = chip == button ? Colors.White : Muted; } };
+            button.Clicked += (_, _) => { _familyPicker.SelectedIndex = index; foreach (var chip in _familyButtons) { var selected = chip == button; chip.SetAppThemeColor(Button.BackgroundColorProperty, selected ? Accent : Surface, selected ? Accent : Color.FromArgb("#19191B")); chip.SetAppThemeColor(Button.TextColorProperty, selected ? Colors.White : Muted, selected ? Colors.White : Color.FromArgb("#B0B0B7")); } };
             _familyButtons.Add(button); familyRow.Add(button);
         }
         return new VerticalStackLayout
@@ -281,7 +287,7 @@ public class HomePage : ContentPage
         row.Add(preview, 0, 0); row.Add(info, 1, 0);
         row.Add(new Label { Text = "→", FontSize = 20, TextColor = Accent, VerticalOptions = LayoutOptions.Center }, 2, 0);
         var card = new Border { Padding = new Thickness(14), Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = row };
-        card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#172338"));
+        card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#19191B"));
         if (card.Content is View listContent) listContent.InputTransparent = true;
         var destination = route ?? $"catalog?name={Uri.EscapeDataString(name)}&kind={kind}";
         var tap = new TapGestureRecognizer();
@@ -317,7 +323,7 @@ public class HomePage : ContentPage
             }
         };
 
-        card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#172338"));
+        card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#19191B"));
         if (card.Content is View cardContent) cardContent.InputTransparent = true;
         if (card.Content is VerticalStackLayout content)
         {

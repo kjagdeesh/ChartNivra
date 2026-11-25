@@ -30,7 +30,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     public ChartCatalogPreviewPage()
     {
         BackgroundColor = Color.FromArgb("#F8FAFC");
-        this.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F8FAFC"), Color.FromArgb("#0B1220"));
+        this.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F8FAFC"), Color.FromArgb("#0B0B0C"));
         Shell.SetNavBarIsVisible(this, false);
         _content.Add(_workspace);
         Content = new ScrollView { Content = _content };
@@ -50,8 +50,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     private void BuildWorkspace()
     {
         _content.Children.Clear();
-        var backButton = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 10, HeightRequest = 42, Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start };
-        backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        var backButton = GalleryTheme.BackButton();
         var header = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 10) };
         header.Add(new BrandView(), 0, 0);
         header.Add(backButton, 1, 0);
@@ -81,7 +80,6 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
                 }
             }
         };
-        _preview.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#F0F3FA"), Color.FromArgb("#182235"));
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
         var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = SampleXaml.Host };
         var active = new ContentView { Content = csharp };
@@ -98,7 +96,9 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
             BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 },
             Content = new VerticalStackLayout { Spacing = 0, Children = { inspectorHeader, new ContentView { Padding = new Thickness(20, 0, 20, 20), Content = active } } }
         };
-        _codePanel.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Color.FromArgb("#182235"));
+        GalleryTheme.Apply(_content);
+        GalleryTheme.Apply(_preview);
+        GalleryTheme.Apply(_codePanel);
     }
 
     private View BuildChart()
@@ -233,6 +233,6 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     }
 
     private static Button MakeTab(string text, bool active) { var tab = new Button { Text = text, FontSize = 12, FontAttributes = FontAttributes.Bold, Padding = 0, HeightRequest = 34, CornerRadius = 7, BorderWidth = 0 }; SetTab(tab, active); return tab; }
-    private static void SetTab(Button tab, bool active) { tab.TextColor = active ? Color.FromArgb("#4F46E5") : Color.FromArgb("#64748B"); tab.BackgroundColor = active ? Colors.White : Colors.Transparent; }
+    private static void SetTab(Button tab, bool active) => GalleryTheme.SetCodeTab(tab, active);
     private static TapGestureRecognizer Tap(Action action) { var gesture = new TapGestureRecognizer(); gesture.Tapped += (_, _) => action(); return gesture; }
 }

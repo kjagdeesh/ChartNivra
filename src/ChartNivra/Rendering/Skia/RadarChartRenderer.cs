@@ -8,6 +8,7 @@ using ChartNivra.Rendering.Abstractions;
 public class RadarChartRenderer : IChartRenderer
 {
     private readonly RadarChartModel _model;
+        public ChartTheme Theme { get => _model.Theme; set => _model.Theme = value; }
 
     public RadarChartRenderer(RadarChartModel model)
     {

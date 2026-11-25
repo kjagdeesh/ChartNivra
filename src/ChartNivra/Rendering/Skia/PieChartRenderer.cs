@@ -12,6 +12,7 @@ namespace ChartNivra.Rendering.Skia
     public class PieChartRenderer : IChartRenderer
     {
         private readonly PieChartModel _model;
+        public ChartTheme Theme { get => _model.Theme; set => _model.Theme = value; }
 
         public PieChartRenderer(PieChartModel model)
         {

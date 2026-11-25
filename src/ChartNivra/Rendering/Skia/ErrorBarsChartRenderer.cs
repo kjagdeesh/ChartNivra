@@ -7,6 +7,7 @@ namespace ChartNivra.Rendering.Skia
     public class ErrorBarsChartRenderer : IChartRenderer
     {
         private readonly ErrorBarsSeriesModel _model;
+        public ChartTheme Theme { get; set; } = ChartTheme.Light;
 
         public ErrorBarsChartRenderer(ErrorBarsSeriesModel model)
         {
@@ -15,7 +16,7 @@ namespace ChartNivra.Rendering.Skia
 
         public void Render(IChartCanvas canvas, ChartRect bounds)
         {
-            var theme = ChartTheme.Light;
+            var theme = Theme;
             canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
 
             var topMargin = 20.0;

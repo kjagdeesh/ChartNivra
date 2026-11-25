@@ -8,18 +8,18 @@ using ChartNivra.Rendering.Abstractions;
 public class BoxPlotRenderer : IChartRenderer
 {
     private readonly BoxPlotSeriesModel _series;
-    private readonly ChartTheme _theme;
+    public ChartTheme Theme { get; set; }
 
     public BoxPlotRenderer(BoxPlotSeriesModel series, ChartTheme theme)
     {
         _series = series;
-        _theme = theme;
+        Theme = theme;
     }
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        canvas.DrawRectangle(bounds, new ChartBrush(_theme.BackgroundColor));
-        var top = ChartDrawing.DrawTitle(canvas, "Box Plot", bounds, _theme);
+        canvas.DrawRectangle(bounds, new ChartBrush(Theme.BackgroundColor));
+        var top = ChartDrawing.DrawTitle(canvas, "Box Plot", bounds, Theme);
 
         var data = _series.Data;
         if (data.Count == 0) return;
@@ -50,7 +50,7 @@ public class BoxPlotRenderer : IChartRenderer
             var q3Y = plotArea.Bottom - (p.Q3 - minVal) / range * plotArea.Height;
             var maxY = plotArea.Bottom - (p.Max - minVal) / range * plotArea.Height;
 
-            var color = _theme.DefaultPalette.GetColor(i);
+            var color = Theme.DefaultPalette.GetColor(i);
 
             // Whiskers
             canvas.DrawLine(new ChartPoint(x, minY), new ChartPoint(x, maxY), new ChartPen(color, 1.5f));
@@ -60,17 +60,17 @@ public class BoxPlotRenderer : IChartRenderer
             // Box with rounded corners
             canvas.DrawRoundRect(new ChartRect(x - halfW, q3Y, boxWidth, q1Y - q3Y), 2f, new ChartBrush(color.WithAlpha(80)), new ChartPen(color, 1.5f));
             // Median line
-            canvas.DrawLine(new ChartPoint(x - halfW, medY), new ChartPoint(x + halfW, medY), new ChartPen(_theme.TextColor, 2f));
+            canvas.DrawLine(new ChartPoint(x - halfW, medY), new ChartPoint(x + halfW, medY), new ChartPen(Theme.TextColor, 2f));
 
             var medianLabel = p.Median.ToString("0.0");
             var medianSize = canvas.MeasureText(medianLabel, 9, true);
-            canvas.DrawText(medianLabel, new ChartPoint(x - medianSize.Width / 2, medY - 5), _theme.TextColor, 9, true);
+            canvas.DrawText(medianLabel, new ChartPoint(x - medianSize.Width / 2, medY - 5), Theme.TextColor, 9, true);
 
             // Category label
             var labelSize = canvas.MeasureText(p.Category, 10f);
-            canvas.DrawText(p.Category, new ChartPoint(x - labelSize.Width / 2, plotArea.Bottom + 18), _theme.SecondaryTextColor, 10f);
+            canvas.DrawText(p.Category, new ChartPoint(x - labelSize.Width / 2, plotArea.Bottom + 18), Theme.SecondaryTextColor, 10f);
         }
 
-        canvas.DrawLine(new ChartPoint(plotArea.Left, plotArea.Bottom), new ChartPoint(plotArea.Right, plotArea.Bottom), new ChartPen(_theme.AxisLineColor, 1f));
+        canvas.DrawLine(new ChartPoint(plotArea.Left, plotArea.Bottom), new ChartPoint(plotArea.Right, plotArea.Bottom), new ChartPen(Theme.AxisLineColor, 1f));
     }
 }

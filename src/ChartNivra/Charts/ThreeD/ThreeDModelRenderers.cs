@@ -9,10 +9,10 @@ using ChartNivra.Rendering.Abstractions;
 /// <summary>Base helpers shared by the concrete, model-backed 3D sample renderers.</summary>
 internal static class ThreeDRenderSupport
 {
-    public static void DrawBackground(IChartCanvas canvas, ChartRect bounds, string title)
+    public static void DrawBackground(IChartCanvas canvas, ChartRect bounds, string title, ChartTheme theme)
     {
-        canvas.DrawRectangle(bounds, new ChartBrush(ChartTheme.Light.BackgroundColor));
-        canvas.DrawText(title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), ChartTheme.Light.TextColor, 16, true);
+        canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
+        canvas.DrawText(title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16, true);
     }
 
     public static ChartPoint Project(Camera3D camera, Vector3 point, ChartRect bounds) =>
@@ -23,9 +23,9 @@ internal static class ThreeDRenderSupport
         (byte)(low.G + (high.G - low.G) * amount),
         (byte)(low.B + (high.B - low.B) * amount));
 
-    public static void DrawAxisGuide(IChartCanvas canvas, ChartRect bounds, string x, string y, string z)
+    public static void DrawAxisGuide(IChartCanvas canvas, ChartRect bounds, string x, string y, string z, ChartTheme theme)
     {
-        var color = ChartTheme.Light.SecondaryTextColor;
+        var color = theme.SecondaryTextColor;
         var origin = new ChartPoint(bounds.Left + 44, bounds.Bottom - 42);
         var xEnd = new ChartPoint(origin.X + 55, origin.Y);
         var yEnd = new ChartPoint(origin.X, origin.Y - 42);
@@ -38,27 +38,31 @@ internal static class ThreeDRenderSupport
         canvas.DrawText(z, new ChartPoint(zEnd.X + 3, zEnd.Y - 4), color, 9, true);
     }
 
-    public static void DrawCallout(IChartCanvas canvas, ChartRect bounds, ChartPoint anchor, string text, ChartColor accent, ICollection<ChartRect>? occupied = null)
+    public static void DrawCallout(IChartCanvas canvas, ChartRect bounds, ChartPoint anchor, string text, ChartColor accent, ChartTheme theme, ICollection<ChartRect>? occupied = null)
     {
-        var toRight = anchor.X < bounds.Left + bounds.Width * .62;
-        var lineEnd = new ChartPoint(anchor.X + (toRight ? 26 : -26), anchor.Y - 22);
         var textSize = canvas.MeasureText(text, 10, true);
-        var labelX = toRight ? lineEnd.X + 5 : lineEnd.X - textSize.Width - 13;
-        var labelY = lineEnd.Y - 14;
-        var rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
-        if (occupied is not null)
+        var width = textSize.Width + 8;
+        var height = textSize.Height + 7;
+        var candidates = new List<ChartRect>();
+        for (var offset = 0; offset <= 5; offset++)
         {
-            var direction = anchor.Y < bounds.Top + bounds.Height / 2 ? 1 : -1;
-            for (var attempt = 0; attempt < 5 && occupied.Any(existing => Intersects(existing, rect)); attempt++)
+            foreach (var side in new[] { 1, -1 })
+            foreach (var vertical in new[] { -1, 1 })
             {
-                labelY += direction * 18;
-                rect = new ChartRect(labelX, labelY, textSize.Width + 8, textSize.Height + 7);
+                var x = side > 0 ? anchor.X + 18 : anchor.X - 18 - width;
+                var y = vertical < 0 ? anchor.Y - 14 - height - offset * (height + 4) : anchor.Y + 14 + offset * (height + 4);
+                x = Math.Clamp(x, bounds.Left + 4, Math.Max(bounds.Left + 4, bounds.Right - width - 4));
+                y = Math.Clamp(y, bounds.Top + 36, Math.Max(bounds.Top + 36, bounds.Bottom - height - 4));
+                candidates.Add(new ChartRect(x, y, width, height));
             }
-            occupied.Add(rect);
         }
+        var rect = candidates.OrderBy(candidate => occupied?.Count(existing => Intersects(existing, candidate)) ?? 0)
+            .ThenBy(candidate => Math.Pow(Math.Clamp(anchor.X, candidate.Left, candidate.Right) - anchor.X, 2) + Math.Pow(Math.Clamp(anchor.Y, candidate.Top, candidate.Bottom) - anchor.Y, 2)).First();
+        occupied?.Add(rect);
+        var lineEnd = new ChartPoint(Math.Clamp(anchor.X, rect.Left, rect.Right), Math.Clamp(anchor.Y, rect.Top, rect.Bottom));
         canvas.DrawLine(anchor, lineEnd, new ChartPen(accent.WithAlpha(220), 1));
-        canvas.DrawRoundRect(rect, 4, new ChartBrush(ChartColor.White), new ChartPen(accent.WithAlpha(180), 1));
-        canvas.DrawText(text, new ChartPoint(labelX + 4, labelY + textSize.Height + 1), ChartTheme.Light.TextColor, 10, true);
+        canvas.DrawRoundRect(rect, 4, new ChartBrush(theme.PlotAreaColor), new ChartPen(accent.WithAlpha(180), 1));
+        canvas.DrawText(text, new ChartPoint(rect.Left + 4, rect.Top + textSize.Height + 1), theme.TextColor, 10, true);
     }
 
     private static bool Intersects(ChartRect first, ChartRect second) => first.Left < second.Right && first.Right > second.Left && first.Top < second.Bottom && first.Bottom > second.Top;
@@ -67,12 +71,13 @@ internal static class ThreeDRenderSupport
 /// <summary>Renderer for <see cref="ColumnChart3DModel"/> using depth-sorted shaded cuboid faces.</summary>
 public sealed class ColumnChart3DRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly ColumnChart3DModel _model;
     public ColumnChart3DRenderer(ColumnChart3DModel model) => _model = model;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title);
+        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title, Theme);
         var faces = new List<(Triangle3D Triangle, float Depth)>();
         var callouts = new List<ChartRect>();
         foreach (var point in _model.Points)
@@ -99,21 +104,22 @@ public sealed class ColumnChart3DRenderer : IChartRenderer
         {
             if (string.IsNullOrWhiteSpace(point.Label)) continue;
             var labelAt = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
-            ThreeDRenderSupport.DrawCallout(canvas, bounds, labelAt, $"{point.Label} · {point.Y:0.0}", point.Color ?? _model.DefaultColor, callouts);
+            ThreeDRenderSupport.DrawCallout(canvas, bounds, labelAt, $"{point.Label} · {point.Y:0.0}", point.Color ?? _model.DefaultColor, Theme, callouts);
         }
-        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle, Theme);
     }
 }
 
 /// <summary>Renderer for a sampled <see cref="SurfaceChart3DModel"/> mesh.</summary>
 public sealed class SurfaceChart3DRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly SurfaceChart3DModel _model;
     public SurfaceChart3DRenderer(SurfaceChart3DModel model) => _model = model;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title);
+        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title, Theme);
         var grid = _model.GenerateGrid();
         var min = double.MaxValue; var max = double.MinValue;
         foreach (var value in grid) { min = Math.Min(min, value); max = Math.Max(max, value); }
@@ -136,30 +142,40 @@ public sealed class SurfaceChart3DRenderer : IChartRenderer
             var color = ThreeDRenderSupport.Blend(_model.LowColor, _model.HighColor, amount);
             canvas.DrawPolygon(new[] { ThreeDRenderSupport.Project(_model.Camera, face.A, bounds), ThreeDRenderSupport.Project(_model.Camera, face.B, bounds), ThreeDRenderSupport.Project(_model.Camera, face.C, bounds) }, new ChartBrush(color), new ChartPen(color.WithAlpha(200), 0.7f));
         }
-        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.ValueTitle, _model.YAxisTitle);
-        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MinX, (float)min, (float)_model.MinY), bounds), $"Low · {min:0.0}", _model.LowColor);
-        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MaxX, (float)max, (float)_model.MaxY), bounds), $"High · {max:0.0}", _model.HighColor);
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.ValueTitle, _model.YAxisTitle, Theme);
+        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MinX, (float)min, (float)_model.MinY), bounds), $"Low · {min:0.0}", _model.LowColor, Theme);
+        ThreeDRenderSupport.DrawCallout(canvas, bounds, ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)_model.MaxX, (float)max, (float)_model.MaxY), bounds), $"High · {max:0.0}", _model.HighColor, Theme);
     }
 }
 
 /// <summary>Renderer for projected, depth-sorted <see cref="ScatterChart3DModel"/> points.</summary>
 public sealed class ScatterChart3DRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly ScatterChart3DModel _model;
     public ScatterChart3DRenderer(ScatterChart3DModel model) => _model = model;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title);
+        ThreeDRenderSupport.DrawBackground(canvas, bounds, _model.Title, Theme);
         var callouts = new List<ChartRect>();
-        foreach (var point in _model.Points.OrderBy(p => Vector4.Transform(new Vector4((float)p.X, (float)p.Y, (float)p.Z, 1), _model.Camera.GetViewMatrix()).Z))
+        var points = _model.Points.OrderBy(p => Vector4.Transform(new Vector4((float)p.X, (float)p.Y, (float)p.Z, 1), _model.Camera.GetViewMatrix()).Z).ToArray();
+        foreach (var point in points)
         {
             var screen = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
             var color = point.Color ?? _model.DefaultColor;
-            canvas.DrawCircle(screen, (float)Math.Clamp(point.Size, 2, 20), new ChartBrush(color.WithAlpha(205)), new ChartPen(color, 1.5f));
-            if (!string.IsNullOrWhiteSpace(point.Label))
-                ThreeDRenderSupport.DrawCallout(canvas, bounds, screen, $"{point.Label} · {point.X:0},{point.Y:0},{point.Z:0}", color, callouts);
+            var radius = (float)Math.Clamp(point.Size, 2, 20);
+            canvas.DrawCircle(screen, radius, new ChartBrush(color.WithAlpha(205)), new ChartPen(color, 1.5f));
+            callouts.Add(new ChartRect(screen.X - radius - 2, screen.Y - radius - 2, radius * 2 + 4, radius * 2 + 4));
         }
-        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle);
+        foreach (var point in points)
+        {
+            if (!string.IsNullOrWhiteSpace(point.Label))
+            {
+                var screen = ThreeDRenderSupport.Project(_model.Camera, new Vector3((float)point.X, (float)point.Y, (float)point.Z), bounds);
+                ThreeDRenderSupport.DrawCallout(canvas, bounds, screen, $"{point.Label} · {point.X:0},{point.Y:0},{point.Z:0}", point.Color ?? _model.DefaultColor, Theme, callouts);
+            }
+        }
+        ThreeDRenderSupport.DrawAxisGuide(canvas, bounds, _model.XAxisTitle, _model.YAxisTitle, _model.ZAxisTitle, Theme);
     }
 }

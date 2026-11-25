@@ -10,6 +10,7 @@ namespace ChartNivra.Rendering.Skia
     public class AnnotatedCartesianRenderer : IChartRenderer
     {
         private readonly CartesianChartModel _model;
+        public ChartTheme Theme { get => _model.Theme; set => _model.Theme = value; }
         private readonly List<AnnotationBase> _annotations;
 
         public AnnotatedCartesianRenderer(CartesianChartModel model, List<AnnotationBase> annotations)

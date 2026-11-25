@@ -8,6 +8,7 @@ using ChartNivra.Rendering.Abstractions;
 public class HeatmapRenderer : IChartRenderer
 {
     private readonly HeatmapModel _model;
+        public ChartTheme Theme { get => _model.Theme; set => _model.Theme = value; }
 
     public HeatmapRenderer(HeatmapModel model)
     {

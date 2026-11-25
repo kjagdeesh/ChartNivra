@@ -6,6 +6,7 @@ using ChartNivra.Core.Themes;
 using ChartNivra.Rendering.Abstractions;
 using ChartNivra.Rendering.Skia;
 using ChartNivra.Gauges;
+using ChartNivra.ThreeD;
 using Microsoft.Maui.Controls;
 using SkiaSharp.Views.Maui;
 using SkiaSharp.Views.Maui.Controls;
@@ -73,6 +74,21 @@ public class ChartView : SKCanvasView
     {
         switch (_renderer)
         {
+            case BarChartRenderer renderer: renderer.Theme = Theme; break;
+            case PieChartRenderer renderer: renderer.Theme = Theme; break;
+            case HeatmapRenderer renderer: renderer.Theme = Theme; break;
+            case RadarChartRenderer renderer: renderer.Theme = Theme; break;
+            case BoxPlotRenderer renderer: renderer.Theme = Theme; break;
+            case FinancialChartRenderer renderer: renderer.Theme = Theme; break;
+            case OhlcChartRenderer renderer: renderer.Theme = Theme; break;
+            case HistogramRenderer renderer: renderer.Theme = Theme; break;
+            case PolarChartRenderer renderer: renderer.Theme = Theme; break;
+            case ErrorBarsChartRenderer renderer: renderer.Theme = Theme; break;
+            case AnnotatedCartesianRenderer renderer: renderer.Theme = Theme; break;
+            case ThreeDChartRenderer renderer: renderer.Theme = Theme; break;
+            case ColumnChart3DRenderer renderer: renderer.Theme = Theme; break;
+            case SurfaceChart3DRenderer renderer: renderer.Theme = Theme; break;
+            case ScatterChart3DRenderer renderer: renderer.Theme = Theme; break;
             case BubbleChartRenderer renderer: renderer.Theme = Theme; break;
             case FunnelChartRenderer renderer: renderer.Theme = Theme; break;
             case RangeAreaRenderer renderer: renderer.Theme = Theme; break;
