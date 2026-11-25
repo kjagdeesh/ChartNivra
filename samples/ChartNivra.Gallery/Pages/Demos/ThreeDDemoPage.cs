@@ -5,6 +5,7 @@ using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Themes;
 using ChartNivra.Core.ThreeD;
 using ChartNivra.Maui.Controls;
+using ChartNivra.Gallery.Controls;
 using ChartNivra.Rendering.Abstractions;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
@@ -34,7 +35,7 @@ public class MainPage : ContentPage
             Padding = new Thickness(24, 20, 24, 32), Spacing = 20, MaximumWidthRequest = 1440, HorizontalOptions = LayoutOptions.Center
         };
         var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
-        topBar.Add(new Label { Text = "◈  chartnivra", FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4338CA"), VerticalOptions = LayoutOptions.Center }, 0, 0);
+        topBar.Add(new BrandView(), 0, 0);
         var back = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 9, HeightRequest = 42, Padding = new Thickness(14, 0) };
         back.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
         topBar.Add(back, 1, 0);

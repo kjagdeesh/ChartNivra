@@ -34,6 +34,6 @@
 <ItemGroup>
     <MauiImage Include="Resources\Images\*.svg" />
     <MauiIcon Include="Resources\AppIcon\appicon.svg" />
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0F172A" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#24216E" BaseSize="160,160" />
   </ItemGroup>
 </Project>

@@ -52,9 +52,9 @@ public class CodeSnippetView : ContentView
             FontFamily        = EditorFont,
             FontSize          = 14,
             LineHeight        = 1.4,
-            LineBreakMode     = LineBreakMode.NoWrap,
+            LineBreakMode     = LineBreakMode.WordWrap,
         };
-        _lineNumbers = new Label { FontFamily = EditorFont, FontSize = 14, LineHeight = 1.4, TextColor = Color.FromArgb("#758895"), HorizontalTextAlignment = TextAlignment.End, LineBreakMode = LineBreakMode.NoWrap, InputTransparent = true };
+        _lineNumbers = new Label { FontFamily = EditorFont, FontSize = 14, LineHeight = 1.4, TextColor = Color.FromArgb("#758895"), HorizontalTextAlignment = TextAlignment.End, LineBreakMode = LineBreakMode.WordWrap, InputTransparent = true, WidthRequest = 42 };
 
         var copyBtn = new Button
         {
@@ -117,6 +117,10 @@ public class CodeSnippetView : ContentView
     private void OnCodeChanged(string newCode)
     {
         _code = newCode ?? string.Empty;
+        // Android's NoWrap label is single-line; provide the widest source line enough
+        // space inside the horizontal scroller while retaining explicit newlines.
+        var longestLine = _code.Split('\n').Max(line => line.TrimEnd('\r').Replace("\t", "    ").Length);
+        _codeLabel.WidthRequest = Math.Max(320, longestLine * 10.0 + 24);
         _lineNumbers.Text = string.Join("\n", Enumerable.Range(1, _code.Count(c => c == '\n') + 1).Select(number => number.ToString("00")));
         ApplySyntaxHighlighting();
     }

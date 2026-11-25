@@ -69,9 +69,9 @@ public class HomePage : ContentPage
         };
 
         var topBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 24) };
-        var brand = new Label { Text = "◈  chartnivra", FontSize = 19, FontAttributes = FontAttributes.Bold, TextColor = Text, VerticalOptions = LayoutOptions.Center };
+        var brand = new Label { Text = "chartnivra", FontSize = 19, FontAttributes = FontAttributes.Bold, TextColor = Text, VerticalOptions = LayoutOptions.Center };
         brand.SetAppThemeColor(Label.TextColorProperty, Text, Color.FromArgb("#F1F5F9"));
-        topBar.Add(brand, 0, 0); topBar.Add(themeButton, 1, 0);
+        topBar.Add(new HorizontalStackLayout { Spacing = 10, Children = { new Image { Source = "chartnivra_logo.png", WidthRequest = 32, HeightRequest = 32 }, brand } }, 0, 0); topBar.Add(themeButton, 1, 0);
         Content = new ScrollView
         {
             Content = _dashboardContent = new VerticalStackLayout
@@ -282,6 +282,7 @@ public class HomePage : ContentPage
         row.Add(new Label { Text = "→", FontSize = 20, TextColor = Accent, VerticalOptions = LayoutOptions.Center }, 2, 0);
         var card = new Border { Padding = new Thickness(14), Stroke = Border, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = row };
         card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#172338"));
+        if (card.Content is View listContent) listContent.InputTransparent = true;
         var destination = route ?? $"catalog?name={Uri.EscapeDataString(name)}&kind={kind}";
         var tap = new TapGestureRecognizer();
         var navigating = false;
@@ -317,6 +318,7 @@ public class HomePage : ContentPage
         };
 
         card.SetAppThemeColor(VisualElement.BackgroundColorProperty, Surface, Color.FromArgb("#172338"));
+        if (card.Content is View cardContent) cardContent.InputTransparent = true;
         if (card.Content is VerticalStackLayout content)
         {
             foreach (var label in content.Children.OfType<Label>())

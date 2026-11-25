@@ -53,7 +53,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         var backButton = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 10, HeightRequest = 42, Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start };
         backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
         var header = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 10) };
-        header.Add(new Label { Text = "◈  chartnivra", FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4F46E5"), VerticalOptions = LayoutOptions.Center }, 0, 0);
+        header.Add(new BrandView(), 0, 0);
         header.Add(backButton, 1, 0);
         var copyButton = new Button { Text = "Copy C#", FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, BackgroundColor = Color.FromArgb("#4338CA"), CornerRadius = 8, HeightRequest = 42, Padding = new Thickness(16, 0), Margin = new Thickness(10, 0, 0, 0) };
         copyButton.Clicked += async (_, _) => { await Clipboard.Default.SetTextAsync(CreateCsharpSource()); copyButton.Text = "Copied"; await Task.Delay(1600); copyButton.Text = "Copy C#"; };

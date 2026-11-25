@@ -10,7 +10,7 @@ internal static class DemoPageChrome
         Shell.SetNavBarIsVisible(page, false);
         page.BackgroundColor = Color.FromArgb("#F8FAFC");
         var top = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Auto } } };
-        top.Add(new Label { Text = "◈  chartnivra", FontSize = 17, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#4338CA"), VerticalOptions = LayoutOptions.Center }, 0, 0);
+        top.Add(new BrandView(), 0, 0);
         var back = new Button { Text = "←  All charts", FontSize = 13, HeightRequest = 42, Padding = new Thickness(14, 0), CornerRadius = 9, BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, TextColor = Color.FromArgb("#0F172A") };
         back.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
         top.Add(back, 1, 0);
