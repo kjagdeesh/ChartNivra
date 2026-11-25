@@ -24,37 +24,39 @@ public class RadialGaugeModel : IChartRenderer
     {
         canvas.DrawRectangle(bounds, new ChartBrush(Theme.BackgroundColor));
 
-        var center = bounds.Center;
-        var radius = (float)(Math.Min(bounds.Width, bounds.Height) * 0.38);
-
         var ratio = Maximum <= Minimum ? 0 : Math.Clamp((Value - Minimum) / (Maximum - Minimum), 0, 1);
-        var innerRadius = Math.Max(0, radius - 12f);
+        var radius = (float)Math.Max(20, Math.Min(bounds.Width * .32, bounds.Height * .33));
+        var center = new ChartPoint(bounds.Center.X, bounds.Top + bounds.Height * .53);
+        const float start = 135;
+        const float sweep = 270;
+        const float thickness = 14;
+        canvas.DrawArc(center, radius, 0, start, sweep, null, new ChartPen(TrackColor, thickness));
+        if (ratio > 0)
+            canvas.DrawArc(center, radius, 0, start, (float)(sweep * ratio), null, new ChartPen(ValueColor, thickness));
 
-        // Full track and the active portion make the KPI state immediately legible.
-        canvas.DrawArc(center, radius, innerRadius, -90, 360, new ChartBrush(TrackColor));
-        canvas.DrawArc(center, radius, innerRadius, -90, (float)(360 * ratio), new ChartBrush(ValueColor));
+        var endAngle = (start + sweep * ratio) * Math.PI / 180;
+        var endPoint = new ChartPoint(center.X + radius * Math.Cos(endAngle), center.Y + radius * Math.Sin(endAngle));
+        canvas.DrawCircle(endPoint, 4, new ChartBrush(Theme.BackgroundColor), new ChartPen(ValueColor, 2));
+        var pointerInner = new ChartPoint(center.X + (radius - 24) * Math.Cos(endAngle), center.Y + (radius - 24) * Math.Sin(endAngle));
+        canvas.DrawLine(pointerInner, endPoint, new ChartPen(NeedleColor, 2));
 
-        // A small needle is retained for precise reading without obscuring the progress arc.
-        var needleAngle = (-90 + 360 * ratio) * Math.PI / 180;
-        var needleEnd = new ChartPoint(center.X + radius * .62 * Math.Cos(needleAngle), center.Y + radius * .62 * Math.Sin(needleAngle));
-        canvas.DrawLine(center, needleEnd, new ChartPen(NeedleColor, 2f));
-        canvas.DrawCircle(center, 4, new ChartBrush(NeedleColor));
-
-        // Draw center title / value
         var text = $"{Value:F0}{Unit}";
-        var size = canvas.MeasureText(text, 20f, isBold: true);
-        canvas.DrawText(text, new ChartPoint(center.X - size.Width / 2, center.Y + size.Height / 3), Theme.TextColor, 20f, isBold: true);
+        var fontSize = bounds.Width < 260 ? 25f : 32f;
+        var size = canvas.MeasureText(text, fontSize, isBold: true);
+        canvas.DrawText(text, new ChartPoint(center.X - size.Width / 2, center.Y + 3), Theme.TextColor, fontSize, isBold: true);
 
         if (!string.IsNullOrEmpty(Title))
         {
             var titleSize = canvas.MeasureText(Title, 13f);
-            canvas.DrawText(Title, new ChartPoint(center.X - titleSize.Width / 2, center.Y + radius * 0.7), Theme.SecondaryTextColor, 13f);
+            canvas.DrawText(Title, new ChartPoint(center.X - titleSize.Width / 2, center.Y + 26), Theme.SecondaryTextColor, 13f);
         }
 
         var minText = Minimum.ToString("0");
         var maxText = Maximum.ToString("0");
-        canvas.DrawText(minText, new ChartPoint(center.X - radius, center.Y + radius + 14), Theme.SecondaryTextColor, 10);
+        var endOffset = radius * .707;
+        var minSize = canvas.MeasureText(minText, 10);
+        canvas.DrawText(minText, new ChartPoint(center.X - endOffset - minSize.Width / 2, center.Y + endOffset + 24), Theme.SecondaryTextColor, 10);
         var maxSize = canvas.MeasureText(maxText, 10);
-        canvas.DrawText(maxText, new ChartPoint(center.X + radius - maxSize.Width, center.Y + radius + 14), Theme.SecondaryTextColor, 10);
+        canvas.DrawText(maxText, new ChartPoint(center.X + endOffset - maxSize.Width / 2, center.Y + endOffset + 24), Theme.SecondaryTextColor, 10);
     }
 }

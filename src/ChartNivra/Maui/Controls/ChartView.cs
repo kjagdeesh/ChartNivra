@@ -5,6 +5,7 @@ using ChartNivra.Core.Primitives;
 using ChartNivra.Core.Themes;
 using ChartNivra.Rendering.Abstractions;
 using ChartNivra.Rendering.Skia;
+using ChartNivra.Gauges;
 using Microsoft.Maui.Controls;
 using SkiaSharp.Views.Maui;
 using SkiaSharp.Views.Maui.Controls;
@@ -80,6 +81,7 @@ public class ChartView : SKCanvasView
             case TreemapRenderer renderer: renderer.Theme = Theme; break;
             case StepLineRenderer renderer: renderer.Theme = Theme; break;
             case BulletChartRenderer renderer: renderer.Theme = Theme; break;
+            case RadialGaugeModel renderer: renderer.Theme = Theme; break;
         }
     }
 

@@ -83,7 +83,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         };
         _preview.SetAppThemeColor(VisualElement.BackgroundColorProperty, Color.FromArgb("#F0F3FA"), Color.FromArgb("#182235"));
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
-        var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Light\" />" };
+        var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = SampleXaml.Host };
         var active = new ContentView { Content = csharp };
         var csTab = MakeTab("C#", true); var xamlTab = MakeTab("XAML", false);
         csTab.Clicked += (_, _) => { active.Content = csharp; SetTab(csTab, true); SetTab(xamlTab, false); };

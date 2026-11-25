@@ -37,7 +37,7 @@ public abstract class ChartPageBase : ContentPage
 
         ChartView = new ChartView { HeightRequest = 430, BackgroundColor = Colors.Transparent };
         _csharpSnippet = new CodeSnippetView { Code = csharpCode, Language = CodeLanguage.CSharp };
-        _xamlSnippet = new CodeSnippetView { Code = CreateXamlSnippet(title), Language = CodeLanguage.Xaml };
+        _xamlSnippet = new CodeSnippetView { Code = SampleXaml.Host, Language = CodeLanguage.Xaml };
         _csharpTab = MakeTab("C#", true);
         _xamlTab = MakeTab("XAML", false);
         _csharpTab.Clicked += (_, _) => SelectCode(false);
@@ -192,15 +192,4 @@ public abstract class ChartPageBase : ContentPage
         var gesture = new TapGestureRecognizer(); gesture.Tapped += (_, _) => action(); return gesture;
     }
 
-    private static string CreateXamlSnippet(string title) => $$"""
-<!-- XAML host for {{title}}. The C# tab is the exact runtime data and renderer setup. -->
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:chartnivra="clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra">
-    <chartnivra:ChartView x:Name="chartView"
-                           Title="{{title}}"
-                           HeightRequest="320"
-                           Theme="Light" />
-</ContentPage>
-""";
 }

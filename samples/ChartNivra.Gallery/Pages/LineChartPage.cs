@@ -8,15 +8,11 @@ using ChartNivra.Core.Themes;
 public class LineChartPage : ChartPageBase
 {
     private const string Code = """
-var model = new CartesianChartModel
+chartView.Title = "Monthly Revenue";
+chartView.Theme = ChartTheme.Light;
+chartView.Model.Series.Add(new LineSeriesModel
 {
-    Title = "Monthly Revenue",
-    Theme = ChartTheme.Light,
-};
-
-model.Series.Add(new LineSeriesModel
-{
-    Title       = "Revenue",
+    Title       = "Revenue 2024",
     Color       = ChartColor.FromHex("#00C096"),
     StrokeWidth = 2.5f,
     ShowMarkers = true,
@@ -29,8 +25,6 @@ model.Series.Add(new LineSeriesModel
         new(9, 97), new(10, 134), new(11, 148),
     }
 });
-
-chartView.Model.Series.AddRange(model.Series);
 """;
 
     public LineChartPage() : base("Line Chart", "Smooth line series with data points", Code) { }
