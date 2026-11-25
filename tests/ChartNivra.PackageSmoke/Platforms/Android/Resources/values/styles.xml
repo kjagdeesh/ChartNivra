@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <!-- Shell creates a BottomNavigationView even when the tab bar is hidden.
+         MAUI's legacy design style does not supply the text appearances required
+         by newer versions of the Material navigation component. -->
+    <style name="Maui.MainTheme" parent="Maui.MainTheme.Base">
+        <item name="bottomNavigationViewStyle">@style/ChartNivra.BottomNavigationView</item>
+        <item name="bottomNavigationStyle">@style/ChartNivra.BottomNavigationView</item>
+    </style>
+    <style name="ChartNivra.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.MaterialComponents.Caption</item>
+    </style>
+</resources>
