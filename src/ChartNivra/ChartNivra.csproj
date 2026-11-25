@@ -10,7 +10,6 @@
     <Authors>ChartNivra</Authors>
     <Description>Cross-platform .NET charting library with Cartesian, financial, statistical, polar, gauge, 3D, export, and MAUI controls.</Description>
     <PackageTags>charts;dotnet;maui;skia;visualization;financial;3d</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/chartnivra/chartnivra</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -21,11 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="2.88.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="README.md" />
-    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
