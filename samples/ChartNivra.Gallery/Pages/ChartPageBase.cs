@@ -111,13 +111,9 @@ public abstract class ChartPageBase : ContentPage
         header.RowDefinitions.Clear();
         header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
         header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         header.Margin = new Thickness(0, 0, 0, 10);
         header.Add(new BrandView(), 0, 0);
         header.Add(backButton, 1, 0);
-        var copyButton = new Button { Text = "Copy C#", FontSize = 13, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, BackgroundColor = Color.FromArgb("#4338CA"), CornerRadius = 8, HeightRequest = 42, Padding = new Thickness(16, 0), Margin = new Thickness(10, 0, 0, 0) };
-        copyButton.Clicked += async (_, _) => { await Clipboard.Default.SetTextAsync(_csharpSnippet.Code); copyButton.Text = "Copied"; await Task.Delay(1600); copyButton.Text = "Copy C#"; };
-        header.Add(copyButton, 2, 0);
         _pageContent = new VerticalStackLayout
         {
             Spacing = 0, Padding = new Thickness(24, 20, 24, 28),
