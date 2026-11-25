@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="assets/chartnivra-logo.svg">
   <title>ChartNivra — Enterprise .NET MAUI Charting Library</title>
-  <meta name="description" content="ChartNivra: Production-ready 2D & 3D charting for .NET MAUI. 25+ chart types, 60 FPS real-time, cross-platform.">
+  <meta name="description" content="Explore the ChartNivra .NET MAUI chart gallery and its sample code.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -64,12 +64,12 @@
       </h1>
 
       <p class="hero-sub">
-        25+ chart types with true 3D perspective, 60 FPS real-time streaming, and pixel-perfect rendering across Windows, iOS, Android & macOS — all powered by SkiaSharp.
+        Explore 23 chart types and five interactive demos for Windows, iOS, Android and macOS, powered by SkiaSharp.
       </p>
 
       <div class="hero-stats">
         <div class="stat">
-          <strong>25+</strong>
+          <strong>23</strong>
           <span>Chart Types</span>
         </div>
         <div class="stat-divider"></div>
@@ -102,7 +102,7 @@
 
       <div class="install-box">
         <span class="install-label">Install</span>
-        <code class="install-cmd">dotnet add package ChartNivra.Maui</code>
+        <code class="install-cmd">dotnet add package ChartNivra --version 0.1.0-preview.1</code>
         <button class="copy-btn" onclick="copyInstall(this)" title="Copy">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         </button>
@@ -145,7 +145,7 @@
               <div class="kpi-icon" style="background:#FFF7ED">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
               </div>
-              <div class="kpi-val">25+</div>
+              <div class="kpi-val">23</div>
               <div class="kpi-lbl">Chart Types</div>
               <div class="kpi-chg up">All Included</div>
             </div>
@@ -274,9 +274,11 @@
       <button class="tab-btn" data-category="circular">Circular</button>
       <button class="tab-btn" data-category="financial">Financial</button>
       <button class="tab-btn" data-category="statistical">Statistical</button>
-      <button class="tab-btn" data-category="threed">3D Charts</button>
+      <button class="tab-btn" data-category="3d">3D Charts</button>
       <button class="tab-btn" data-category="gauges">Gauges</button>
-      <button class="tab-btn" data-category="special">Special</button>
+      <button class="tab-btn" data-category="hierarchical">Hierarchical</button>
+      <button class="tab-btn" data-category="conversion">Conversion</button>
+      <button class="tab-btn" data-category="demos">Demos</button>
     </div>
 
     <!-- Chart Grid -->
@@ -953,10 +955,10 @@
     </div>
 
     <div class="modal-tabs">
-      <button class="mtab active" onclick="switchCodeTab('xaml', this)">XAML</button>
-      <button class="mtab" onclick="switchCodeTab('csharp', this)">C#</button>
-      <button class="mtab" onclick="switchCodeTab('mvvm', this)">MVVM</button>
+      <button class="mtab active" data-tab="xaml" onclick="switchCodeTab('xaml', this)">XAML</button>
+      <button class="mtab" data-tab="csharp" onclick="switchCodeTab('csharp', this)">C#</button>
     </div>
+    <p id="modalSourceNote" class="modal-source-note"></p>
 
     <div class="modal-code-wrap">
       <button class="code-copy-btn" onclick="copyCode()">
@@ -966,10 +968,6 @@
       <pre class="modal-code" id="modalCode"><code id="modalCodeInner"></code></pre>
     </div>
 
-    <div class="modal-props">
-      <h4>Key Properties</h4>
-      <div class="props-grid" id="modalProps"></div>
-    </div>
   </div>
 </div>
 
@@ -1246,13 +1244,14 @@
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <h3>Install the NuGet Package</h3>
+          <h3>Install the local preview package</h3>
+          <p>Build the preview package and configure a local NuGet source before running this command. The package is still in development.</p>
           <div class="code-block">
             <div class="code-bar">
               <span class="cb-label">Terminal</span>
               <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
             </div>
-            <pre><code>dotnet add package ChartNivra.Maui --version 1.0.0</code></pre>
+            <pre><code>dotnet add package ChartNivra --version 0.1.0-preview.1</code></pre>
           </div>
         </div>
       </div>
@@ -1261,19 +1260,17 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h3>Register in MauiProgram.cs</h3>
+          <h3>Register SkiaSharp in MauiProgram.cs</h3>
           <div class="code-block">
             <div class="code-bar">
               <span class="cb-label">MauiProgram.cs</span>
               <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
             </div>
-            <pre><code>builder
+            <pre><code data-language="csharp">using SkiaSharp.Views.Maui.Controls.Hosting;
+
+builder
     .UseMauiApp&lt;App&gt;()
-    .UseChartNivra(options =&gt;
-    {
-        options.DefaultTheme = ChartTheme.CleanLight;
-        options.DefaultPalette = ChartPalette.Ocean;
-    });</code></pre>
+    .UseSkiaSharp();</code></pre>
           </div>
         </div>
       </div>
@@ -1288,20 +1285,14 @@
               <span class="cb-label">MainPage.xaml</span>
               <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
             </div>
-            <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:cn="clr-namespace:ChartNivra.Maui;assembly=ChartNivra.Maui"&gt;
-
-  &lt;cn:LineChartView
-      Title="Monthly Revenue"
-      Series="{Binding RevenueSeries}"
-      Theme="{Binding AppTheme}"
-      Palette="{Binding ColorPalette}"
-      ShowGrid="True"
-      ShowLegend="True"
-      AnimationDuration="800"
-      HeightRequest="300" /&gt;
-
+            <pre><code data-language="xaml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;ContentPage xmlns=&quot;http://schemas.microsoft.com/dotnet/2021/maui&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2009/xaml&quot;
+             xmlns:charts=&quot;clr-namespace:ChartNivra.Maui.Controls;assembly=ChartNivra&quot;
+             x:Class=&quot;MyApp.SamplePage&quot;&gt;
+    &lt;!-- Configure chartView in SamplePage.xaml.cs using the C# tab. --&gt;
+    &lt;charts:ChartView x:Name=&quot;chartView&quot;
+                      HeightRequest=&quot;320&quot; /&gt;
 &lt;/ContentPage&gt;</code></pre>
           </div>
         </div>
@@ -1311,39 +1302,29 @@
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
-          <h3>Bind Data in C# / MVVM</h3>
+          <h3>Configure the Chart in C#</h3>
           <div class="code-block">
             <div class="code-bar">
-              <span class="cb-label">ViewModel.cs</span>
+              <span class="cb-label">SamplePage.xaml.cs</span>
               <button class="cb-copy" onclick="copySnippet(this)">Copy</button>
             </div>
-            <pre><code>using ChartNivra.Core;
-using ChartNivra.Maui;
-
-public class DashboardViewModel : ObservableObject
+            <pre><code data-language="csharp">chartView.Title = &quot;Monthly Revenue&quot;;
+chartView.Theme = ChartTheme.Light;
+chartView.Model.Series.Add(new LineSeriesModel
 {
-    public ObservableCollection&lt;LineSeriesModel&gt; RevenueSeries { get; }
-
-    public DashboardViewModel()
+    Title       = &quot;Revenue 2024&quot;,
+    Color       = ChartColor.FromHex(&quot;#00C096&quot;),
+    StrokeWidth = 2.5f,
+    ShowMarkers = true,
+    ShowDataLabels = true,
+    Points = new List&lt;ChartPoint&gt;
     {
-        var series = new LineSeriesModel
-        {
-            Label = "Revenue",
-            Smooth = true,       // cubic bezier spline
-            ShowArea = true,     // gradient area fill
-            Points =
-            {
-                new ChartPoint { X = 0, Y = 12400 },
-                new ChartPoint { X = 1, Y = 15200 },
-                new ChartPoint { X = 2, Y = 11800 },
-                new ChartPoint { X = 3, Y = 18600 },
-                new ChartPoint { X = 4, Y = 21000 },
-                new ChartPoint { X = 5, Y = 19400 },
-            }
-        };
-        RevenueSeries = new([series]);
+        new(0, 42), new(1, 58), new(2, 51),
+        new(3, 76), new(4, 89), new(5, 95),
+        new(6, 82), new(7, 103), new(8, 118),
+        new(9, 97), new(10, 134), new(11, 148),
     }
-}</code></pre>
+});</code></pre>
           </div>
         </div>
       </div>
@@ -1357,61 +1338,15 @@ public class DashboardViewModel : ObservableObject
 <section class="packages" id="docs">
   <div class="container">
     <div class="section-header">
-      <div class="section-pill">Packages</div>
-      <h2>Modular Architecture</h2>
-      <p>Install only what you need. All packages share ChartNivra.Core.</p>
+      <div class="section-pill">Package</div>
+      <h2>One chart library</h2>
+      <p>ChartNivra is under development. The preview package can be built locally and tested with the PackageSmoke project.</p>
     </div>
-
-    <div class="pkg-grid">
-      <div class="pkg-card">
-        <div class="pkg-icon" style="background:#EFF6FF">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.Core</div>
-        <div class="pkg-desc">Primitives, models, themes, palettes, NiceScale, LTTB, transforms</div>
-        <code class="pkg-install">dotnet add package ChartNivra.Core</code>
-      </div>
-      <div class="pkg-card highlight">
-        <div class="pkg-icon" style="background:#F0FDF4">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.Maui <span class="pkg-badge">Recommended</span></div>
-        <div class="pkg-desc">Full MAUI controls, all chart types, MVVM bindings, themes</div>
-        <code class="pkg-install">dotnet add package ChartNivra.Maui</code>
-      </div>
-      <div class="pkg-card">
-        <div class="pkg-icon" style="background:#FFF7ED">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.Financial</div>
-        <div class="pkg-desc">Candlestick, OHLC, volume, Bollinger, RSI, MACD, EMA, Stochastic</div>
-        <code class="pkg-install">dotnet add package ChartNivra.Financial</code>
-      </div>
-      <div class="pkg-card">
-        <div class="pkg-icon" style="background:#FDF4FF">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.ThreeD</div>
-        <div class="pkg-desc">3D bars, surface mesh, scatter, orbit camera, Painter's algorithm</div>
-        <code class="pkg-install">dotnet add package ChartNivra.ThreeD</code>
-      </div>
-      <div class="pkg-card">
-        <div class="pkg-icon" style="background:#F0FDFA">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.Statistical</div>
-        <div class="pkg-desc">Box plots, histograms, violin, error bars, regression lines</div>
-        <code class="pkg-install">dotnet add package ChartNivra.Statistical</code>
-      </div>
-      <div class="pkg-card">
-        <div class="pkg-icon" style="background:#FFF1F2">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </div>
-        <div class="pkg-name">ChartNivra.Export</div>
-        <div class="pkg-desc">Off-screen PNG export, SVG vector export, server-side rendering</div>
-        <code class="pkg-install">dotnet add package ChartNivra.Export</code>
-      </div>
-    </div>
+    <div class="pkg-grid"><div class="pkg-card">
+      <div class="pkg-name">ChartNivra</div>
+      <div class="pkg-desc">Chart models, renderers and .NET MAUI chart controls in one package.</div>
+      <code class="pkg-install">dotnet add package ChartNivra --version 0.1.0-preview.1</code>
+    </div></div>
   </div>
 </section>
 
@@ -1446,7 +1381,7 @@ public class DashboardViewModel : ObservableObject
       </div>
       <div class="footer-col">
         <div class="fc-title">Packages</div>
-        <a href="#docs">ChartNivra.Maui</a>
+        <a href="#docs">ChartNivra</a>
         <a href="#docs">ChartNivra.Financial</a>
         <a href="#docs">ChartNivra.ThreeD</a>
         <a href="#docs">ChartNivra.Export</a>
@@ -1461,6 +1396,8 @@ public class DashboardViewModel : ObservableObject
   </div>
 </footer>
 
+<script src="assets/js/gallery-data.js"></script>
+<script src="assets/js/syntax.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

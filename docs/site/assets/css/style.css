@@ -674,6 +674,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .mtab.active { color: var(--primary); border-bottom-color: var(--primary); }
 .mtab:hover:not(.active) { color: var(--text-1); background: var(--bg); }
+.modal-source-note { color: var(--text-3); font-size: 12px; margin: 12px 0; }
 
 .modal-code-wrap {
   position: relative;
@@ -711,6 +712,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: #E2E8F0;
   white-space: pre;
 }
+
+.modal-code code .syntax-keyword, .code-block code .syntax-keyword { color: #c4a7ff; }
+.modal-code code .syntax-type, .code-block code .syntax-type { color: #8bd5ed; }
+.modal-code code .syntax-tag, .code-block code .syntax-tag { color: #f38bc4; }
+.modal-code code .syntax-attribute, .code-block code .syntax-attribute { color: #a6e3a1; }
+.modal-code code .syntax-string, .code-block code .syntax-string { color: #e6db98; }
+.modal-code code .syntax-number, .code-block code .syntax-number { color: #fab387; }
+.modal-code code .syntax-comment, .code-block code .syntax-comment { color: #8d9aaa; }
 
 .modal-props h4 { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 12px; }
 .props-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
