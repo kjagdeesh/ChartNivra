@@ -4,7 +4,7 @@ This project contains the charting library used by the Gallery. It combines mode
 
 ## Install and use
 
-After the stable package is published, add it to your MAUI project:
+Install the published [ChartNivra 1.0.0 package](https://www.nuget.org/packages/ChartNivra/1.0.0) in your MAUI project:
 
 ```sh
 dotnet add package ChartNivra --version 1.0.0

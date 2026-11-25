@@ -7,13 +7,13 @@
     <img src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&amp;logoColor=white" alt=".NET 10" />
     <img src="https://img.shields.io/badge/Rendering-SkiaSharp-00A6C7" alt="SkiaSharp rendering" />
     <img src="https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows-334155" alt="Supported target platforms" />
-    <img src="https://img.shields.io/badge/Planned%20NuGet-1.0.0-blue" alt="Planned NuGet version 1.0.0" />
+    <a href="https://www.nuget.org/packages/ChartNivra/1.0.0"><img src="https://img.shields.io/nuget/v/ChartNivra?label=NuGet" alt="ChartNivra on NuGet" /></a>
   </p>
 </div>
 
 ChartNivra is an in-development charting library for .NET MAUI. It combines chart models, SkiaSharp rendering, a MAUI chart view, and an interactive sample gallery in a single repository. Use the gallery to explore chart types, inspect sample data, and see how each example is configured.
 
-> **Release status:** The initial stable NuGet release is planned as **`ChartNivra` version `1.0.0`**. It has not been published as part of this repository workflow. A local `0.1.0-preview.1` package has been used for package-consumer testing. APIs and packaging may change before release.
+> **Released:** [ChartNivra `1.0.0` is available on NuGet.org](https://www.nuget.org/packages/ChartNivra/1.0.0). Development and cross-platform validation are ongoing.
 
 ## Highlights
 
@@ -70,11 +70,11 @@ Screenshots are snapshots of the development Gallery and may not reflect every s
 | Item | Details |
 | --- | --- |
 | Package ID | `ChartNivra` |
-| Planned initial stable version | `1.0.0` |
+| Initial stable version | `1.0.0` |
 | Intended targets | .NET 10, Android, iOS, Mac Catalyst, and Windows |
-| Status | In development; local preview package used for consumer testing |
+| Package page | [ChartNivra 1.0.0 on NuGet.org](https://www.nuget.org/packages/ChartNivra/1.0.0) |
 
-**The following commands are for the planned stable release.** They will work against NuGet.org only after `ChartNivra` version `1.0.0` has been published there or is available in another configured package source.
+Install the published package from NuGet.org using any of the following methods.
 
 ### .NET CLI
 
@@ -86,7 +86,7 @@ dotnet add package ChartNivra --version 1.0.0
 
 ### Visual Studio
 
-Open **Manage NuGet Packages** for your MAUI project, select the appropriate package source, search for `ChartNivra`, and install version `1.0.0` after it is available.
+Open **Manage NuGet Packages** for your MAUI project, select **nuget.org**, search for `ChartNivra`, and install version `1.0.0`.
 
 ### PackageReference
 
@@ -212,9 +212,9 @@ dotnet run -c Release --project benchmarks/ChartNivra.Benchmarks/ChartNivra.Benc
 
 The test project includes unit, rendering, integration, and other headless checks; device and UI testing are still required. Benchmark results are machine-specific and do not measure complete chart rendering or mobile responsiveness. See the [test](tests/ChartNivra.Tests/README.md) and [benchmark](benchmarks/ChartNivra.Benchmarks/README.md) guides.
 
-## Release readiness
+## Ongoing validation
 
-Before a stable `1.0.0` release, complete package-consumer and device testing, verify the chart examples and documentation, and resolve the Android build warning about SkiaSharp's 16 KB native page alignment. Windows, Android, and Mac Catalyst have been exercised during development; iOS and a broader device and chart regression matrix still need verification. A previous automated test run in this environment could not connect to its test host.
+Further package-consumer and device testing, chart example verification, and investigation of the Android build warning about SkiaSharp's 16 KB native page alignment are still needed. Windows, Android, and Mac Catalyst have been exercised during development; iOS and a broader device and chart regression matrix still need verification. A previous automated test run in this environment could not connect to its test host.
 
 The documentation site's Gallery data is generated from the sample app with `python tools/sync_gallery_site.py`. Rerun it when Gallery cards or displayed snippets change.
 
