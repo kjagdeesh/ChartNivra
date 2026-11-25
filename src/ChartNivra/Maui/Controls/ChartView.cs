@@ -50,6 +50,7 @@ public class ChartView : SKCanvasView
         set
         {
             _renderer = value;
+            ApplyRendererTheme();
             InvalidateSurface();
         }
     }
@@ -62,7 +63,23 @@ public class ChartView : SKCanvasView
         {
             chart._model.Title = chart.Title;
             chart._model.Theme = chart.Theme;
+            chart.ApplyRendererTheme();
             chart.InvalidateSurface();
+        }
+    }
+
+    private void ApplyRendererTheme()
+    {
+        switch (_renderer)
+        {
+            case BubbleChartRenderer renderer: renderer.Theme = Theme; break;
+            case FunnelChartRenderer renderer: renderer.Theme = Theme; break;
+            case RangeAreaRenderer renderer: renderer.Theme = Theme; break;
+            case WaterfallChartRenderer renderer: renderer.Theme = Theme; break;
+            case SunburstRenderer renderer: renderer.Theme = Theme; break;
+            case TreemapRenderer renderer: renderer.Theme = Theme; break;
+            case StepLineRenderer renderer: renderer.Theme = Theme; break;
+            case BulletChartRenderer renderer: renderer.Theme = Theme; break;
         }
     }
 

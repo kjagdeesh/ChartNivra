@@ -29,7 +29,8 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     public ChartCatalogPreviewPage()
     {
         BackgroundColor = Color.FromArgb("#F8FAFC");
-        Shell.SetNavBarIsVisible(this, true);
+        this.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#F8FAFC"), Color.FromArgb("#0B1220"));
+        Shell.SetNavBarIsVisible(this, false);
         _content.Add(_workspace);
         Content = new ScrollView { Content = _content };
         SizeChanged += (_, _) => UpdateLayout(Width);
@@ -47,24 +48,31 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
     private void BuildWorkspace()
     {
         _content.Children.Clear();
-        _content.Add(new Label { Text = "CHART SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#4F46E5") });
-        _content.Add(new Label { Text = _name, FontSize = 28, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A"), Margin = new Thickness(0, 3, 0, 0) });
-        _content.Add(new Label { Text = "Interactive preview · complete implementation", FontSize = 14, TextColor = Color.FromArgb("#64748B"), Margin = new Thickness(0, 4, 0, 20) });
+        var backButton = new Button { Text = "←  All charts", FontSize = 13, TextColor = Color.FromArgb("#0F172A"), BackgroundColor = Colors.White, BorderColor = Color.FromArgb("#E2E8F0"), BorderWidth = 1, CornerRadius = 10, HeightRequest = 42, Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start };
+        backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        var header = new Grid { RowSpacing = 18, RowDefinitions = new RowDefinitionCollection { new() { Height = GridLength.Auto }, new() { Height = GridLength.Auto } }, Margin = new Thickness(0, 0, 0, 12) };
+        header.Add(backButton, 0, 0);
+        var heading = new Label { Text = _name, FontSize = 26, FontAttributes = FontAttributes.Bold };
+        heading.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#0F172A"), Color.FromArgb("#F1F5F9"));
+        header.Add(new VerticalStackLayout { Spacing = 3, Children = { new Label { Text = "CHARTNIVRA / SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1.2, TextColor = Color.FromArgb("#818CF8") }, heading } }, 0, 1);
+        _content.Add(header);
+        _content.Add(new Label { Text = "Explore the chart and its implementation.", FontSize = 14, TextColor = Color.FromArgb("#64748B"), Margin = new Thickness(0, 0, 0, 24) });
         _content.Add(_workspace);
         _preview = new Border
         {
-            Padding = new Thickness(16), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1,
-            StrokeShape = new RoundRectangle { CornerRadius = 14 },
+            Padding = new Thickness(24), BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 18 },
             Content = new VerticalStackLayout
             {
-                Spacing = 8,
+                Spacing = 16,
                 Children =
                 {
-                    new Label { Text = "LIVE PREVIEW", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#64748B") },
+                    new Label { Text = "Preview", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A") },
                     BuildChart()
                 }
             }
         };
+        _preview.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Color.FromArgb("#182235"));
         var csharp = new CodeSnippetView { Language = CodeLanguage.CSharp, HeightRequest = 426, Code = CreateCsharpSource() };
         var xaml = new CodeSnippetView { Language = CodeLanguage.Xaml, HeightRequest = 426, Code = $"<!-- chartView is configured by the C# tab in this sample. -->\n<chartnivra:ChartView x:Name=\"chartView\"\n    Title=\"{_name}\"\n    HeightRequest=\"320\"\n    Theme=\"Light\" />" };
         var active = new ContentView { Content = csharp };
@@ -76,13 +84,15 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         _codePanel = new Border
         {
             BackgroundColor = Colors.White, Stroke = Color.FromArgb("#E2E8F0"), StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = 14 },
-            Content = new VerticalStackLayout { Spacing = 0, Children = { new Label { Text = "IMPLEMENTATION", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = Color.FromArgb("#64748B"), Padding = new Thickness(16, 14, 16, 4) }, tabs, new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") }, active } }
+            Content = new VerticalStackLayout { Spacing = 0, Children = { new Label { Text = "Source code", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#0F172A"), Padding = new Thickness(18, 18, 18, 6) }, tabs, new BoxView { HeightRequest = 1, BackgroundColor = Color.FromArgb("#E2E8F0") }, active } }
         };
+        _codePanel.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Color.FromArgb("#182235"));
     }
 
     private View BuildChart()
     {
         var chart = new ChartView { HeightRequest = 360, Theme = ChartTheme.Light, Title = _name };
+        chart.SetAppTheme(ChartView.ThemeProperty, ChartTheme.Light, ChartTheme.Dark);
         switch (_kind)
         {
             case ChartThumbnailKind.Bar:
@@ -205,7 +215,7 @@ public sealed class ChartCatalogPreviewPage : ContentPage, IQueryAttributable
         _content.Padding = compact ? new Thickness(12, 16, 12, 20) : new Thickness(24, 20, 24, 28);
         _workspace.Children.Clear(); _workspace.ColumnDefinitions.Clear(); _workspace.RowDefinitions.Clear();
         if (compact) { _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); _workspace.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 0, 1); }
-        else { _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 1, 0); }
+        else { _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.15, GridUnitType.Star) }); _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(.85, GridUnitType.Star) }); _workspace.Add(_preview, 0, 0); _workspace.Add(_codePanel, 1, 0); }
     }
 
     private static Label MakeTab(string text, bool active) { var tab = new Label { Text = text, FontSize = 13, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.Center, Padding = new Thickness(0, 10) }; SetTab(tab, active); return tab; }

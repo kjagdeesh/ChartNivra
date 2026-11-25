@@ -7,6 +7,7 @@ using ChartNivra.Rendering.Abstractions;
 
 public class SunburstRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly SunburstModel _model;
 
     public SunburstRenderer(SunburstModel model)
@@ -16,7 +17,7 @@ public class SunburstRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Light;
+        var theme = Theme;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
 
         var topMargin = 20.0;
@@ -30,60 +31,50 @@ public class SunburstRenderer : IChartRenderer
         var centerY = bounds.Top + topMargin + (bounds.Height - topMargin) / 2;
         var outerRadius = Math.Min(bounds.Width, bounds.Height - topMargin) * 0.35;
 
-        if (_model.Root.ComputeTotalValue() <= 0) return;
-        DrawNode(canvas, _model.Root, centerX, centerY, _model.InnerRadiusRatio * outerRadius, outerRadius, -Math.PI / 2, 2 * Math.PI, theme);
+        if (_model.Root.ComputeTotalValue() <= 0 || _model.Root.Children.Count == 0) return;
+        var innerRadius = _model.InnerRadiusRatio * outerRadius;
+        var levels = Math.Max(1, GetDepth(_model.Root));
+        var ringWidth = (outerRadius - innerRadius) / levels;
+        DrawChildren(canvas, _model.Root, centerX, centerY, innerRadius, ringWidth, -Math.PI / 2, 2 * Math.PI, 0, theme);
     }
 
-    private void DrawNode(IChartCanvas canvas, HierarchyNode node, double cx, double cy, double innerR, double outerR, double startAngle, double sweepAngle, ChartTheme theme)
+    private void DrawChildren(IChartCanvas canvas, HierarchyNode parent, double cx, double cy, double baseInnerRadius, double ringWidth, double startAngle, double sweepAngle, int depth, ChartTheme theme)
     {
-        if (node.Value <= 0) return;
-
-        var totalValue = node.ComputeTotalValue();
-        var nodeSweep = sweepAngle * (node.Value / totalValue);
-
-        var color = node.Color ?? theme.DefaultPalette.GetColor(0);
-
-        // Draw arc segment
-        var points = new List<ChartPoint>();
-        var segments = Math.Max(1, (int)(nodeSweep / 0.1));
-        for (int i = 0; i <= segments; i++)
+        var total = parent.Children.Sum(child => child.ComputeTotalValue());
+        if (total <= 0) return;
+        var childStart = startAngle;
+        for (var index = 0; index < parent.Children.Count; index++)
         {
-            var angle = startAngle + nodeSweep * i / segments;
-            points.Add(new ChartPoint(cx + outerR * Math.Cos(angle), cy + outerR * Math.Sin(angle)));
-        }
-        for (int i = segments; i >= 0; i--)
-        {
-            var angle = startAngle + nodeSweep * i / segments;
-            points.Add(new ChartPoint(cx + innerR * Math.Cos(angle), cy + innerR * Math.Sin(angle)));
-        }
-        points.Add(points[0]);
-
-        canvas.DrawPolygon(points, new ChartBrush(color), new ChartPen(theme.BackgroundColor, 2f));
-
-        // Draw label at middle of arc
-        if (!string.IsNullOrEmpty(node.Name))
-        {
-            var midAngle = startAngle + nodeSweep / 2;
-            var labelR = (innerR + outerR) / 2;
-            var lx = cx + labelR * Math.Cos(midAngle);
-            var ly = cy + labelR * Math.Sin(midAngle);
-            var labelSize = canvas.MeasureText(node.Name, 10f);
-            canvas.DrawText(node.Name, new ChartPoint(lx - labelSize.Width / 2, ly + labelSize.Height / 2), theme.TextColor, 10f);
-        }
-
-        // Draw children
-        if (node.Children.Count > 0)
-        {
-            var childInnerR = outerR;
-            var childOuterR = outerR + (outerR - innerR) * 0.8;
-            var childStart = startAngle;
-
-            foreach (var child in node.Children)
+            var child = parent.Children[index];
+            var childSweep = sweepAngle * (child.ComputeTotalValue() / total);
+            var innerR = baseInnerRadius + depth * ringWidth;
+            var outerR = innerR + ringWidth;
+            var color = child.Color ?? theme.DefaultPalette.GetColor(index + depth);
+            var points = new List<ChartPoint>();
+            var segments = Math.Max(3, (int)(childSweep / .08));
+            for (var i = 0; i <= segments; i++)
             {
-                var childSweep = nodeSweep * (child.Value / node.Value);
-                DrawNode(canvas, child, cx, cy, childInnerR, childOuterR, childStart, childSweep, theme);
-                childStart += childSweep;
+                var angle = childStart + childSweep * i / segments;
+                points.Add(new ChartPoint(cx + outerR * Math.Cos(angle), cy + outerR * Math.Sin(angle)));
             }
+            for (var i = segments; i >= 0; i--)
+            {
+                var angle = childStart + childSweep * i / segments;
+                points.Add(new ChartPoint(cx + innerR * Math.Cos(angle), cy + innerR * Math.Sin(angle)));
+            }
+            canvas.DrawPolygon(points, new ChartBrush(color), new ChartPen(theme.BackgroundColor, 2f));
+            if (childSweep > .38)
+            {
+                var mid = childStart + childSweep / 2;
+                var labelRadius = (innerR + outerR) / 2;
+                var size = canvas.MeasureText(child.Name, 9, true);
+                canvas.DrawText(child.Name, new ChartPoint(cx + labelRadius * Math.Cos(mid) - size.Width / 2, cy + labelRadius * Math.Sin(mid) + size.Height / 2), ChartColor.White, 9, true);
+            }
+            if (child.Children.Count > 0)
+                DrawChildren(canvas, child, cx, cy, baseInnerRadius, ringWidth, childStart, childSweep, depth + 1, theme);
+            childStart += childSweep;
         }
     }
+
+    private static int GetDepth(HierarchyNode node) => node.Children.Count == 0 ? 0 : 1 + node.Children.Max(GetDepth);
 }

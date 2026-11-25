@@ -31,7 +31,7 @@ public abstract class ChartPageBase : ContentPage
     {
         Title = title;
         BackgroundColor = PageBg;
-        Shell.SetNavBarIsVisible(this, true);
+        Shell.SetNavBarIsVisible(this, false);
 
         ChartView = new ChartView { HeightRequest = 430, BackgroundColor = Colors.Transparent };
         _csharpSnippet = new CodeSnippetView { Code = csharpCode, Language = CodeLanguage.CSharp };
@@ -44,8 +44,9 @@ public abstract class ChartPageBase : ContentPage
 
         _chartPanel = new Border
         {
-            Padding = new Thickness(12), BackgroundColor = CardBg, Stroke = CardBorder, StrokeThickness = 1,
-            StrokeShape = new RoundRectangle { CornerRadius = 14 }, Content = ChartView,
+            Padding = new Thickness(20), BackgroundColor = CardBg, Stroke = CardBorder, StrokeThickness = 1,
+            StrokeShape = new RoundRectangle { CornerRadius = 18 },
+            Content = new VerticalStackLayout { Spacing = 16, Children = { new Label { Text = "Preview", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = TextDark }, ChartView } },
         };
         var tabBar = new Grid { ColumnDefinitions = new ColumnDefinitionCollection { new() { Width = GridLength.Star }, new() { Width = GridLength.Star } } };
         tabBar.Add(_csharpTab, 0, 0); tabBar.Add(_xamlTab, 1, 0);
@@ -58,7 +59,7 @@ public abstract class ChartPageBase : ContentPage
                 Spacing = 0,
                 Children =
                 {
-                    new Label { Text = "IMPLEMENTATION · LIVE SAMPLE DATA", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = TextMuted, Padding = new Thickness(16, 14, 16, 4) },
+                    new Label { Text = "Source code", FontSize = 16, FontAttributes = FontAttributes.Bold, TextColor = TextDark, Padding = new Thickness(18, 18, 18, 6) },
                     tabBar,
                     new BoxView { HeightRequest = 1, BackgroundColor = CardBorder },
                     _codeContent,
@@ -67,18 +68,47 @@ public abstract class ChartPageBase : ContentPage
         };
 
         _workspace = new Grid { ColumnSpacing = 16, RowSpacing = 16 };
+        var backButton = new Button
+        {
+            Text = "←  All charts", FontSize = 13, TextColor = TextDark, BackgroundColor = Colors.White,
+            BorderColor = CardBorder, BorderWidth = 1, CornerRadius = 10, HeightRequest = 42,
+            Padding = new Thickness(14, 0), HorizontalOptions = LayoutOptions.Start,
+        };
+        backButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+        var header = new Grid
+        {
+            RowSpacing = 18,
+            RowDefinitions = new RowDefinitionCollection { new() { Height = GridLength.Auto }, new() { Height = GridLength.Auto } },
+            Margin = new Thickness(0, 0, 0, 12),
+        };
+        header.Add(backButton, 0, 0);
+        header.Add(new VerticalStackLayout
+        {
+            Spacing = 1,
+            Children =
+            {
+                new Label { Text = "CHARTNIVRA / SAMPLE", FontSize = 10, FontAttributes = FontAttributes.Bold, CharacterSpacing = 1, TextColor = AccentIndigo },
+                new Label { Text = title, FontSize = 23, FontAttributes = FontAttributes.Bold, TextColor = TextDark },
+            }
+        }, 0, 1);
         _pageContent = new VerticalStackLayout
         {
             Spacing = 0, Padding = new Thickness(24, 20, 24, 28),
             Children =
             {
-                new Label { Text = title, FontSize = 25, FontAttributes = FontAttributes.Bold, TextColor = TextDark },
-                new Label { Text = subtitle, FontSize = 14, TextColor = TextMuted, Margin = new Thickness(0, 4, 0, 20) },
+                header,
+                new Label { Text = subtitle, FontSize = 14, TextColor = TextMuted, Margin = new Thickness(0, 0, 0, 20) },
                 _workspace,
             }
         };
         Content = new ScrollView { Content = _pageContent };
         ConfigureChart();
+        ChartView.SetAppTheme(ChartView.ThemeProperty, ChartNivra.Core.Themes.ChartTheme.Light, ChartNivra.Core.Themes.ChartTheme.Dark);
+        this.SetAppThemeColor(BackgroundColorProperty, PageBg, Color.FromArgb("#0B1220"));
+        _chartPanel.SetAppThemeColor(Border.BackgroundColorProperty, CardBg, Color.FromArgb("#182235"));
+        _codePanel.SetAppThemeColor(Border.BackgroundColorProperty, CardBg, Color.FromArgb("#182235"));
+        foreach (var label in ((VerticalStackLayout)header.Children[1]).Children.OfType<Label>().Skip(1))
+            label.SetAppThemeColor(Label.TextColorProperty, TextDark, Color.FromArgb("#F1F5F9"));
         SizeChanged += (_, _) => UpdateLayout(Width);
     }
 
@@ -102,10 +132,10 @@ public abstract class ChartPageBase : ContentPage
         }
         else
         {
-            ChartView.HeightRequest = 480; _codePanel.HeightRequest = 506;
+            ChartView.HeightRequest = 460; _codePanel.HeightRequest = 532;
             _csharpSnippet.HeightRequest = _xamlSnippet.HeightRequest = 426;
-            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.15, GridUnitType.Star) });
+            _workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(.85, GridUnitType.Star) });
             _workspace.Add(_chartPanel, 0, 0); _workspace.Add(_codePanel, 1, 0);
         }
     }

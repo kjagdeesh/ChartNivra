@@ -8,12 +8,13 @@ using ChartNivra.Rendering.Abstractions;
 /// <summary>Renders a compact bullet chart with qualitative ranges and a target marker.</summary>
 public sealed class BulletChartRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly BulletChartModel _model;
     public BulletChartRenderer(BulletChartModel model) => _model = model;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Light;
+        var theme = Theme;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
         canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16, true);
         var plot = new ChartRect(bounds.Left + 32, bounds.Top + 82, bounds.Width - 64, 74);

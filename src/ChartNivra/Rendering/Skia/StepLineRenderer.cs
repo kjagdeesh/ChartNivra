@@ -8,13 +8,14 @@ using ChartNivra.Rendering.Abstractions;
 /// <summary>Renders discrete step-before, step-center, and step-after series.</summary>
 public sealed class StepLineRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly StepLineSeriesModel _model;
 
     public StepLineRenderer(StepLineSeriesModel model) => _model = model;
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Light;
+        var theme = Theme;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
         canvas.DrawText(_model.Title, new ChartPoint(bounds.Left + 20, bounds.Top + 30), theme.TextColor, 16, true);
         if (_model.Points.Count == 0) return;

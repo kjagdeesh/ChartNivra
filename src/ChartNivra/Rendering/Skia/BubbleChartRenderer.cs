@@ -7,6 +7,7 @@ using ChartNivra.Rendering.Abstractions;
 
 public class BubbleChartRenderer : IChartRenderer
 {
+    public ChartTheme Theme { get; set; } = ChartTheme.Light;
     private readonly BubbleSeriesModel _model;
 
     public BubbleChartRenderer(BubbleSeriesModel model)
@@ -16,7 +17,7 @@ public class BubbleChartRenderer : IChartRenderer
 
     public void Render(IChartCanvas canvas, ChartRect bounds)
     {
-        var theme = ChartTheme.Light;
+        var theme = Theme;
         canvas.DrawRectangle(bounds, new ChartBrush(theme.BackgroundColor));
 
         var topMargin = 20.0;
